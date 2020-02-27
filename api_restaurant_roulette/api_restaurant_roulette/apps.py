@@ -2,4 +2,4 @@ from django.apps import AppConfig
 
 
 class RestaurantRouletteConfig(AppConfig):
-    name = 'restaurant_roulette'
+    name = 'api_restaurant_roulette'
