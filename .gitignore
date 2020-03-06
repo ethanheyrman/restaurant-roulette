@@ -1,0 +1,10 @@
+#virtualenv stuff
+bin/
+lib/
+lib64
+pyvenv.cfg
+
+#Databse
+db.sqlite3
+
+api_restaurant_roulette/__pycache__/
