@@ -7,4 +7,5 @@ pyvenv.cfg
 #Databse
 db.sqlite3
 
-api_restaurant_roulette/__pycache__/
+__pycache__/
+migrations/
