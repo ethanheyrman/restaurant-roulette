@@ -1,0 +1,71 @@
+
+.RandomRestraunt {
+    height: 400px;
+    background-color: #181823;
+    margin-left: 20%;
+    margin-right: 20%;
+    margin-top: 150px;
+    padding:50px 50px 50px 50px;
+    color:white;
+    border-radius: 10px;
+    
+}
+
+.Name {
+    margin-bottom: 2%;
+    font-weight: bold;
+    font-size: 24px;
+    width: 100%;
+}
+
+.Info {
+    float: left;
+    width: 65%;
+    color: #98A5D6;
+}
+
+.Hours {
+    float: right;
+    width: 30%;
+    color: #98A5D6;
+}
+
+.Navigation {
+    text-align: center;
+}
+
+#url {
+    text-decoration: none;
+    color: #98A5D6;
+}
+
+.rerollbutton {
+  border:none;
+  background-color: #9666e8;
+  height: 40px;
+  width: 120px;
+  margin-top: 20px;
+  color: white;
+  border-radius: 5px;
+  font-size: 16px;
+  margin-left: 10px;
+  margin-right: 10px;
+  letter-spacing: .5px;
+  transition: 0.5s;
+}
+
+.rerollbutton:focus {
+    outline: 0;
+}
+
+.rerollbutton:hover {
+    background-color: #7b50c6;
+    color: white;
+    cursor: pointer;
+}
+
+.link {
+    text-decoration: none;
+    color: white;
+}
+ 
