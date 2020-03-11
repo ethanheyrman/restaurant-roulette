@@ -24,4 +24,5 @@ router.register(r'restaurants', views.RestaurantView, 'restaurant')
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('restaurant/', include(router.urls)),
+    path('restaurant/', include('api_restaurant_roulette.api_restaurant_roulette.urls'))
 ]
