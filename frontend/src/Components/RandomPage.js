@@ -19,7 +19,7 @@ class RandomPage extends React.Component {
             location: '',
             url: '',
         }
-        this.getRestraunt = this.getRestraunt.bind(this)
+        this.getRestaurant = this.getRestaurant.bind(this)
     }
 
     async componentDidMount() {
@@ -39,7 +39,7 @@ class RandomPage extends React.Component {
         })
     }
     
-    getRestraunt() {
+    getRestaurant() {
         fetch('https://jsonplaceholder.typicode.com/users/6/')
         .then (res => res.json())
         .then (json => {
@@ -59,7 +59,7 @@ class RandomPage extends React.Component {
     render() {
         return (
             <div>
-            <div class="RandomRestraunt">
+            <div class="RandomRestaurant">
                 <div class="Name">{this.state.name}</div>
                 <div class="Info">
                     <div>{this.state.cuisine}</div>
@@ -75,7 +75,7 @@ class RandomPage extends React.Component {
                 </div>
             </div>
             <div class="Navigation">
-                <button class="rerollbutton" onClick={this.getRestraunt}>reroll</button>
+                <button class="rerollbutton" onClick={this.getRestaurant}>reroll</button>
                 <Link class="link" to="/"><button class="rerollbutton">home</button></Link>
             </div>
             </div>
