@@ -15,7 +15,7 @@ class HomePage extends React.Component {
             <div>
                 <div class="Navigation">
                     <Link class="link" to="/random"><button class="randombutton">Random</button></Link>
-                    <Link class="link" to="/filters"><button class="filterbutton">Filters</button></Link>
+                    <Link class="link" to="/filtered"><button class="filterbutton">Filters</button></Link>
                 </div>
             </div>
         )
