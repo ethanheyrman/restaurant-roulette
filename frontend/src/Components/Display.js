@@ -31,7 +31,7 @@ export class Display extends Component {
           >
             <AppBar title="Display" />
             <h1 align = "center">Thank You For Your Submission</h1>
-            <Link class="link" to="/filtered"><button class="homebutton">Person 2</button></Link>
+            <Link class="link" to="/filtered"><button class="homebutton">Add User</button></Link>
             <Link class="link" to="/results"><button class="homebutton">Results</button></Link>
           </Dialog>
         </React.Fragment>
