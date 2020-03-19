@@ -60,19 +60,7 @@ class FilterPage extends React.Component {
         return (
             <div>
             <div class="FilteredRestaurant">
-                <div class="Name">{this.state.name}</div>
-                <div class="Info">
-                    <div>{this.state.cuisine}</div>
-                    <div>{this.state.review}</div>
-                    <div>{this.state.price}</div>
-                    <div>{this.state.location}</div>
-                    <div>{this.state.number}</div>
-                    <div><a id="url" href={"https://www." + this.state.url}>{this.state.url}</a></div>
-                </div>
-                <div class="Hours">
-                    <div>hours</div>
-                    <div>{this.state.hours}</div>
-                </div>
+            <Link class="link" to="/userform"><button class="homebutton">Start</button></Link>
             </div>
             <div class="Navigation">
                 <Link class="link" to="/"><button class="homebutton">Home</button></Link>

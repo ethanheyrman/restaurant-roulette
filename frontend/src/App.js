@@ -2,7 +2,9 @@ import React from 'react';
 import './App.css';
 import RandomPage from './Components/RandomPage';
 import HomePage from './Components/HomePage';
-import FilterPage from './Components/FilterPage'
+import FilterPage from './Components/FilterPage';
+import UserForm from './Components/UserForm';
+import Results from './Components/Results.js';
 
 import {
   BrowserRouter as Router,
@@ -16,6 +18,12 @@ function App() {
     <div class="App">
      <Router>
         <Switch>
+        <Route path="/userform">
+            <UserForm />
+        </Route>
+        <Route path="/results">
+            <Results />
+        </Route>
         <Route path="/filtered">
             <Filter />
         </Route>
