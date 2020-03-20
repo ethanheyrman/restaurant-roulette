@@ -49,7 +49,16 @@ export class FormSecondaryDetails extends Component {
             maxWidth='sm'
           >
             <AppBar title="part 2" />
-            <Autocomplete
+            <TextField
+              placeholder="Enter Your Rating Preference"
+              label="Rating"
+              onChange={handleChange('Rating')}
+              defaultValue={values.Rating}
+              margin="normal"
+              fullWidth="true"
+            />
+            {/* DROPDOWN OPTION 1-------- */}
+            {/* <Autocomplete
                 multiple
                 options={ratingPref}
                 getOptionLabel={option => option.title}
@@ -65,7 +74,7 @@ export class FormSecondaryDetails extends Component {
                     fullWidth
                   />
                 )}
-              />
+              /> */}
             {/* DROPDOWN OPTION 2-------- */}
             {/* <form>
               <label>
@@ -108,13 +117,13 @@ export class FormSecondaryDetails extends Component {
   }
 }
 
-// Price preference
-const ratingPref = [
-  { title: '⭐' },
-  { title: '⭐⭐'},
-  { title: '⭐⭐⭐'},
-  { title: '⭐⭐⭐⭐'},
-  { title: '⭐⭐⭐⭐⭐'},
-];
+// // Price preference
+// const ratingPref = [
+//   { title: '⭐' },
+//   { title: '⭐⭐'},
+//   { title: '⭐⭐⭐'},
+//   { title: '⭐⭐⭐⭐'},
+//   { title: '⭐⭐⭐⭐⭐'},
+// ];
 
 export default FormSecondaryDetails;

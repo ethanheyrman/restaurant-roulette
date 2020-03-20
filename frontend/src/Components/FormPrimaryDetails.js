@@ -61,7 +61,16 @@ export class FormPrimaryDetails extends Component {
               fullWidth="true"
             />
             <br />
-               <Autocomplete
+            <TextField
+              placeholder="Enter Your Cuisine Preference"
+              label="Cuisine"
+              onChange={handleChange('Cuisine')}
+              defaultValue={values.Cuisine}
+              margin="normal"
+              fullWidth="true"
+            />
+            {/* DROPDOWN OPTION 1-------- */}
+               {/* <Autocomplete
                 multiple
                 options={cuisinePref}
                 getOptionLabel={option => option.title}
@@ -77,7 +86,7 @@ export class FormPrimaryDetails extends Component {
                     fullWidth
                   />
                 )}
-              />
+              /> */}
             {/* DROPDOWN OPTION 2-------- */}
             {/* <form>
               <label>
@@ -98,7 +107,16 @@ export class FormPrimaryDetails extends Component {
               </label>
             </form> */}
             <br />
-            <Autocomplete
+            <TextField
+              placeholder="Enter Your Price Preference"
+              label="Price"
+              onChange={handleChange('Price')}
+              defaultValue={values.Price}
+              margin="normal"
+              fullWidth="true"
+            />
+            {/* DROPDOWN OPTION 1-------- */}
+            {/* <Autocomplete
                 multiple
                 options={pricePref}
                 getOptionLabel={option => option.title}
@@ -114,7 +132,7 @@ export class FormPrimaryDetails extends Component {
                     fullWidth
                   />
                 )}
-              />
+              /> */}
             {/* DROPDOWN OPTION 2-------- */}
             {/* <form >
               <label>
@@ -140,27 +158,27 @@ export class FormPrimaryDetails extends Component {
   }
 }
 
-// Price preference
-const pricePref = [
-  { title: '$'},
-  { title: '$$'},
-  { title: '$$$'},
-  { title: '$$$$'},
-];
+// // Price preference
+// const pricePref = [
+//   { title: '$'},
+//   { title: '$$'},
+//   { title: '$$$'},
+//   { title: '$$$$'},
+// ];
 
-// Cuisine preference
-const cuisinePref = [
-  { title: 'Italian'},
-  { title: 'Indian'},
-  { title: 'Chinese'},
-  { title: 'Japanese'},
-  { title: 'Mexican'},
-  { title: 'Greek'},
-  { title: 'American'},
-  { title: 'French'},
-  { title: 'Asian fusion'},
-  { title: 'Mediterranean'},
-  { title: 'Thai' },
-];
+// // Cuisine preference
+// const cuisinePref = [
+//   { title: 'Italian'},
+//   { title: 'Indian'},
+//   { title: 'Chinese'},
+//   { title: 'Japanese'},
+//   { title: 'Mexican'},
+//   { title: 'Greek'},
+//   { title: 'American'},
+//   { title: 'French'},
+//   { title: 'Asian fusion'},
+//   { title: 'Mediterranean'},
+//   { title: 'Thai' },
+// ];
 
 export default FormPrimaryDetails;
