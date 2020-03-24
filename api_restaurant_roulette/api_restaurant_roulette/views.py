@@ -32,6 +32,11 @@ def random_restaurant(request):
     # Thanks to https://books.agiliq.com/projects/django-orm-cookbook/en/latest/random.html
     # for telling me how to do my job
     if request.method == 'GET':
+        # Fail if there are no restaurants in the DB
+        num_entries = Restaurant.objects.all().count()
+        if num_entries == 0:
+            return HttpResponse(status=500)
+
         max_id = Restaurant.objects.all().aggregate(max_id=Max("pk"))['max_id']
         # Loop incase the random pk is invalid
         while True:
