@@ -6,6 +6,9 @@ pyvenv.cfg
 environment_setup.txt
 environment_variables.txt
 
+.DS_Store
+node_modules/
+
 #database
 db.sqlite3
 
