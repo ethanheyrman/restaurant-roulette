@@ -126,3 +126,5 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+MAX_QUERYSET_LEN = os.environ.get("MAX_QUERYSET_LEN", 5)
