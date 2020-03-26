@@ -19,7 +19,7 @@ class Restaurant(models.Model):
     saturday_open = models.TimeField(default=datetime.time(0, 0))
     saturday_close = models.TimeField(default=datetime.time(0, 0))
     phone = models.BigIntegerField()
-    rating = models.SmallIntegerField()
+    rating = models.DecimalField(decimal_places=1,max_digits=2)
     price = models.SmallIntegerField()
     category = models.TextField()
     address = models.TextField()
