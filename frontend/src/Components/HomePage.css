@@ -11,11 +11,11 @@
 
 .randombutton {
     border:none;
-    background-color: #9666e8;
+    background-color: #F7F4EA;
     height: 40px;
     width: 120px;
     margin-top: 20px;
-    color: white;
+    color: grey;
     border-radius: 5px;
     font-size: 16px;
     margin-left: 10px;
@@ -29,19 +29,19 @@
 }
   
 .randombutton:hover {
-    background-color: #7b50c6;
-    color: white;
+    background-color: #F7F4EA;
+    color: #F7F4EA;
     cursor: pointer;
 }
 
 
 .filterbutton {
   border:none;
-  background-color: #9666e8;
+  background-color: #F7F4EA;
   height: 40px;
   width: 120px;
   margin-top: 20px;
-  color: white;
+  color: grey;
   border-radius: 5px;
   font-size: 16px;
   margin-left: 10px;
@@ -55,7 +55,7 @@
 }
 
 .filterbutton:hover {
-    background-color: #7b50c6;
-    color: white;
+    background-color: #F7F4EA;
+    color: #F7F4EA;
     cursor: pointer;
 }
