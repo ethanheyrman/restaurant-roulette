@@ -130,7 +130,6 @@ class RandomPage extends React.Component {
     render() {
         return (
             <div>
-                <link rel="stylesheet" href="./RandomPage.css"></link>
             <div class="RandomRestaurant">
                 <div class="RName">{this.state.name}</div>
                 <div class="RInfo">
