@@ -39,10 +39,10 @@ with open(path, 'r') as csv_file:
                     'saturday_close': line[14],
                     'phone': line[15],
                     'rating': line[16],
-                    'price': line[16],
-                    'category': line[17],
-                    'address': line[18],
-                    'website': line[19]}
+                    'price': line[17],
+                    'category': line[18],
+                    'address': line[19],
+                    'website': line[20]}
             url = 'http://127.0.0.1:8000/restaurant/add/'
             r = requests.post(url, json = dat)
         i = i + 1
