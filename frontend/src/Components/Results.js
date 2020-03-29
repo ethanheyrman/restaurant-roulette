@@ -48,23 +48,6 @@ class Results extends React.Component {
                 cuisine: json.email,
                 location: json.address.street,
                 url: json.website,
-                hours: json.address.zipcode
-            }) 
-        })
-    }
-    
-    getRestaurant() {
-        fetch('https://jsonplaceholder.typicode.com/users/6/')
-        .then (res => res.json())
-        .then (json => {
-            this.setState ({
-                name: json.name,
-                number: json.phone,
-                review: json.id,
-                price: json.username,
-                cuisine: json.email,
-                location: json.address.street,
-                url: json.website,
                 sunday_open: json.sunday_open,
                 sunday_close: json.sunday_close,
                 monday_open: json.monday_open,
@@ -82,6 +65,35 @@ class Results extends React.Component {
         })
     }
     
+    getRestaurant() {
+        fetch('https://jsonplaceholder.typicode.com/users/6/')
+        .then (res => res.json())
+        .then (json => {
+            this.setState ({
+                name: json.name,
+                number: json.phone,
+                review: json.id,
+                price: json.price,
+                cuisine: json.category,
+                location: json.address,
+                url: json.website,
+                sunday_open: json.sunday_open,
+                sunday_close: json.sunday_close,
+                monday_open: json.monday_open,
+                monday_close: json.monday_close,
+                tuesday_open: json.tuesday_open,
+                tuesday_close: json.tuesday_close,
+                wednesday_open: json.wednesday_open,
+                wednesday_close: json.wednesday_close,
+                thursday_open: json.thursday_open,
+                thursday_close: json.thursday_close,
+                friday_open: json.friday_open,
+                friday_close: json.friday_close,
+                saturday_open: json.saturday_open,
+                saturday_close: json.saturday_close,            }) 
+        })
+    }
+
     getRating(rating) {
         switch (rating) {
             case 1: 
