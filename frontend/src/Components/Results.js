@@ -18,6 +18,20 @@ class Results extends React.Component {
             cuisine: '',
             location: '',
             url: '',
+            sunday_open: '',
+            sunday_close: '',
+            monday_open: '',
+            monday_close: '',
+            tuesday_open: '',
+            tuesday_close: '',
+            wednesday_open: '',
+            wednesday_close: '',
+            thursday_open: '',
+            thursday_close: '',
+            friday_open: '',
+            friday_close: '',
+            saturday_open: '',
+            saturday_close: '',
         }
         this.getRestaurant = this.getRestaurant.bind(this)
     }
@@ -51,9 +65,53 @@ class Results extends React.Component {
                 cuisine: json.email,
                 location: json.address.street,
                 url: json.website,
-                hours: json.address.zipcode
-            }) 
+                sunday_open: json.sunday_open,
+                sunday_close: json.sunday_close,
+                monday_open: json.monday_open,
+                monday_close: json.monday_close,
+                tuesday_open: json.tuesday_open,
+                tuesday_close: json.tuesday_close,
+                wednesday_open: json.wednesday_open,
+                wednesday_close: json.wednesday_close,
+                thursday_open: json.thursday_open,
+                thursday_close: json.thursday_close,
+                friday_open: json.friday_open,
+                friday_close: json.friday_close,
+                saturday_open: json.saturday_open,
+                saturday_close: json.saturday_close,            }) 
         })
+    }
+    
+    getRating(rating) {
+        switch (rating) {
+            case 1: 
+                return "⭐"
+            case 2: 
+                return "⭐⭐"
+            case 3:
+                return "⭐⭐⭐"
+            case 4:
+                return "⭐⭐⭐⭐"
+            case 5: 
+                return "⭐⭐⭐⭐⭐"
+            default:
+                return ""
+        }
+    }
+
+    getPrice(price) {
+        switch (price) {
+            case 1: 
+                return "$"
+            case 2: 
+                return "$ $"
+            case 3:
+                return "$ $ $"
+            case 4:
+                return "$ $ $ $"
+            default:
+                return ""
+        }
     }
 
     render() {
