@@ -14,7 +14,8 @@ light green: #A3C4BC
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: #258ea6;
+    /* background-color: #258ea6; */
+    background-image: url(../background.png);
   }
   
   .form-wrapper {
