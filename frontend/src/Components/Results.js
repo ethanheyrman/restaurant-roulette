@@ -11,7 +11,6 @@ class Results extends React.Component {
         super(props)
         this.state = {
             name: '',
-            hours: '',
             number: '',
             review: '',
             price: '',
@@ -37,7 +36,7 @@ class Results extends React.Component {
     }
 
     async componentDidMount() {
-        fetch('https://jsonplaceholder.typicode.com/users/8/')
+        fetch('https://127.0.0.1:8000/restaurant/results/')
         .then (res => res.json())
         .then (json => {
             this.setState ({
