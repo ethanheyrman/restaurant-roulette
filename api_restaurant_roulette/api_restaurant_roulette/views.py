@@ -3,6 +3,7 @@ import itertools
 from django.shortcuts import render
 from django.http import HttpResponse, Http404
 from django.views.decorators.csrf import csrf_exempt
+from django.db.models import Max, Q
 from rest_framework import viewsets
 from rest_framework.renderers import JSONRenderer
 from .serializers import RestaurantSerializer
@@ -10,95 +11,95 @@ from .models import Restaurant
 import json
 from django.db.models.query import QuerySet
 from api_restaurant_roulette.settings import MAX_QUERYSET_LEN
+import random
+from collections import namedtuple
 
 
 class RestaurantView(viewsets.ModelViewSet):
     serializer_class = RestaurantSerializer
     queryset = Restaurant.objects.all()
 
-    @csrf_exempt
-    def get_queryset(self):
-        query_params = self.request.query_params
-        response = {}
-        if query_params:
-            response["restaurant_queryset"], response["limiting_query_param"] = self.filter_restaurants(query_params)
-            return HttpResponse(response)
-        else:
-            return HttpResponse(status=400)
+@csrf_exempt
+def get_queryset(request):
 
-    def filter_restaurants(self, query_params):
-        """
+    query_params = {}
+    query_params['price'] = str(request.GET.get('price'))
+    query_params['category'] = str(request.GET.getlist('category'))
+    # query_params['rating'] = str(request.GET.getlist('rating'))
+    # query_params['name'] = str(request.GET.getlist('name'))
+    # query_params['distance'] = str(request.GET.getlist('distance'))
 
-        :param self:
-        :param query_params:
-        :return:
-        """
+    response = {}
+    if query_params:
+        response["restaurant_queryset"], \
+        response["num_applied_params"], \
+        response["limiting_query_param"] = _filter_restaurants(query_params)
 
-        """
-        If query data:
-            Return restaurant_list, limiting_param = self._perform_all_queries()
-        Else, return to the user a queryset containing one “randomly” chosen restaurant and None
+        serializer = RestaurantSerializer(response["restaurant_queryset"], many=True)
+        serialized_data = JSONRenderer().render(serializer.data)
+        serialized_data = json.loads(serialized_data.decode('utf-8'))
+        response["restaurant_queryset"] = serialized_data
+        return HttpResponse(response.items())
+    else:
+        return HttpResponse(status=400)
 
-        """
-        if query_params:
-            return self._perform_all_queries(query_params=query_params)
-        else:
-            pass  # return self.random_restaurant()
 
-    @staticmethod
-    def _incrementally_query(query_params):
-        """
+def _filter_restaurants(query_params):
+    """
 
-        :param query_params:
-        :return:
-        """
-        num_applied_params = 0
-        filtered_restaurants = QuerySet()
-        queryset_stack = []
-        if filtered_restaurants is None:  # retrieve all restaurants
-            filtered_restaurants = Restaurant.objects.all()
-        queryset_stack.append(filtered_restaurants)
-        for current_param in enumerate(query_params):
-            filtered_restaurants = queryset_stack.peek().filter(current_param)
+    :param query_params:
+    :return:
+    """
+
+    """
+    If query data:
+        Return restaurant_list, limiting_param = self._perform_all_queries()
+    Else, return to the user a queryset containing one “randomly” chosen restaurant and None
+
+    """
+    if query_params:
+        return _incrementally_query(query_params=query_params)
+    else:
+        return random_restaurant(), None
+
+
+def _incrementally_query(query_params):
+    """
+
+    :param query_params:
+    :return:
+    """
+    num_applied_params = 0
+    filtered_restaurants = None
+    queryset_stack = []
+
+    filters = {}
+    filters["category"] = Q(category__exact=str(query_params["category"]))
+    filters["price"] = Q(price__exact=str(query_params["price"]))
+    # filters["rating"] = Q(rating__exact=str(query_params["rating"]))
+    # filters["distance"] = Q(distance__exact=str(query_params["distance"]))
+
+    if not filtered_restaurants:  # retrieve all restaurants
+        filtered_restaurants = Restaurant.objects.all()
+
+    queryset_stack.append(filtered_restaurants)
+
+    for key, value in query_params.items():
+        if query_params.get(key) is not None:
+            current_filter = filters.get(key)
+            filtered_restaurants = queryset_stack[-1].filter(current_filter)
             num_applied_params += 1
 
-            if len(filtered_restaurants) < MAX_QUERYSET_LEN:
-                if current_param in {len(filtered_restaurants)-1}:
-                    return filtered_restaurants, num_applied_params, None
-                else:
-                    return queryset_stack.pop(), num_applied_params, current_param
-            elif len(filtered_restaurants) >= MAX_QUERYSET_LEN:
-                filtered_restaurants = filtered_restaurants[:MAX_QUERYSET_LEN]
+        if len(filtered_restaurants) < MAX_QUERYSET_LEN:
+            if value in {len(filtered_restaurants)-1}:
                 return filtered_restaurants, num_applied_params, None
             else:
-                queryset_stack.append(filtered_restaurants)
-
-    def _perform_all_queries(self, query_params):
-        """
-
-        :return:
-        """
-        query_bank = []
-        for permutation in itertools.permutations(query_params):
-            restaurants, num_applied_filters, limiting_param = self._incrementally_query(permutation)
-            if limiting_param is None:
-                return restaurants, None
-            else:
-                query_result = {
-                    "restaurants": restaurants,
-                    "num_applied_filters": num_applied_filters,
-                    "limiting_params": limiting_param
-                }
-                query_bank.append(query_result)
-        most_applied_params = 0
-        restaurants = None
-        limiting_param = None
-        for result in query_bank:
-            if result["num_applied_filters"] > most_applied_params:
-                most_applied_params = result["num_applied_filters"]
-                restaurants = result["restaurants"]
-                limiting_param = result["limiting_param"]
-        return restaurants, limiting_param
+                return queryset_stack.pop(), num_applied_params, value
+        elif len(filtered_restaurants) >= MAX_QUERYSET_LEN:
+            filtered_restaurants = filtered_restaurants[:MAX_QUERYSET_LEN]
+            return filtered_restaurants, num_applied_params, None
+        else:
+            queryset_stack.append(filtered_restaurants)
 
 @csrf_exempt
 def add_restaurant(request):
@@ -113,3 +114,25 @@ def add_restaurant(request):
     else:
         return HttpResponse(status=405)
 
+
+@csrf_exempt
+def random_restaurant(request):
+    # Thanks to https://books.agiliq.com/projects/django-orm-cookbook/en/latest/random.html
+    # for telling me how to do my job
+    if request.method == 'GET':
+        # Fail if there are no restaurants in the DB
+        num_entries = Restaurant.objects.all().count()
+        if num_entries == 0:
+            return HttpResponse(status=500)
+
+        max_id = Restaurant.objects.all().aggregate(max_id=Max("pk"))['max_id']
+        # Loop incase the random pk is invalid
+        while True:
+            pk = random.randint(1, max_id)
+            restaurant = Restaurant.objects.filter(pk=pk).first()
+            if restaurant:
+                serializer = RestaurantSerializer(restaurant)
+                serialized_data = JSONRenderer().render(serializer.data)
+                return HttpResponse(serialized_data)
+    else:
+        return HttpResponse(status=405)
