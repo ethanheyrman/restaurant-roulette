@@ -1,11 +1,11 @@
 .FilteredRestaurant {
     height: 400px;
-    background-color: #181823;
+    background-color: #FFA0B1;
     margin-left: 20%;
     margin-right: 20%;
     margin-top: 150px;
     padding:50px 50px 50px 50px;
-    color:white;
+    color:#F7F4EA;
     border-radius: 10px;
     
 }
@@ -13,20 +13,47 @@
 .Name {
     margin-bottom: 2%;
     font-weight: bold;
-    font-size: 24px;
+    font-size: 32px;
     width: 100%;
 }
 
 .Info {
     float: left;
-    width: 65%;
-    color: #98A5D6;
+    width: 35%;
+    color: #F7F4EA;
+    margin-top: 65px;
+}
+
+.Contact {
+    float: left;
+    width: 35%;
+    color: #F7F4EA;
+    margin-top: 65px;
+}
+
+.Title {
+    color:#F7F4EA;
+    margin-bottom: 5px;
+    margin-top: 8px;
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.Value {
+    font-size: 18px;
+    color:#F7F4EA;
+}
+
+.Days {
+    float: right;
+    width: 10%;
+    color: #F7F4EA;
 }
 
 .Hours {
     float: right;
-    width: 30%;
-    color: #98A5D6;
+    width: 20%;
+    color: #F7F4EA;
 }
 
 .Navigation {
@@ -40,11 +67,11 @@
 
 .homebutton {
     border:none;
-    background-color: #9666e8;
+    background-color: #F7F4EA;
     height: 40px;
     width: 120px;
     margin-top: 20px;
-    color: white;
+    color: grey;
     border-radius: 5px;
     font-size: 16px;
     margin-left: 10px;
@@ -58,13 +85,13 @@
 }
   
 .homebutton:hover {
-    background-color: #7b50c6;
-    color: white;
+    background-color: #F7F4EA;
+    color: F7F4EA;
     cursor: pointer;
 }
 
 .link {
     text-decoration: none;
-    color: white;
+    color: #F7F4EA;
 }
  
