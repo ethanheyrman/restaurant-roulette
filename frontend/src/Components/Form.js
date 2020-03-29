@@ -38,12 +38,10 @@ class Form extends Component {
       rating: null,
       distance: null,
       value: "default",
-    //   password: null,
       formErrors: {
         firstName: "",
         lastName: "",
         email: "",
-        // password: ""
         cuisine: "",
         price: "",
         rating: "",
@@ -71,11 +69,6 @@ class Form extends Component {
       console.error("FORM INVALID - DISPLAY ERROR MESSAGE");
     }
   };
-
-//   canBeSubmitted() {
-//     const { email, distance, firstName } = this.state;
-//     return email.length > 0 && distance.length > 0 && firstName.length > 0;
-//   }
 
   handleChange = e => {
     e.preventDefault();
@@ -108,7 +101,7 @@ class Form extends Component {
         break;
       case "rating":
         formErrors.rating =
-            value.length < 1 ? "minimum 1 characater required" : "";
+            value.length === null ? "minimum 1 characater required" : "";
         break;
       case "distance":
         formErrors.distance =
@@ -123,7 +116,6 @@ class Form extends Component {
 
   render() {
     const { formErrors } = this.state;
-    // const isEnabled = this.canBeSubmitted();
 
     return (
       <div className="wrapper">
@@ -287,15 +279,14 @@ class Form extends Component {
             <div className="sub_mit">
             <div class="Navigation">
                 <Link class="link" to="/"><button class="sub_mit">Home</button></Link>
-        
-    {/* { 
-      this.props.notClickable
-      ? <Link to="/results" className="disabledCursor" onClick={ (event) => event.preventDefault() }>Submit2</Link>
-      : <Link to="/results" className="notDisabled">Submit3</Link>
-    } */}
 
-
-            <Link class="link" to="/results"><button class="sub_mit" disabled={!formValid}>Submit</button></Link>
+            {
+              !this.props.formValid
+              ? <Link class="link" to="/results"><button class="sub_mit" disabled={!this.state.email || !this.state.firstName
+              || !this.state.distance}>Submit</button></Link> :
+              <Link class="link" to="/results"><button class="sub_mit">Submit</button></Link>
+           }
+            {/* <Link class="link" to="/results"><button class="sub_mit" disabled={!this.props.formValid}>Submit</button></Link> */}
             <Link class="link" to="/filtered"><button class="sub_mit">Add user</button></Link>
             </div>
               <small>Already Have an Account?</small>

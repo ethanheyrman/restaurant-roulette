@@ -37,34 +37,34 @@
     text-decoration: none;
     color: #98A5D6;
 }
+
+.homebutton {
+    border:none;
+    background-color: #9666e8;
+    height: 40px;
+    width: 120px;
+    margin-top: 20px;
+    color: white;
+    border-radius: 5px;
+    font-size: 16px;
+    margin-left: 10px;
+    margin-right: 10px;
+    letter-spacing: .5px;
+    transition: 0.5s;
+}
   
 .homebutton:focus {
     outline: 0;
+}
+  
+.homebutton:hover {
+    background-color: #7b50c6;
+    color: white;
+    cursor: pointer;
 }
 
 .link {
     text-decoration: none;
     color: white;
 }
-
-.homebutton {
-border:none;
-background-color: #519e8a;
-height: 40px;
-width: 120px;
-margin-top: 20px;
-color: #fff;
-border-radius: 5px;
-font-size: 16px;
-margin-left: 10px;
-margin-right: 10px;
-letter-spacing: .5px;
-transition: 0.5s;
-margin-bottom: 0.25em;
-}
-
-.homebutton:hover {
-color: #519e8a;
-background-color: #fff;
-border: 2px solid #519e8a;
-}
+ 

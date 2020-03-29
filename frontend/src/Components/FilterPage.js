@@ -11,8 +11,7 @@ class FilterPage extends React.Component {
         return (
             <div>
             <div class="FilteredRestaurant">
-            {/* <Link class="link" to="/userform"><button class="homebutton">Start</button></Link> */}
-            <Link class="link" to="/form"><button class="homebutton">Start</button></Link>
+            <Link class="link" to="/userform"><button class="homebutton">Start</button></Link>
             </div>
             <div class="Navigation">
                 <Link class="link" to="/"><button class="homebutton">Home</button></Link>
