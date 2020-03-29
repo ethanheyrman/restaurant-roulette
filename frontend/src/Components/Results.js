@@ -145,8 +145,8 @@ class Results extends React.Component {
              <div>
                  <link rel="stylesheet" href="./FilterPage.css"></link>
              <div class="FilteredRestaurant">
-                 <div class="Name">{this.state.name}</div>
-                 <div class="Info">
+                 <div class="FName">{this.state.name}</div>
+                 <div class="FInfo">
                      <div>{this.state.cuisine}</div>
                      <div>{this.state.review}</div>
                      <div>{this.state.price}</div>
