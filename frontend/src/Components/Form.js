@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import "./Form.css";
 import {Link} from "react-router-dom";
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import TextField from '@material-ui/core/TextField';
 
 const emailRegex = RegExp(
   /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
@@ -22,6 +24,7 @@ const formValid = ({ formErrors, ...rest }) => {
   return valid;
 };
 
+
 class Form extends Component {
   constructor(props) {
     super(props);
@@ -34,6 +37,7 @@ class Form extends Component {
       price: null,
       rating: null,
       distance: null,
+      value: "default",
     //   password: null,
       formErrors: {
         firstName: "",
@@ -47,6 +51,7 @@ class Form extends Component {
       }
     };
   }
+
 
   handleSubmit = e => {
     e.preventDefault();
@@ -67,10 +72,16 @@ class Form extends Component {
     }
   };
 
+//   canBeSubmitted() {
+//     const { email, distance, firstName } = this.state;
+//     return email.length > 0 && distance.length > 0 && firstName.length > 0;
+//   }
+
   handleChange = e => {
     e.preventDefault();
     const { name, value } = e.target;
     let formErrors = { ...this.state.formErrors };
+    
 
     switch (name) {
       case "firstName":
@@ -112,6 +123,7 @@ class Form extends Component {
 
   render() {
     const { formErrors } = this.state;
+    // const isEnabled = this.canBeSubmitted();
 
     return (
       <div className="wrapper">
@@ -160,48 +172,6 @@ class Form extends Component {
                 <span className="errorMessage">{formErrors.email}</span>
               )}
             </div>
-            <div className="cuisine">
-              <label htmlFor="cuisine">Cuisine</label>
-              <input
-                className={formErrors.cuisine.length > 0 ? "error" : null}
-                placeholder="Cuisine"
-                type="cuisine"
-                name="cuisine"
-                noValidate
-                onChange={this.handleChange}
-              />
-              {formErrors.cuisine.length > 0 && (
-                <span className="errorMessage">{formErrors.cuisine}</span>
-              )}
-            </div>
-            <div className="price">
-              <label htmlFor="price">Price</label>
-              <input
-                className={formErrors.price.length > 0 ? "error" : null}
-                placeholder="Price"
-                type="price"
-                name="price"
-                noValidate
-                onChange={this.handleChange}
-              />
-              {formErrors.price.length > 0 && (
-                <span className="errorMessage">{formErrors.price}</span>
-              )}
-            </div>
-            <div className="rating">
-              <label htmlFor="rating">Rating</label>
-              <input
-                className={formErrors.rating.length > 0 ? "error" : null}
-                placeholder="Rating"
-                type="rating"
-                name="rating"
-                noValidate
-                onChange={this.handleChange}
-              />
-              {formErrors.rating.length > 0 && (
-                <span className="errorMessage">{formErrors.rating}</span>
-              )}
-            </div>
             <div className="distance">
               <label htmlFor="distance">Distance</label>
               <input
@@ -216,10 +186,116 @@ class Form extends Component {
                 <span className="errorMessage">{formErrors.distance}</span>
               )}
             </div>
+            {/* <div className="cuisine">
+              <label htmlFor="cuisine">Cuisine</label>
+              <input
+                className={formErrors.cuisine.length > 0 ? "error" : null}
+                placeholder="Cuisine"
+                type="cuisine"
+                name="cuisine"
+                noValidate
+                onChange={this.handleChange}
+              />
+              {formErrors.cuisine.length > 0 && (
+                <span className="errorMessage">{formErrors.cuisine}</span>
+              )}
+            </div> */}
+            <div className="cuisine">
+               <Autocomplete
+                multiple
+                options={cuisinePref}
+                getOptionLabel={option => option.title}
+                // defaultValue={[cuisinePref]}
+                onChange={this.onTagsChange}
+                renderInput={params => (
+                  <TextField
+                    {...params}
+                    variant="standard"
+                    label="Cuisine"
+                    placeholder="Cuisines"
+                    margin="normal"
+                    fullWidth
+                  />
+                )}
+              />
+            </div>
+            {/* <div className="price">
+              <label htmlFor="price">Price</label>
+              <input
+                className={formErrors.price.length > 0 ? "error" : null}
+                placeholder="Price"
+                type="price"
+                name="price"
+                noValidate
+                onChange={this.handleChange}
+              />
+              {formErrors.price.length > 0 && (
+                <span className="errorMessage">{formErrors.price}</span>
+              )}
+            </div> */}
+            <div className="price">
+            <Autocomplete
+                multiple
+                options={pricePref}
+                getOptionLabel={option => option.title}
+                // defaultValue={[pricePref[0]]}
+                onChange={this.onTagsChange}
+                renderInput={params => (
+                  <TextField
+                    {...params}
+                    variant="standard"
+                    label="Price"
+                    placeholder="Price"
+                    margin="normal"
+                    fullWidth
+                  />
+                )}
+              />
+              </div>
+            {/* <div className="rating">
+              <label htmlFor="rating">Rating</label>
+              <input
+                className={formErrors.rating.length > 0 ? "error" : null}
+                placeholder="Rating"
+                type="rating"
+                name="rating"
+                noValidate
+                onChange={this.handleChange}
+              />
+              {formErrors.rating.length > 0 && (
+                <span className="errorMessage">{formErrors.rating}</span>
+              )}
+            </div> */}
+            <div className="rating">
+            <Autocomplete
+            multiple
+            options={ratingPref}
+            getOptionLabel={option => option.title}
+            onChange={this.onTagsChange}
+            renderInput={params => (
+                <TextField
+                {...params}
+                variant="standard"
+                label="Rating"
+                placeholder="Rating"
+                margin="normal"
+                fullWidth
+                />
+            )}
+            />
+            </div>
             <div className="sub_mit">
             <div class="Navigation">
                 <Link class="link" to="/"><button class="sub_mit">Home</button></Link>
-            <Link class="link" to="/results"><button class="sub_mit">Submit</button></Link>
+        
+    {/* { 
+      this.props.notClickable
+      ? <Link to="/results" className="disabledCursor" onClick={ (event) => event.preventDefault() }>Submit2</Link>
+      : <Link to="/results" className="notDisabled">Submit3</Link>
+    } */}
+
+
+            <Link class="link" to="/results"><button class="sub_mit" disabled={!formValid}>Submit</button></Link>
             <Link class="link" to="/filtered"><button class="sub_mit">Add user</button></Link>
             </div>
               <small>Already Have an Account?</small>
@@ -232,3 +308,35 @@ class Form extends Component {
 }
 
 export default Form;
+
+// Cuisine preference
+const cuisinePref = [
+  { title: 'Italian'},
+  { title: 'Indian'},
+  { title: 'Chinese'},
+  { title: 'Japanese'},
+  { title: 'Mexican'},
+  { title: 'Greek'},
+  { title: 'American'},
+  { title: 'French'},
+  { title: 'Asian fusion'},
+  { title: 'Mediterranean'},
+  { title: 'Thai' },
+];
+
+// Price preference
+const pricePref = [
+  { title: '$'},
+  { title: '$$'},
+  { title: '$$$'},
+  { title: '$$$$'},
+];
+
+// Rating preference
+const ratingPref = [
+  { title: '⭐' },
+  { title: '⭐⭐'},
+  { title: '⭐⭐⭐'},
+  { title: '⭐⭐⭐⭐'},
+  { title: '⭐⭐⭐⭐⭐'},
+];

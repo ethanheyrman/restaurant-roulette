@@ -99,12 +99,12 @@ light green: #A3C4BC
     width: 49%;
   }
   
-  .email {
+  .email,
+  .distance {
     width: 100%;
   }
 
-  .rating,
-  .distance {
+  .rating {
     width: 49%;
   }
   
