@@ -79,11 +79,11 @@ class Form extends Component {
     switch (name) {
       case "firstName":
         formErrors.firstName =
-          value.length < 3 ? "minimum 3 characaters required" : "";
+          value.length < 2 ? "minimum 2 characaters required" : "";
         break;
       case "lastName":
         formErrors.lastName =
-          value.length < 3 ? "minimum 3 characaters required" : "";
+          value.length < 2 ? "minimum 2 characaters required" : "";
         break;
       case "email":
         //   check if email has @sign else invalid
