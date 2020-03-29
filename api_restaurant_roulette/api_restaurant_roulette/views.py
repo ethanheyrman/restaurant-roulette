@@ -48,3 +48,25 @@ def random_restaurant(request):
                 return HttpResponse(serialized_data)
     else:
         return HttpResponse(status=405)
+
+@csrf_exempt
+def filter_restaurant(request):
+    # Thanks to https://books.agiliq.com/projects/django-orm-cookbook/en/latest/random.html
+    # for telling me how to do my job
+    if request.method == 'GET':
+        # Fail if there are no restaurants in the DB
+        num_entries = Restaurant.objects.all().count()
+        if num_entries == 0:
+            return HttpResponse(status=500)
+
+        max_id = Restaurant.objects.all().aggregate(max_id=Max("pk"))['max_id']
+        # Loop incase the random pk is invalid
+        while True:
+            pk = random.randint(1, max_id)
+            restaurant = Restaurant.objects.filter(pk=pk).first()
+            if restaurant:
+                serializer = RestaurantSerializer(restaurant)
+                serialized_data = JSONRenderer().render(serializer.data)
+                return HttpResponse(serialized_data)
+    else:
+        return HttpResponse(status=405)
