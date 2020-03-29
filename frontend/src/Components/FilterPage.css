@@ -1,70 +1,108 @@
-.FilteredRestaurant {
-    height: 400px;
-    background-color: #181823;
-    margin-left: 20%;
-    margin-right: 20%;
-    margin-top: 150px;
-    padding:50px 50px 50px 50px;
-    color:white;
-    border-radius: 10px;
-    
-}
-
-.Name {
-    margin-bottom: 2%;
-    font-weight: bold;
-    font-size: 24px;
-    width: 100%;
-}
-
-.Info {
-    float: left;
-    width: 65%;
-    color: #98A5D6;
-}
-
-.Hours {
-    float: right;
-    width: 30%;
-    color: #98A5D6;
-}
-
-.Navigation {
-    text-align: center;
-}
-
-#url {
-    text-decoration: none;
-    color: #98A5D6;
-}
-
 .homebutton {
     border:none;
-    background-color: #9666e8;
+    border: 2px solid #519e8a;
     height: 40px;
     width: 120px;
     margin-top: 20px;
-    color: white;
+    color: #fff;
     border-radius: 5px;
     font-size: 16px;
     margin-left: 10px;
     margin-right: 10px;
     letter-spacing: .5px;
     transition: 0.5s;
+    margin-bottom: 0.25em;
+    }
+   
+.homebutton:hover {
+color: #519e8a;
+background-color: #fff;
+border: 2px solid;
 }
   
 .homebutton:focus {
     outline: 0;
 }
-  
-.homebutton:hover {
-    background-color: #7b50c6;
-    color: white;
-    cursor: pointer;
+
+
+.FilteredRestaurant {
+    height: 400px;
+    /* background-color: #181823; */
+    background-color: #FFA0B1;
+    margin-left: 20%;
+    margin-right: 20%;
+    margin-top: 150px;
+    padding:50px 50px 50px 50px;
+    color:white;
+    /* color:#F7F4EA; */
+    border-radius: 10px;
+
+}
+
+.FName {
+    margin-bottom: 2%;
+    font-weight: bold;
+    font-size: 24px;
+    font-size: 32px;
+    width: 100%;
+
+}
+
+.FInfo {
+    float: left;
+    width: 65%;
+    color: #98A5D6;
+    width: 35%;
+    color: #F7F4EA;
+    margin-top: 65px;
+}
+
+.FContact {
+    float: left;
+    width: 35%;
+    color: #F7F4EA;
+    margin-top: 65px;
+}
+
+.FTitle {
+    color:#F7F4EA;
+    margin-bottom: 5px;
+    margin-top: 8px;
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.FValue {
+    font-size: 18px;
+    color:#F7F4EA;
+}
+
+.FDays {
+    float: right;
+    width: 30%;
+    color: #98A5D6;
+    width: 10%;
+    color: #F7F4EA;
+}
+.FHours {
+    float: right;
+    width: 20%;
+    color: #F7F4EA;
+}
+
+
+.Navigation {
+    text-align: center;
+}
+
+#Furl {
+    text-decoration: none;
+    color: #98A5D6;
+    color: #F7F4EA;
 }
 
 .link {
     text-decoration: none;
     color: white;
+    color: #F7F4EA;
 }
- 
