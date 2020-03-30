@@ -10,21 +10,18 @@ $ virtualenv venv
 $ source venv/bin/activate
 $ pip3 install -r ./api_restaurant_roulette/requirements/base.txt
 $ python3 manage.py makemigrations api_restaurant_roulette
-$ python3 manage.py runserver
+$ python3 manage.py migrate
 ```
 #### To start the Django server
 ```
 $ python3 manage.py runserver
 ```
 #### To manually fill the database for testing:
+Start the Django server, then in a different terminal run
 ```
-$ python3 manage.py createsuperuser
 $ python3 manage.py runserver
+$ python3 ./api_restaurant_roulette/api_restaurant_roulette/RestaurantParser.py
 ```
-Then in your web browser of choice, navigate to "localhost:8000/admin/".<br />
-After logging in with the super user you created, you will be able to
-add restaurants to the database.
-
 ### Frontend Setup
 #### To setup the Node modules
 ```
