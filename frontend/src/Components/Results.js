@@ -11,7 +11,6 @@ class Results extends React.Component {
         super(props)
          this.state = {
              name: '',
-             hours: '',
              number: '',
              review: '',
              price: '',
@@ -37,7 +36,6 @@ class Results extends React.Component {
      }
 
      async componentDidMount() {
-         fetch('https://jsonplaceholder.typicode.com/users/8/')
          fetch('http://127.0.0.1:8000/restaurant/filtered/')
          .then (res => res.json())
          .then (json => {
@@ -69,8 +67,7 @@ class Results extends React.Component {
      }
 
      getRestaurant() {
-         fetch('https://jsonplaceholder.typicode.com/users/6/')
-         fetch('http://127.0.0.1:8000/restaurant/rand/')
+         fetch('http://127.0.0.1:8000/restaurant/filtered/')
          .then (res => res.json())
          .then (json => {
              this.setState ({
@@ -134,16 +131,8 @@ class Results extends React.Component {
      render() {
          return (
              <div>
-                 <link rel="stylesheet" href="./FilterPage.css"></link>
+                 {/*<link rel="stylesheet" href="./FilterPage.css"></link>*/}
              <div class="FilteredRestaurant">
-                 <div class="FName">{this.state.name}</div>
-                 <div class="FInfo">
-                     <div>{this.state.cuisine}</div>
-                     <div>{this.state.review}</div>
-                     <div>{this.state.price}</div>
-                     <div>{this.state.location}</div>
-                     <div>{this.state.number}</div>
-                     <div><a id="url" href={"https://www." + this.state.url}>{this.state.url}</a></div>
                  <div class="FName">{this.state.name}</div>
                  <div class="FInfo">
                      <div class="FTitle">cuisine</div>
@@ -173,9 +162,6 @@ class Results extends React.Component {
                          <p>{this.state.saturday_open} - {this.state.saturday_close}</p>
                      </div>
                  </div>
-                 <div class="Hours">
-                     <div>hours</div>
-                     <div>{this.state.hours}</div>
                  <div class="FDays">
                      <h4>day</h4>
                      <p>sunday:</p>
@@ -186,8 +172,6 @@ class Results extends React.Component {
                      <p>friday:</p>
                      <p>saturday:</p>
                  </div>
-             </div>
-             </div>
              </div>
             <div class="Navigation">
                 <Link class="link" to="/"><button class="homebutton">Home</button></Link>
