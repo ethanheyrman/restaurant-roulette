@@ -16,3 +16,7 @@ db.sqlite3
 .idea/
 api_restaurant_roulette/api_restaurant_roulette/migrations/*
 api_restaurant_roulette/api_restaurant_roulette/__pycache__/*
+*.pyc
+*/*/*/__pycache__/
+*/*/__pycache__/
+*/__pycache__/

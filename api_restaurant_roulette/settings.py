@@ -127,4 +127,4 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-MAX_QUERYSET_LEN = os.environ.get("MAX_QUERYSET_LEN", 5)
+MAX_RESTAURANTS = os.environ.get("MAX_RESTAURANTS", 5)
