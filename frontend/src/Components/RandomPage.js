@@ -99,12 +99,20 @@ class RandomPage extends React.Component {
         switch (rating) {
             case 1: 
                 return "⭐"
+            case 15:
+                return "⭐⭐"
             case 2: 
                 return "⭐⭐"
+            case 25:
+                return "⭐⭐⭐"
             case 3:
                 return "⭐⭐⭐"
+            case 35:
+                return "⭐⭐⭐⭐"
             case 4:
                 return "⭐⭐⭐⭐"
+            case 45:
+                return "⭐⭐⭐⭐⭐"
             case 5: 
                 return "⭐⭐⭐⭐⭐"
             default:
@@ -127,6 +135,11 @@ class RandomPage extends React.Component {
         }
     }
 
+    getCategory(category) {
+        var temp =  category.split(";")
+        return temp.join(", ")
+    }
+
     render() {
         return (
             <div>
@@ -134,7 +147,7 @@ class RandomPage extends React.Component {
                 <div class="RName">{this.state.name}</div>
                 <div class="RInfo">
                     <div class="RTitle">cuisine</div>
-                    <div class="RValue">{this.state.cuisine}</div>
+                    <div class="RValue">{this.getCategory(this.state.cuisine)}</div>
                     <div class="RTitle">rating</div>
                     <div class="RValue">{this.getRating(this.state.review)}</div>
                     <div class="RTitle">price</div>

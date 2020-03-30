@@ -2,13 +2,14 @@
 .RandomRestaurant {
     height: 400px;
     background-color: #FFA0B1;
-    margin-left: 20%;
-    margin-right: 20%;
+    margin-left: 15%;
+    margin-right: 15%;
     margin-top: 150px;
     padding:50px 50px 50px 50px;
     color:#F7F4EA;
     border-radius: 10px;
-    
+    box-shadow: 0 6px 13px rgba(0,0,0,.4);
+
 }
 
 .RName {
@@ -31,6 +32,7 @@
     width: 35%;
     color: #F7F4EA;
     margin-top: 65px;
+    
 }
 
 .RTitle {
@@ -53,7 +55,7 @@
 }
 .RHours {
     float: right;
-    width: 20%;
+    width: 15%;
     color: #F7F4EA;
 }
 
@@ -65,6 +67,8 @@
 #Rurl {
     text-decoration: none;
     color: #F7F4EA;
+    font-size: 16px;
+    word-wrap: break-word;
 }
 
 .rerollbutton {
@@ -80,16 +84,19 @@
   margin-right: 10px;
   letter-spacing: .5px;
   transition: 0.5s;
+  
 }
 
 .rerollbutton:focus {
     outline: 0;
+
 }
 
 .rerollbutton:hover {
     background-color: #F7F4EA;
     color: #F7F4EA;
     cursor: pointer;
+    box-shadow: 0 6px 13px rgba(0,0,0,.4);
 }
 
 .link {
