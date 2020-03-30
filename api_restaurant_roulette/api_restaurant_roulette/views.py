@@ -27,7 +27,6 @@ def filter_restaurants(request):
 
     query_params = {}
     if request.GET.get('price'):
-        print("ok")
         query_params['price'] = request.GET.getlist('price')
     if request.GET.get('category') is not None:
         query_params['category'] = request.GET.getlist('category')
@@ -39,8 +38,7 @@ def filter_restaurants(request):
     response = {}
     if query_params:
         (response["restaurant_queryset"],
-         response["num_applied_filters"],
-         response["limiting_query_param"]
+         response["percentage_of_filters_applied"]
          ) = incrementally_query(query_params=query_params)
         serializer = RestaurantSerializer(response["restaurant_queryset"], many=True)
         serialized_data = JSONRenderer().render(serializer.data)
@@ -85,7 +83,7 @@ def incrementally_query(query_params=None):
     for current_filter in filters:
         filtered_restaurants = restaurant_queryset_stack[-1].filter(current_filter)
         num_applied_filters += 1
-
+        percent_filters_applied = str(int(100 * (num_applied_filters) / len(filters)))
         if len(filtered_restaurants) < MAX_RESTAURANTS:
             if num_applied_filters is len(query_params):  # all filters were applied
                 remaining_restaurants = list(restaurant_queryset_stack.pop())[:MAX_RESTAURANTS]
@@ -95,19 +93,23 @@ def incrementally_query(query_params=None):
                     except ValueError:
                         continue
                 filtered_restaurants = list(chain(filtered_restaurants, remaining_restaurants))
-                return filtered_restaurants[:MAX_RESTAURANTS], num_applied_filters, None
+                print(f"less than {MAX_RESTAURANTS} and last filter applied")
+                return filtered_restaurants[:MAX_RESTAURANTS], percent_filters_applied
 
             else:  # filters remain but priority is returning MAX_RESTAURANTS
                 # repopulate queried restaurants to at least desired number of restaurants
                 while len(filtered_restaurants) < MAX_RESTAURANTS:
                     filtered_restaurants = restaurant_queryset_stack.pop()
-                    num_applied_filters -= 1
-                return filtered_restaurants[:MAX_RESTAURANTS], num_applied_filters, current_filter
+                    # num_applied_filters -= 1
+                print(f"less than {MAX_RESTAURANTS} and last filter not applied")
+                return filtered_restaurants[:MAX_RESTAURANTS], percent_filters_applied
 
         elif len(filtered_restaurants) >= MAX_RESTAURANTS:
             if num_applied_filters is len(query_params):  # all filters were applied
-                return filtered_restaurants[:MAX_RESTAURANTS], num_applied_filters, None
+                print(f"greater than {MAX_RESTAURANTS} and last filter applied")
+                return filtered_restaurants[:MAX_RESTAURANTS], percent_filters_applied
             else:  # continue applying filters
+                print(f"greater than {MAX_RESTAURANTS} and continuing to filter")
                 restaurant_queryset_stack.append(filtered_restaurants)
 
 
