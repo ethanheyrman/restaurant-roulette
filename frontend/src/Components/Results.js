@@ -38,7 +38,7 @@ class Results extends React.Component {
 
      async componentDidMount() {
          fetch('https://jsonplaceholder.typicode.com/users/8/')
-         fetch('http://127.0.0.1:8000/restaurant/filter/')
+         fetch('http://127.0.0.1:8000/restaurant/filtered/')
          .then (res => res.json())
          .then (json => {
              this.setState ({

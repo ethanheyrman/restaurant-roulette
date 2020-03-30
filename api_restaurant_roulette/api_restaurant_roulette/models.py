@@ -1,7 +1,7 @@
 from django.db import models
 import datetime
 
-# Create your models here.
+
 class Restaurant(models.Model):
     name = models.TextField()
     sunday_open = models.TimeField(default=datetime.time(0, 0))
@@ -19,7 +19,7 @@ class Restaurant(models.Model):
     saturday_open = models.TimeField(default=datetime.time(0, 0))
     saturday_close = models.TimeField(default=datetime.time(0, 0))
     phone = models.BigIntegerField()
-    rating = models.SmallIntegerField()
+    rating = models.FloatField()
     price = models.SmallIntegerField()
     category = models.TextField()
     address = models.TextField()

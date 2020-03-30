@@ -79,11 +79,11 @@ class Form extends Component {
     switch (name) {
       case "firstName":
         formErrors.firstName =
-          value.length < 2 ? "minimum 2 characaters required" : "";
+          value.length < 2 ? "minimum 2 characters required" : "";
         break;
       case "lastName":
         formErrors.lastName =
-          value.length < 2 ? "minimum 2 characaters required" : "";
+          value.length < 2 ? "minimum 2 characters required" : "";
         break;
       case "email":
         //   check if email has @sign else invalid
@@ -93,19 +93,19 @@ class Form extends Component {
         break;
       case "cuisine":
         formErrors.cuisine =
-          value.length < 3 ? "minimum 3 characaters required" : "";
+          value.length < 3 ? "minimum 3 characters required" : "";
         break;
       case "price":
         formErrors.price =
-            value.length < 1 ? "minimum 1 characater required" : "";
+            value.length < 1 ? "minimum 1 character required" : "";
         break;
       case "rating":
         formErrors.rating =
-            value.length === null ? "minimum 1 characater required" : "";
+            value.length === null ? "minimum 1 character required" : "";
         break;
       case "distance":
         formErrors.distance =
-            value.length < 1 ? "minimum 1 characater required" : "";
+            value.length < 1 ? "minimum 1 character required" : "";
         break;
       default:
         break;

@@ -26,4 +26,15 @@ After logging in with the super user you created, you will be able to
 add restaurants to the database.
 
 ### Frontend Setup
-...
+#### To setup the Node modules
+```
+$ cd frontend
+$ npm install
+```
+#### To start the app in development mode
+```
+$ npm start
+```
+The app will open on http://localhost:3000 to be viewed in in the browser.
+
+The page will automatically reload if you make changes to the code.
