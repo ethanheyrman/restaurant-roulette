@@ -40,15 +40,22 @@ def filter_restaurants(request):
         (response["restaurant_queryset"],
          response["percentage_of_filters_applied"]
          ) = incrementally_query(query_params=query_params)
-        serializer = RestaurantSerializer(response["restaurant_queryset"], many=True)
-        serialized_data = JSONRenderer().render(serializer.data)
-        response["restaurant_queryset"] = json.loads(serialized_data.decode('utf-8'))
 
-        return HttpResponse(json.dumps(
-            response, sort_keys=True, indent=4),
-            content_type="application/json")
     else:
-        return HttpResponse(status=400)
+        restaurants = []
+        for i in range(0, MAX_RESTAURANTS):
+            restaurants.append(json.loads(random_restaurant(request=request).content))
+        response["restaurant_queryset"] = restaurants
+        response["percentage_of_filters_applied"] = 0
+        # return HttpResponse(status=400)
+
+    serializer = RestaurantSerializer(response["restaurant_queryset"], many=True)
+    serialized_data = JSONRenderer().render(serializer.data)
+    response["restaurant_queryset"] = json.loads(serialized_data.decode('utf-8'))
+
+    return HttpResponse(json.dumps(
+        response, sort_keys=True, indent=4),
+        content_type="application/json")
 
 
 def incrementally_query(query_params=None):
@@ -148,3 +155,4 @@ def random_restaurant(request):
                 return HttpResponse(serialized_data)
     else:
         return HttpResponse(status=405)
+
