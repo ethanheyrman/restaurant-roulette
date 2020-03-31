@@ -19,7 +19,6 @@ $ python3 manage.py runserver
 #### To manually fill the database for testing:
 Start the Django server, then in a different terminal run
 ```
-$ python3 manage.py runserver
 $ python3 ./api_restaurant_roulette/api_restaurant_roulette/RestaurantParser.py
 ```
 ### Frontend Setup
