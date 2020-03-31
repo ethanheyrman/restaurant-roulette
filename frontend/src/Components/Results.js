@@ -36,7 +36,7 @@ class Results extends React.Component {
      }
 
      async componentDidMount() {
-         fetch('http://127.0.0.1:8000/restaurant/filtered/')
+         fetch('http://127.0.0.1:8000/restaurant/rand/')
          .then (res => res.json())
          .then (json => {
              this.setState ({
@@ -47,7 +47,7 @@ class Results extends React.Component {
                  cuisine: json.category,
                  location: json.address,
                  url: json.website,
-                 hours: json.address.zipcode,
+                 hours: json.hours,
                  sunday_open: json.sunday_open,
                  sunday_close: json.sunday_close,
                  monday_open: json.monday_open,
