@@ -1,0 +1,25 @@
+#virtualenv stuff
+bin/
+lib/
+lib64
+pyvenv.cfg
+environment_setup.txt
+environment_variables.txt
+
+.DS_Store
+node_modules/
+
+#database
+db.sqlite3
+
+.gitignore
+.idea/
+
+*/*/__pycache__/
+*/__pycache__/
+__pycache__/
+
+*/*/migrations/
+*/migrations/
+migrations/
+

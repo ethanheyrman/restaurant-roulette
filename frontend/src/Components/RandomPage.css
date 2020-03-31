@@ -1,0 +1,99 @@
+
+.RandomRestaurant {
+    height: 400px;
+    background-color: #FFA0B1;
+    margin-left: 20%;
+    margin-right: 20%;
+    margin-top: 150px;
+    padding:50px 50px 50px 50px;
+    color:#F7F4EA;
+    border-radius: 10px;
+    
+}
+
+.RName {
+    margin-bottom: 2%;
+    font-weight: bold;
+    font-size: 32px;
+    width: 100%;
+
+}
+
+.RInfo {
+    float: left;
+    width: 35%;
+    color: #F7F4EA;
+    margin-top: 65px;
+}
+
+.RContact {
+    float: left;
+    width: 35%;
+    color: #F7F4EA;
+    margin-top: 65px;
+}
+
+.RTitle {
+    color:#F7F4EA;
+    margin-bottom: 5px;
+    margin-top: 8px;
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.RValue {
+    font-size: 18px;
+    color:#F7F4EA;
+}
+
+.RDays {
+    float: right;
+    width: 10%;
+    color: #F7F4EA;
+}
+.RHours {
+    float: right;
+    width: 20%;
+    color: #F7F4EA;
+}
+
+
+.Navigation {
+    text-align: center;
+}
+
+#Rurl {
+    text-decoration: none;
+    color: #F7F4EA;
+}
+
+.rerollbutton {
+  border:none;
+  background-color: #F7F4EA;
+  height: 40px;
+  width: 120px;
+  margin-top: 20px;
+  color: grey;
+  border-radius: 5px;
+  font-size: 16px;
+  margin-left: 10px;
+  margin-right: 10px;
+  letter-spacing: .5px;
+  transition: 0.5s;
+}
+
+.rerollbutton:focus {
+    outline: 0;
+}
+
+.rerollbutton:hover {
+    background-color: #F7F4EA;
+    color: #F7F4EA;
+    cursor: pointer;
+}
+
+.link {
+    text-decoration: none;
+    color: #F7F4EA;
+}
+ 

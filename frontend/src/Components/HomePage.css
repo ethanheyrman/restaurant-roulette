@@ -1,0 +1,61 @@
+.HomePage {
+    height: 400px;
+    background-color: #181823;
+    margin-left: 20%;
+    margin-right: 20%;
+    margin-top: 150px;
+    padding:50px 50px 50px 50px;
+    color:white;
+    border-radius: 10px;   
+}
+
+.randombutton {
+    border:none;
+    background-color: #F7F4EA;
+    height: 40px;
+    width: 120px;
+    margin-top: 20px;
+    color: grey;
+    border-radius: 5px;
+    font-size: 16px;
+    margin-left: 10px;
+    margin-right: 10px;
+    letter-spacing: .5px;
+    transition: 0.5s;
+}
+  
+.randombutton:focus {
+    outline: 0;
+}
+  
+.randombutton:hover {
+    background-color: #F7F4EA;
+    color: #F7F4EA;
+    cursor: pointer;
+}
+
+
+.filterbutton {
+  border:none;
+  background-color: #F7F4EA;
+  height: 40px;
+  width: 120px;
+  margin-top: 20px;
+  color: grey;
+  border-radius: 5px;
+  font-size: 16px;
+  margin-left: 10px;
+  margin-right: 10px;
+  letter-spacing: .5px;
+  transition: 0.5s;
+}
+
+.filterbutton:focus {
+    outline: 0;
+}
+
+.filterbutton:hover {
+    background-color: #F7F4EA;
+    color: #F7F4EA;
+    cursor: pointer;
+}
