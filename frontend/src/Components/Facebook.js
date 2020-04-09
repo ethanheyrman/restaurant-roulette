@@ -29,6 +29,7 @@ export default class Facebook extends Component {
     let fbContent;
 
     if (this.state.isLoggedIn) {
+      
       fbContent = (
         <div
           style={{
@@ -40,7 +41,9 @@ export default class Facebook extends Component {
         >
           <img src={this.state.picture} alt={this.state.name} />
           <h2>User logged in: {this.state.name}</h2>
+          <div className = "edit">
           Email: {this.state.email}
+          </div>
           <Link class="link" to="/form"><button class="button">Continue</button></Link>
           <Link class="link" to="/"><button class="button">Home</button></Link>
         </div>
@@ -48,7 +51,7 @@ export default class Facebook extends Component {
     } else {
       fbContent = (
         <div className="wrapper">
-        <div className="form-wrapper">
+        {/* <div className="form-wrapper"> */}
         <div className = "edit">
         <FacebookLogin
           appId="221803959231445"
@@ -59,7 +62,7 @@ export default class Facebook extends Component {
           callback={this.responseFacebook}
         />
         </div>
-        </div>
+        {/* </div> */}
         </div>
       );
     }

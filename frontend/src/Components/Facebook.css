@@ -44,7 +44,7 @@ align-items: center;
 }
 
 .form-wrapper {
-height: 100px;
+/* height: 100px; */
 width: 400px;
 display: flex;
 flex-direction: column;
