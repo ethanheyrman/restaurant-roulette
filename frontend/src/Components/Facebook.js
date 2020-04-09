@@ -47,6 +47,9 @@ export default class Facebook extends Component {
       );
     } else {
       fbContent = (
+        <div className="wrapper">
+        <div className="form-wrapper">
+        <div className = "edit">
         <FacebookLogin
           appId="221803959231445"
           autoLoad={true}
@@ -55,6 +58,9 @@ export default class Facebook extends Component {
           onClick={this.componentClicked}
           callback={this.responseFacebook}
         />
+        </div>
+        </div>
+        </div>
       );
     }
 
