@@ -5,6 +5,7 @@ import HomePage from './Components/HomePage';
 import FilterPage from './Components/FilterPage';
 import Results from './Components/Results.js';
 import Form from './Components/Form.js';
+import Facebook from './Components/Facebook';
 
 import {
   BrowserRouter as Router,
@@ -23,6 +24,9 @@ function App() {
         </Route>
         <Route path="/form">
             <Form />
+        </Route>
+        <Route path="/fb">
+            <Facebook />
         </Route>
         <Route path="/filtered">
             <Filter />

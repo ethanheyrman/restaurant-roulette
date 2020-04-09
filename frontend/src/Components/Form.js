@@ -3,6 +3,7 @@ import "./Form.css";
 import {Link} from "react-router-dom";
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
+// import Facebook from './Components/Facebook.js';
 
 const emailRegex = RegExp(
   /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
@@ -293,7 +294,8 @@ class Form extends Component {
               <Link class="link" to="/filtered"><button class="sub_mit">Add user</button></Link>
            }
             </div>
-              <small>Already Have an Account?</small>
+              {/* <small>Already Have an Account</small> */}
+              <Link class="link" to="/fb" ><small>Already Have an Account?</small></Link>
             </div>
           </form>
         </div>
