@@ -14,14 +14,23 @@ import argparse
 
 # Initializing arguments and handling method input
 parser = argparse.ArgumentParser(description='Determining restaurant search parameters')
-parser.add_argument("--method", default=1, help="This is the way you would like to add data to the db (1 for yelp search, 2 for CSV file)")
-parser.add_argument("--filename", default="RestaurantList.csv", help="This is the name of the CSV file to read. It must be in the same directory as this script")
-parser.add_argument("--count", default=50, help="This is the number of restuarants to retrieve")
+parser.add_argument("--method", default=2, help="This is the way you would like to add data to the db (1 for yelp search, 2 for CSV file)")
+parser.add_argument("--filenameR", default="RestaurantList.csv", help="This is the name of the CSV file to read. It must be in the same directory as this script")
+parser.add_argument("--filenameW", default="RestaurantListFromDB.csv", help="This is the name of the CSV file to write to. It will be in the same directory as this script")
+parser.add_argument("--count", default=1000, help="This is the number of restuarants to retrieve")
 parser.add_argument("--offset", default=0, help="This is the offset at which you would like the search to begin")
 parser.add_argument("--search_location", default='Madison, WI', help="This is where you would like to search (e.g. Madison,WI)")
-parser.add_argument("--radius", default=8050, help="This is the radius you would like to search")
+parser.add_argument("--radius", default=40000, help="This is the radius you would like to search")
 args = parser.parse_args()
 method = int(args.method)
+
+url_get = 'http://127.0.0.1:8000/restaurant/all/'
+all_restaurants = requests.get(url = url_get)
+try:
+    all_restaurants_JSON = all_restaurants.json()
+except ValueError:
+    all_restaurants_JSON = {}
+
 if method == 1:
 
     # Handling arguments for database entry method of Yelp search
@@ -85,10 +94,10 @@ if method == 1:
             # Variable initialization
             name = '' # string
             # Indices of array: 0 = Monday, 1 = Tuesday,...,6 = Sunday
-            start = ['00:00','00:00','00:00','00:00','00:00','00:00','00:00'] # date-time
-            end = ['00:00','00:00','00:00','00:00','00:00','00:00','00:00'] # date-time
-            start_copy = ['00:00','00:00','00:00','00:00','00:00','00:00','00:00']
-            end_copy = ['00:00','00:00','00:00','00:00','00:00','00:00','00:00']
+            start = ['00:00:00','00:00:00','00:00:00','00:00:00','00:00:00','00:00:00','00:00:00'] # date-time
+            end = ['00:00:00','00:00:00','00:00:00','00:00:00','00:00:00','00:00:00','00:00:00'] # date-time
+            start_copy = ['00:00:00','00:00:00','00:00:00','00:00:00','00:00:00','00:00:00','00:00:00']
+            end_copy = ['00:00:00','00:00:00','00:00:00','00:00:00','00:00:00','00:00:00','00:00:00']
             phone = 'No phone number available' # string
             rating = 0 # double
             price = 0 # integer
@@ -125,8 +134,8 @@ if method == 1:
                 for data_point in Yelp_Detail_Query_Response_JSON['hours']:
                     for inner_data_point in data_point['open']:
                         day = inner_data_point['day']
-                        start_i = inner_data_point['start'][:2] + ':' + inner_data_point['start'][2:]
-                        end_i = inner_data_point['end'][:2] + ':' + inner_data_point['end'][2:]
+                        start_i = inner_data_point['start'][:2] + ':' + inner_data_point['start'][2:] + ':00'
+                        end_i = inner_data_point['end'][:2] + ':' + inner_data_point['end'][2:] + ':00'
                         if day == prevDay:
                             end[day] = end_i
                         else:
@@ -190,6 +199,7 @@ if method == 1:
                 website_url = 'No website available'
 
             # Posting data to the database
+            addVar = 1 # 1 if should add, 0 if should not
             try:
                 dat = {'name': Yelp_Detail_Query_Response_JSON['name'],
                        'sunday_open': start[6],
@@ -212,22 +222,43 @@ if method == 1:
                        'category': categories,
                        'address': address,
                        'website': website_url}
-                # TODO: Check if business is already in the database
-                # if all data matches an entry in database:
-                    #continue
-                # elif name and url match an entry in database:
-                    # try:
-                        # post to database
-                        # delete entry that had partial match
-                    # except post error:
-                        # continue
-                # else:
-                    # post to database
+                # Check if business is already in the database
+                for rest in all_restaurants_JSON:
+                    if str(str(dat['website'])[:len(str(rest['website']))]) == str(rest['website']):
+
+                        # Check if restaurant data has changed
+                        if str(dat['name'].encode('utf-8')) == str(rest['name'].encode('utf-8')) and str(dat['phone']) == str(rest['phone']) and str(dat['rating']) == str(rest['rating']) and str(dat['price']) == str(rest['price']) and str(dat['category']) == str(rest['category']) and str(dat['address']) == str(rest['address']) and str(dat['monday_close']) == str(rest['monday_close']) and str(dat['tuesday_close']) == str(rest['tuesday_close']) and str(dat['wednesday_close']) == str(rest['wednesday_close']) and str(dat['thursday_close']) == str(rest['thursday_close']) and str(dat['friday_close']) == str(rest['friday_close']) and str(dat['saturday_close']) == str(rest['saturday_close']) and str(dat['sunday_close']) == str(rest['sunday_close']) and str(dat['monday_open']) == str(rest['monday_open']) and str(dat['tuesday_open']) == str(rest['tuesday_open']) and str(dat['wednesday_open']) == str(rest['wednesday_open']) and str(dat['thursday_open']) == str(rest['thursday_open']) and str(dat['friday_open']) == str(rest['friday_open']) and str(dat['saturday_open']) == str(rest['saturday_open']) and str(dat['sunday_open']) == str(rest['sunday_open']):
+                            addVar = 0
+                            break
+                        else:
+                            id_to_delete = int(rest['id'])
+                            delete_params = {'idNum': id_to_delete}
+                            url_del = 'http://127.0.0.1:8000/restaurant/delete/'
+                            requests.delete(url = url_del, json = delete_params)
+                            break
+
+                    elif str(dat['name'].encode('utf-8')) == str(rest['name'].encode('utf-8')) and str(dat['address']) == str(rest['address']):
+
+                        # Check if restaurant data has changed
+                        if str(str(dat['website'])[:len(str(rest['website']))]) == str(rest['website']) and str(dat['phone']) == str(rest['phone']) and str(dat['rating']) == str(rest['rating']) and str(dat['price']) == str(rest['price']) and str(dat['category']) == str(rest['category']) and str(dat['monday_close']) == str(rest['monday_close']) and str(dat['tuesday_close']) == str(rest['tuesday_close']) and str(dat['wednesday_close']) == str(rest['wednesday_close']) and str(dat['thursday_close']) == str(rest['thursday_close']) and str(dat['friday_close']) == str(rest['friday_close']) and str(dat['saturday_close']) == str(rest['saturday_close']) and str(dat['sunday_close']) == str(rest['sunday_close']) and str(dat['monday_open']) == str(rest['monday_open']) and str(dat['tuesday_open']) == str(rest['tuesday_open']) and str(dat['wednesday_open']) == str(rest['wednesday_open']) and str(dat['thursday_open']) == str(rest['thursday_open']) and str(dat['friday_open']) == str(rest['friday_open']) and str(dat['saturday_open']) == str(rest['saturday_open']) and str(dat['sunday_open']) == str(rest['sunday_open']):
+                            addVar = 0
+                            break
+                        else:
+                            id_to_delete = int(rest['id'])
+                            delete_params = {'idNum': id_to_delete}
+                            url_del = 'http://127.0.0.1:8000/restaurant/delete/'
+                            requests.delete(url = url_del, json = delete_params)
+                            break
+                    else:
+                        continue
 
             except KeyError:
                 continue
-            POSTURL = 'http://127.0.0.1:8000/restaurant/add/'
-            r = requests.post(POSTURL, json = dat)
+
+            # Confirm whether or not to add to database
+            if addVar == 1:
+                POSTURL = 'http://127.0.0.1:8000/restaurant/add/'
+                r = requests.post(POSTURL, json = dat)
 
         # Setting offset as required for next iteration that will request a new list of restaurants from Yelp
         offset = offset + 50
@@ -235,9 +266,9 @@ if method == 1:
 elif method == 2:
 
     # Handling arguments for database entry method of reading CSV file
-    filename = args.filename
+    filenameR = args.filenameR
     my_path = os.path.abspath(os.path.dirname(__file__))
-    path = os.path.join(my_path, filename)
+    path = os.path.join(my_path, filenameR)
 
     # Opening CSV file
     try:
@@ -251,31 +282,71 @@ elif method == 2:
 
                 # Checking if i > 0 because first line is header information
                 if i > 0:
+                    addVar = 1
+                    if (str(line[15]) == "0"):
+                        phone_str = 'No phone number available'
+                    else:
+                        phone_str = '(' + line[15][:3] + ')' + ' ' + line[15][3:6] + '-' + line[15][6:]
+                    if(str(line[20]) == "No website"):
+                        website_str = 'No website available'
+                    else:
+                        website_str = line[20]
                     dat = {'name': line[0],
-                           'sunday_open': line[1],
-                           'sunday_close': line[2],
-                           'monday_open': line[3],
-                           'monday_close': line[4],
-                           'tuesday_open': line[5],
-                           'tuesday_close': line[6],
-                           'wednesday_open': line[7],
-                           'wednesday_close': line[8],
-                           'thursday_open': line[9],
-                           'thursday_close': line[10],
-                           'friday_open': line[11],
-                           'friday_close': line[12],
-                           'saturday_open': line[13],
-                           'saturday_close': line[14],
-                           'phone': line[15],
+                           'sunday_open': line[1] + ':00',
+                           'sunday_close': line[2] + ':00',
+                           'monday_open': line[3] + ':00',
+                           'monday_close': line[4] + ':00',
+                           'tuesday_open': line[5] + ':00',
+                           'tuesday_close': line[6] + ':00',
+                           'wednesday_open': line[7] + ':00',
+                           'wednesday_close': line[8] + ':00',
+                           'thursday_open': line[9] + ':00',
+                           'thursday_close': line[10] + ':00',
+                           'friday_open': line[11] + ':00',
+                           'friday_close': line[12] + ':00',
+                           'saturday_open': line[13] + ':00',
+                           'saturday_close': line[14] + ':00',
+                           'phone': phone_str,
                            'rating': line[16],
                            'price': line[17],
                            'category': line[18],
                            'address': line[19],
-                           'website': line[20]}
+                           'website': website_str}
 
-                    # Posting data to database
-                    url = 'http://127.0.0.1:8000/restaurant/add/'
-                    r = requests.post(url, json = dat)
+                    # Check if business is already in the database
+                    for rest in all_restaurants_JSON:
+
+                        if str(dat['website']) == str(str(rest['website'])[:len(str(dat['website']))]):
+
+                            # Check if restaurant data has changed
+                            if str(dat['name']) == str(rest['name'].encode('utf-8')) and str(dat['phone']) == str(rest['phone']) and str(dat['rating']) == str(rest['rating']) and str(dat['price']) == str(rest['price']) and str(dat['category']) == str(rest['category']) and str(dat['address']) == str(rest['address']) and str(dat['monday_close']) == str(rest['monday_close']) and str(dat['tuesday_close']) == str(rest['tuesday_close']) and str(dat['wednesday_close']) == str(rest['wednesday_close']) and str(dat['thursday_close']) == str(rest['thursday_close']) and str(dat['friday_close']) == str(rest['friday_close']) and str(dat['saturday_close']) == str(rest['saturday_close']) and str(dat['sunday_close']) == str(rest['sunday_close']) and str(dat['monday_open']) == str(rest['monday_open']) and str(dat['tuesday_open']) == str(rest['tuesday_open']) and str(dat['wednesday_open']) == str(rest['wednesday_open']) and str(dat['thursday_open']) == str(rest['thursday_open']) and str(dat['friday_open']) == str(rest['friday_open']) and str(dat['saturday_open']) == str(rest['saturday_open']) and str(dat['sunday_open']) == str(rest['sunday_open']):
+                                addVar = 0
+                                break
+                            else:
+                                id_to_delete = int(rest['id'])
+                                delete_params = {'idNum': id_to_delete}
+                                url_del = 'http://127.0.0.1:8000/restaurant/delete/'
+                                requests.delete(url = url_del, json = delete_params)
+                                break
+                        elif str(dat['name']) == str(rest['name'].encode('utf-8')) and str(dat['address']) == str(rest['address']):
+
+                            # Check if restaurant data has changed
+                            if str(dat['website']) == str(str(rest['website'])[:len(str(dat['website']))]) and str(dat['phone']) == str(rest['phone']) and str(dat['rating']) == str(rest['rating']) and str(dat['price']) == str(rest['price']) and str(dat['category']) == str(rest['category']) and str(dat['monday_close']) == str(rest['monday_close']) and str(dat['tuesday_close']) == str(rest['tuesday_close']) and str(dat['wednesday_close']) == str(rest['wednesday_close']) and str(dat['thursday_close']) == str(rest['thursday_close']) and str(dat['friday_close']) == str(rest['friday_close']) and str(dat['saturday_close']) == str(rest['saturday_close']) and str(dat['sunday_close']) == str(rest['sunday_close']) and str(dat['monday_open']) == str(rest['monday_open']) and str(dat['tuesday_open']) == str(rest['tuesday_open']) and str(dat['wednesday_open']) == str(rest['wednesday_open']) and str(dat['thursday_open']) == str(rest['thursday_open']) and str(dat['friday_open']) == str(rest['friday_open']) and str(dat['saturday_open']) == str(rest['saturday_open']) and str(dat['sunday_open']) == str(rest['sunday_open']):
+                                addVar = 0
+                                break
+                            else:
+                                id_to_delete = int(rest['id'])
+                                delete_params = {'idNum': id_to_delete}
+                                url_del = 'http://127.0.0.1:8000/restaurant/delete/'
+                                requests.delete(url = url_del, json = delete_params)
+                                break
+                        else:
+                            continue
+
+                    # Confirm whether or not to add to database
+                    if addVar == 1:
+                        POSTURL = 'http://127.0.0.1:8000/restaurant/add/'
+                        r = requests.post(POSTURL, json = dat)
                 i = i + 1
 
         # Closing file
@@ -286,9 +357,59 @@ elif method == 2:
         print('.\n.\n.')
         sys.exit()
 
+elif method == 3:
+
+    filenameW = args.filenameW
+    my_path = os.path.abspath(os.path.dirname(__file__))
+    path = os.path.join(my_path, filenameW)
+
+    all_restaurants_JSON
+
+    # Opening CSV file
+    try:
+        with open(path, 'w') as csv_file:
+            csv_writer = csv.DictWriter(csv_file, fieldnames = ['name', 'sunday_open', 'sunday_close', 'monday_open', 'monday_close', 'tuesday_open', 'tuesday_close', 'wednesday_open', 'wednesday_close', 'thursday_open', 'thursday_close', 'friday_open', 'friday_close', 'saturday_open', 'saturday_close', 'phone', 'rating', 'price', 'category', 'address', 'website', 'id'])
+            csv_writer.writeheader()
+
+            # Iterating through all restaurants
+            for rest in all_restaurants_JSON:
+                #row = str(rest['name'].encode('utf-8')) + ',' + str(rest['sunday_open']) + ',' + str(rest['saturday_open']) + ',' + str(rest['friday_open']) + ',' + str(rest['thursday_open']) + ',' + str(rest['wednesday_open']) + ',' + str(rest['tuesday_open']) + ',' + str(rest['monday_open']) + ',' + str(rest['sunday_close']) + ',' + str(rest['saturday_close']) + ',' + str(rest['friday_close']) + ',' + str(rest['thursday_close']) + ',' + str(rest['wednesday_close']) + ',' +    str(rest['tuesday_close']) + ',' + str(rest['monday_close']) + ',' + str(rest['phone']) + ',' + str(rest['rating']) + ',' + str(rest['price']) + ',' + str(rest['category']) + ',' + str(rest['address']) + ',' + str(rest['website']) + ',' + str(rest['id'])
+                row = {'name': rest['name'].encode('utf-8'),
+                       'price': rest['price'],
+                       'website': rest['website'],
+                       'address': rest['address'],
+                       'category': rest['category'],
+                       'rating': rest['rating'],
+                       'phone': rest['phone'],
+                       'id': rest['id'],
+                       'monday_open': rest['monday_open'],
+                       'tuesday_open': rest['tuesday_open'],
+                       'wednesday_open': rest['wednesday_open'],
+                       'thursday_open': rest['thursday_open'],
+                       'friday_open': rest['friday_open'],
+                       'saturday_open': rest['saturday_open'],
+                       'sunday_open': rest['sunday_open'],
+                       'monday_close': rest['monday_close'],
+                       'tuesday_close': rest['tuesday_close'],
+                       'wednesday_close': rest['wednesday_close'],
+                       'thursday_close': rest['thursday_close'],
+                       'friday_close': rest['friday_close'],
+                       'saturday_close': rest['saturday_close'],
+                       'sunday_close': rest['sunday_close']}
+                csv_writer.writerow(row)
+                row = ''
+
+        # Closing file
+        csv_file.close()
+    except IOError:
+        print('.\n.\n.')
+        print("I/O Error.")
+        print('.\n.\n.')
+        sys.exit()
+
 else:
 
-    # If method entered was not 1 or 2
+    # If method entered was not 1, 2, or 3
     print('.\n.\n.')
     print("Invalid method of database entry.")
     print('.\n.\n.')

@@ -1,0 +1,10 @@
+Use RestaurantParser.py to update the db. To do so, while in same folder as restaurant parser, run: 
+
+To read from yelp:
+python3 RestaurantParser.py --count=00 --offset=0 --search_location="Madison, WI" --radius=40000 --method=1
+
+To read from a CSV file of data:
+python3 RestaurantParser.py --filenameR="RestaurantList.csv" --method=2
+
+To write db to a CSV file:
+python3 RestaurantParser.py --method=3 --filenameW="RestaurantListFromDB.csv"
