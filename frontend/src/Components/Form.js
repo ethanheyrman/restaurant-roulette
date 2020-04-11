@@ -304,14 +304,14 @@ class Form extends Component {
 
             {
               !this.props.formValid
-              ? <Link class="link" to="/results"><button class="sub_mit" disabled={!this.state.email || !this.state.firstName
-              || !this.state.distance}>Submit</button></Link> :
+              ? <Link class="link" to="/results"><button class="sub_mit" disabled={!this.state.email || !this.state.firstName}>
+                Submit</button></Link> :
               <Link class="link" to="/results"><button class="sub_mit">Submit</button></Link>
            }
            {
               !this.props.formValid
-              ? <Link class="link" to="/filtered"><button class="sub_mit" disabled={!this.state.email || !this.state.firstName
-              || !this.state.distance}>Add user</button></Link> :
+              ? <Link class="link" to="/filtered"><button class="sub_mit" disabled={!this.state.email || !this.state.firstName}>
+                Add user</button></Link> :
               <Link class="link" to="/filtered"><button class="sub_mit">Add user</button></Link>
            }
             </div>
