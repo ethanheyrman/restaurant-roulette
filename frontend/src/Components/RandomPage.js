@@ -170,11 +170,11 @@ class RandomPage extends React.Component {
                     <p>friday:</p>
                     <p>saturday:</p>
                 </div>
-                <Link class="link" to="/res"><button class="homebutton">Res</button></Link>
             </div>
             <div class="Navigation">
-                <button class="rerollbutton" onClick={this.getRestaurant}>reroll</button>
-                <Link class="link" to="/"><button class="rerollbutton">home</button></Link>
+                <Link class="link" to="/res"><button class="rerollbutton"> Reserve</button></Link>
+                <button class="rerollbutton" onClick={this.getRestaurant}>Reroll</button>
+                <Link class="link" to="/"><button class="rerollbutton">Home</button></Link>
             </div>
             </div>
         )

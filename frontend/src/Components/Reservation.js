@@ -27,7 +27,7 @@ export default function Reservation() {
       <TextField
         id="datetime-local"
         label="Reservation Day"
-        type="datetime-local"
+        type="date"
         defaultValue="2020-04-11"
         className={classes.textField}
         InputLabelProps={{
