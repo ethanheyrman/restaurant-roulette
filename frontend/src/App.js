@@ -5,6 +5,8 @@ import HomePage from './Components/HomePage';
 import FilterPage from './Components/FilterPage';
 import Results from './Components/Results.js';
 import Form from './Components/Form.js';
+import Reservation from './Components/Reservation.js';
+import Acknowledgement from './Components/Acknowledgement.js';
 
 import {
   BrowserRouter as Router,
@@ -20,6 +22,12 @@ function App() {
         <Switch>
         <Route path="/results">
             <Results />
+        </Route>
+        <Route path="/res">
+            <Reservation />
+        </Route>
+        <Route path="/ack">
+            <Acknowledgement />
         </Route>
         <Route path="/form">
             <Form />
