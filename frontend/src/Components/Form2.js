@@ -1,16 +1,15 @@
+
+
 import React, { Component } from "react";
 import "./Form.css";
 import {Link} from "react-router-dom";
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
-import { GoogleComponent } from 'react-google-location'; 
 // import Facebook from './Components/Facebook.js';
 
 const emailRegex = RegExp(
   /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
 );
-
-const API_KEY = "AIzaSyAGrH5hYx20Y_k4drcU47uRPoBhz336QZM";
 
 const formValid = ({ formErrors, ...rest }) => {
   let valid = true;
@@ -34,20 +33,12 @@ class Form extends Component {
     super(props);
 
     this.state = {
-      firstName: null,
-      lastName: null,
-      email: null,
       cuisine: null,
       price: null,
       rating: null,
       distance: null,
-      latitude: '',
-      longitude: '',
       value: "default",
       formErrors: {
-        firstName: "",
-        lastName: "",
-        email: "",
         cuisine: "",
         price: "",
         rating: "",
@@ -63,9 +54,6 @@ class Form extends Component {
     if (formValid(this.state)) {
       console.log(`
         --SUBMITTING--
-        First Name: ${this.state.firstName}
-        Last Name: ${this.state.lastName}
-        Email: ${this.state.email}
         Cuisine: ${this.state.cuisine}
         Price: ${this.state.price}
         Rating: ${this.state.rating}
@@ -80,23 +68,8 @@ class Form extends Component {
     e.preventDefault();
     const { name, value } = e.target;
     let formErrors = { ...this.state.formErrors };
-
     
     switch (name) {
-      case "firstName":
-        formErrors.firstName =
-          value.length < 2 ? "minimum 2 characters required" : "";
-        break;
-      case "lastName":
-        formErrors.lastName =
-          value.length < 2 ? "minimum 2 characters required" : "";
-        break;
-      case "email":
-        //   check if email has @sign else invalid
-        formErrors.email = emailRegex.test(value)
-          ? ""
-          : "invalid email address";
-        break;
       case "cuisine":
         formErrors.cuisine =
           value.length < 3 ? "minimum 3 characters required" : "";
@@ -128,64 +101,7 @@ class Form extends Component {
         <div className="form-wrapper">
           <h1>Ready? Set. Go!</h1>
           <form onSubmit={this.handleSubmit} noValidate>
-            <div className="firstName">
-              <label htmlFor="firstName">First Name</label>
-              <input
-                className={formErrors.firstName.length > 0 ? "error" : null}
-                placeholder="First Name"
-                type="text"
-                name="firstName"
-                noValidate
-                onChange={this.handleChange}
-              />
-              {formErrors.firstName.length > 0 && (
-                <span className="errorMessage">{formErrors.firstName}</span>
-              )}
-            </div>
-            <div className="lastName">
-              <label htmlFor="lastName">Last Name</label>
-              <input
-                className={formErrors.lastName.length > 0 ? "error" : null}
-                placeholder="Last Name"
-                type="text"
-                name="lastName"
-                noValidate
-                onChange={this.handleChange}
-              />
-              {formErrors.lastName.length > 0 && (
-                <span className="errorMessage">{formErrors.lastName}</span>
-              )}
-            </div>
-            <div className="email">
-              <label htmlFor="email">Email</label>
-              <input
-                className={formErrors.email.length > 0 ? "error" : null}
-                placeholder="Email"
-                type="email"
-                name="email"
-                noValidate
-                onChange={this.handleChange}
-              />
-              {formErrors.email.length > 0 && (
-                <span className="errorMessage">{formErrors.email}</span>
-              )}
-            </div>
-
-            <div className="location">
-              <label htmlFor="location">Location</label>
-              <GoogleComponent
-                apiKey={API_KEY}
-                language={'en'}
-                country={'country:us'}
-                coordinates={true}
-                locationBoxStyle={'boxstyle'}
-                locationListStyle={'liststyle'}
-                onChange={(e) => { this.setState({ latitude: e.coordinates.lat, longitude: e.coordinates.lng })}} />
-              {formErrors.distance.length > 0 && (
-                <span className="errorMessage">{formErrors.distance}</span>
-              )}
-            </div>
-            {/*<div className="distance">
+            <div className="distance">
               <label htmlFor="distance">Distance</label>
               <input
                 className={formErrors.distance.length > 0 ? "error" : null}
@@ -198,29 +114,12 @@ class Form extends Component {
               {formErrors.distance.length > 0 && (
                 <span className="errorMessage">{formErrors.distance}</span>
               )}
-            </div>*/
-            }
-
-            {/* <div className="cuisine">
-              <label htmlFor="cuisine">Cuisine</label>
-              <input
-                className={formErrors.cuisine.length > 0 ? "error" : null}
-                placeholder="Cuisine"
-                type="cuisine"
-                name="cuisine"
-                noValidate
-                onChange={this.handleChange}
-              />
-              {formErrors.cuisine.length > 0 && (
-                <span className="errorMessage">{formErrors.cuisine}</span>
-              )}
-            </div> */}
+            </div>
             <div className="cuisine">
                <Autocomplete
                 multiple
                 options={cuisinePref}
                 getOptionLabel={option => option.title}
-                // defaultValue={[cuisinePref]}
                 onChange={this.onTagsChange}
                 renderInput={params => (
                   <TextField
@@ -234,26 +133,11 @@ class Form extends Component {
                 )}
               />
             </div>
-            {/* <div className="price">
-              <label htmlFor="price">Price</label>
-              <input
-                className={formErrors.price.length > 0 ? "error" : null}
-                placeholder="Price"
-                type="price"
-                name="price"
-                noValidate
-                onChange={this.handleChange}
-              />
-              {formErrors.price.length > 0 && (
-                <span className="errorMessage">{formErrors.price}</span>
-              )}
-            </div> */}
             <div className="price">
             <Autocomplete
                 multiple
                 options={pricePref}
                 getOptionLabel={option => option.title}
-                // defaultValue={[pricePref[0]]}
                 onChange={this.onTagsChange}
                 renderInput={params => (
                   <TextField
@@ -267,20 +151,6 @@ class Form extends Component {
                 )}
               />
               </div>
-            {/* <div className="rating">
-              <label htmlFor="rating">Rating</label>
-              <input
-                className={formErrors.rating.length > 0 ? "error" : null}
-                placeholder="Rating"
-                type="rating"
-                name="rating"
-                noValidate
-                onChange={this.handleChange}
-              />
-              {formErrors.rating.length > 0 && (
-                <span className="errorMessage">{formErrors.rating}</span>
-              )}
-            </div> */}
             <div className="rating">
             <Autocomplete
             multiple
@@ -303,21 +173,10 @@ class Form extends Component {
             <div class="Navigation">
                 <Link class="link" to="/"><button class="sub_mit">Home</button></Link>
 
-            {
-              !this.props.formValid
-              ? <Link class="link" to="/results"><button class="sub_mit" disabled={!this.state.email || !this.state.firstName}>
-                Submit</button></Link> :
               <Link class="link" to="/results"><button class="sub_mit">Submit</button></Link>
-           }
-           {
-              !this.props.formValid
-              ? <Link class="link" to="/filtered"><button class="sub_mit" disabled={!this.state.email || !this.state.firstName}>
-                Add user</button></Link> :
+           
               <Link class="link" to="/filtered"><button class="sub_mit">Add user</button></Link>
-           }
             </div>
-              {/* <small>Already Have an Account</small> */}
-              <Link class="link" to="/fb" ><small>Already Have an Account?</small></Link>
             </div>
           </form>
         </div>
