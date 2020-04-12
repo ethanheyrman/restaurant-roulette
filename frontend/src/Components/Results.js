@@ -172,6 +172,7 @@ class Results extends React.Component {
                      <p>friday:</p>
                      <p>saturday:</p>
                  </div>
+                 <Link class="link" to="/res"><button class="homebutton">Res</button></Link>
              </div>
             <div class="Navigation">
                 <Link class="link" to="/"><button class="homebutton">Home</button></Link>

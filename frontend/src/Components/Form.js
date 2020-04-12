@@ -279,7 +279,7 @@ class Form extends Component {
             <div className="sub_mit">
             <div class="Navigation">
                 <Link class="link" to="/"><button class="sub_mit">Home</button></Link>
-                <Link class="link" to="/res"><button class="sub_mit">Res</button></Link>
+                {/* <Link class="link" to="/res"><button class="sub_mit">Res</button></Link> */}
             {
               !this.props.formValid
               ? <Link class="link" to="/results"><button class="sub_mit" disabled={!this.state.email || !this.state.firstName
