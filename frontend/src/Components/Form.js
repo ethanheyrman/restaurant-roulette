@@ -3,11 +3,14 @@ import "./Form.css";
 import {Link} from "react-router-dom";
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
+import { GoogleComponent } from 'react-google-location'; 
 // import Facebook from './Components/Facebook.js';
 
 const emailRegex = RegExp(
   /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
 );
+
+const API_KEY = "AIzaSyAGrH5hYx20Y_k4drcU47uRPoBhz336QZM";
 
 const formValid = ({ formErrors, ...rest }) => {
   let valid = true;
@@ -38,6 +41,8 @@ class Form extends Component {
       price: null,
       rating: null,
       distance: null,
+      latitude: '',
+      longitude: '',
       value: "default",
       formErrors: {
         firstName: "",
@@ -75,8 +80,8 @@ class Form extends Component {
     e.preventDefault();
     const { name, value } = e.target;
     let formErrors = { ...this.state.formErrors };
-    
 
+    
     switch (name) {
       case "firstName":
         formErrors.firstName =
@@ -165,7 +170,22 @@ class Form extends Component {
                 <span className="errorMessage">{formErrors.email}</span>
               )}
             </div>
-            <div className="distance">
+
+            <div className="location">
+              <label htmlFor="location">Location</label>
+              <GoogleComponent
+                apiKey={API_KEY}
+                language={'en'}
+                country={'country:us'}
+                coordinates={true}
+                locationBoxStyle={'boxstyle'}
+                locationListStyle={'liststyle'}
+                onChange={(e) => { this.setState({ latitude: e.coordinates.lat, longitude: e.coordinates.lng })}} />
+              {formErrors.distance.length > 0 && (
+                <span className="errorMessage">{formErrors.distance}</span>
+              )}
+            </div>
+            {/*<div className="distance">
               <label htmlFor="distance">Distance</label>
               <input
                 className={formErrors.distance.length > 0 ? "error" : null}
@@ -178,7 +198,9 @@ class Form extends Component {
               {formErrors.distance.length > 0 && (
                 <span className="errorMessage">{formErrors.distance}</span>
               )}
-            </div>
+            </div>*/
+            }
+
             {/* <div className="cuisine">
               <label htmlFor="cuisine">Cuisine</label>
               <input
@@ -283,14 +305,14 @@ class Form extends Component {
 
             {
               !this.props.formValid
-              ? <Link class="link" to="/results"><button class="sub_mit" disabled={!this.state.email || !this.state.firstName
-              || !this.state.distance}>Submit</button></Link> :
+              ? <Link class="link" to="/results"><button class="sub_mit" disabled={!this.state.email || !this.state.firstName}>
+                Submit</button></Link> :
               <Link class="link" to="/results"><button class="sub_mit">Submit</button></Link>
            }
            {
               !this.props.formValid
-              ? <Link class="link" to="/filtered"><button class="sub_mit" disabled={!this.state.email || !this.state.firstName
-              || !this.state.distance}>Add user</button></Link> :
+              ? <Link class="link" to="/filtered"><button class="sub_mit" disabled={!this.state.email || !this.state.firstName}>
+                Add user</button></Link> :
               <Link class="link" to="/filtered"><button class="sub_mit">Add user</button></Link>
            }
             </div>

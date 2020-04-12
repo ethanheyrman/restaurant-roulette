@@ -87,7 +87,8 @@
   .cuisine,
   .price,
   .rating,
-  .distance {
+  .distance,
+  .location {
     display: flex;
     flex-direction: column;
     margin-bottom: 15px;
@@ -101,7 +102,8 @@
   }
 
   .email,
-  .distance {
+  .distance,
+  .location {
     width: 100%;
   }
 
@@ -145,3 +147,35 @@
     color: black;
     font-weight: lighter;
   }
+
+  
+li {
+  list-style-position: inside;
+  list-style-type: none;
+  
+}
+ul{
+position: absolute;
+z-index: 123;
+width: calc(100%);
+
+}
+.google-covert {
+  width: 100%;
+  z-index: 999;
+  position: relative;
+  border: none !important;
+  box-shadow: none !important;
+}
+.liststyle {
+  background-color: pink;
+  width: calc(100%);
+  
+}
+
+.boxstyle {
+  background-color: white;
+  width: calc(100% - 22px);
+}
+
+
