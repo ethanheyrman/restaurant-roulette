@@ -44,7 +44,7 @@ export default class Facebook extends Component {
           <div className = "edit">
           Email: {this.state.email}
           </div>
-          <Link class="link" to="/form"><button class="button">Continue</button></Link>
+          <Link class="link" to="/form2"><button class="button">Continue</button></Link>
           <Link class="link" to="/"><button class="button">Home</button></Link>
         </div>
       );
