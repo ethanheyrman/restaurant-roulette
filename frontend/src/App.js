@@ -3,8 +3,10 @@ import './App.css';
 import RandomPage from './Components/RandomPage';
 import HomePage from './Components/HomePage';
 import FilterPage from './Components/FilterPage';
-import UserForm from './Components/UserForm';
 import Results from './Components/Results.js';
+import Form from './Components/Form.js';
+import Form2 from './Components/Form2.js';
+import Facebook from './Components/Facebook';
 
 import {
   BrowserRouter as Router,
@@ -18,11 +20,17 @@ function App() {
     <div class="App">
      <Router>
         <Switch>
-        <Route path="/userform">
-            <UserForm />
-        </Route>
         <Route path="/results">
             <Results />
+        </Route>
+        <Route path="/form">
+            <Form />
+        </Route>
+        <Route path="/form2">
+            <Form2 />
+        </Route>
+        <Route path="/fb">
+            <Facebook />
         </Route>
         <Route path="/filtered">
             <Filter />
