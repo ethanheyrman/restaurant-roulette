@@ -159,8 +159,7 @@ def random_restaurant(request):
 
 ###
 def all_restaurants(request):
-    # Thanks to https://books.agiliq.com/projects/django-orm-cookbook/en/latest/random.html
-    # for telling me how to do my job
+
     all_restaurants_stack = []
     if request.method == 'GET':
         # Fail if there are no restaurants in the DB
@@ -189,9 +188,7 @@ def delete_restaurant(request):
         num_entries = Restaurant.objects.all().count()
         if num_entries == 0:
             return HttpResponse(status=500)
-
         Restaurant.objects.filter(id=idNum).delete()
-        #restaurant_to_delete.delete()
         return HttpResponse(status=200)
     else:
         return HttpResponse(status=405)
