@@ -1,7 +1,7 @@
 from django.db import models
 import datetime
 
-# Create your models here.
+
 class Restaurant(models.Model):
     name = models.TextField()
     sunday_open = models.TimeField(default=datetime.time(0, 0))

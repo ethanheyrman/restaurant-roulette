@@ -156,8 +156,6 @@ def random_restaurant(request):
     else:
         return HttpResponse(status=405)
 
-
-###
 def all_restaurants(request):
     # Thanks to https://books.agiliq.com/projects/django-orm-cookbook/en/latest/random.html
     # for telling me how to do my job
