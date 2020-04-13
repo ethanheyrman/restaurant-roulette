@@ -408,4 +408,3 @@ elif method is 3:
 else:  # valid import method not specified.
     error_msg = "Invalid method of database entry."
     raise Exception(error_msg)
-
