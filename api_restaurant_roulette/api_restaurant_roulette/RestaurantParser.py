@@ -1,16 +1,8 @@
-"""
-Yelp API info:
-Client ID:
-UIIt6xKJNCf5Y02-4ssYEA
-API Key:
-IVNVVKDmE0kP8Wmu2e4Zmpjl_HpCGsZSkQ2aqllVj7_z7jfkx50s-wSgeRhz8ZkDG2R6W26CG6RXVR5gf0owATiqFSReDzWIAVzTe_ujCD0CQF87D1XjwTU207WLXnYx
-"""
-
-import sys
-import csv, io
-import requests
-import os.path
 import argparse
+import csv
+import os.path
+import requests
+import sys
 
 # Initializing arguments and handling method input
 parser = argparse.ArgumentParser(description='Determining restaurant search parameters')
@@ -21,18 +13,9 @@ parser.add_argument("--count", default=1000, help="This is the number of restuar
 parser.add_argument("--offset", default=0, help="This is the offset at which you would like the search to begin")
 parser.add_argument("--search_location", default='Madison, WI', help="This is where you would like to search (e.g. Madison,WI)")
 parser.add_argument("--radius", default=40000, help="This is the radius you would like to search")
-args = parser.parse_args()
-method = int(args.method)
 
-url_get = 'http://127.0.0.1:8000/restaurant/all/'
-all_restaurants = requests.get(url = url_get)
-try:
-    all_restaurants_JSON = all_restaurants.json()
-except ValueError:
-    all_restaurants_JSON = {}
 
-if method == 1:
-
+def fetch_restaurants_from_yelp():
     # Handling arguments for database entry method of Yelp search
     count = int(args.count)
     if count > 1000:
@@ -56,9 +39,9 @@ if method == 1:
                 limits[loop] = count%50
 
     # Yelp necessary information
-    API_KEY = 'IVNVVKDmE0kP8Wmu2e4Zmpjl_HpCGsZSkQ2aqllVj7_z7jfkx50s-wSgeRhz8ZkDG2R6W26CG6RXVR5gf0owATiqFSReDzWIAVzTe_ujCD0CQF87D1XjwTU207WLXnYx'
+    YELP_API_KEY = os.environ.get("YELP_API_KEY", "")
     ENDPOINT_GET_LIST = 'https://api.yelp.com/v3/businesses/search'
-    HEADERS = {'Authorization': 'bearer %s' % API_KEY}
+    HEADERS = {'Authorization': 'bearer %s' % YELP_API_KEY}
 
     # Loop for getting and reading one list from  Yelp
     for loop in range(loops):
@@ -263,8 +246,8 @@ if method == 1:
         # Setting offset as required for next iteration that will request a new list of restaurants from Yelp
         offset = offset + 50
 
-elif method == 2:
 
+def read_restaurants_from_csv():
     # Handling arguments for database entry method of reading CSV file
     filenameR = args.filenameR
     my_path = os.path.abspath(os.path.dirname(__file__))
@@ -357,13 +340,11 @@ elif method == 2:
         print('.\n.\n.')
         sys.exit()
 
-elif method == 3:
 
+def write_restaurants_to_csv():
     filenameW = args.filenameW
     my_path = os.path.abspath(os.path.dirname(__file__))
     path = os.path.join(my_path, filenameW)
-
-    all_restaurants_JSON
 
     # Opening CSV file
     try:
@@ -373,7 +354,6 @@ elif method == 3:
 
             # Iterating through all restaurants
             for rest in all_restaurants_JSON:
-                #row = str(rest['name'].encode('utf-8')) + ',' + str(rest['sunday_open']) + ',' + str(rest['saturday_open']) + ',' + str(rest['friday_open']) + ',' + str(rest['thursday_open']) + ',' + str(rest['wednesday_open']) + ',' + str(rest['tuesday_open']) + ',' + str(rest['monday_open']) + ',' + str(rest['sunday_close']) + ',' + str(rest['saturday_close']) + ',' + str(rest['friday_close']) + ',' + str(rest['thursday_close']) + ',' + str(rest['wednesday_close']) + ',' +    str(rest['tuesday_close']) + ',' + str(rest['monday_close']) + ',' + str(rest['phone']) + ',' + str(rest['rating']) + ',' + str(rest['price']) + ',' + str(rest['category']) + ',' + str(rest['address']) + ',' + str(rest['website']) + ',' + str(rest['id'])
                 row = {'name': rest['name'].encode('utf-8'),
                        'price': rest['price'],
                        'website': rest['website'],
@@ -407,9 +387,25 @@ elif method == 3:
         print('.\n.\n.')
         sys.exit()
 
-else:
 
-    # If method entered was not 1, 2, or 3
-    print('.\n.\n.')
-    print("Invalid method of database entry.")
-    print('.\n.\n.')
+args = parser.parse_args()
+
+method = int(args.method)
+
+url_get = 'http://127.0.0.1:8000/restaurant/all/'
+all_restaurants = requests.get(url=url_get)
+try:
+    all_restaurants_JSON = all_restaurants.json()
+except ValueError:
+    all_restaurants_JSON = {}
+
+if method is 1:
+    fetch_restaurants_from_yelp()
+elif method is 2:
+    read_restaurants_from_csv()
+elif method is 3:
+    write_restaurants_to_csv()
+else:  # valid import method not specified.
+    error_msg = "Invalid method of database entry."
+    raise Exception(error_msg)
+
