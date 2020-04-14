@@ -6,7 +6,7 @@ import FilterPage from './Components/FilterPage';
 import Results from './Components/Results.js';
 import Form from './Components/Form.js';
 import Form2 from './Components/Form2.js';
-import Facebook from './Components/Facebook';
+import Facebook from './Components/Facebook.js';
 
 import {
   BrowserRouter as Router,
