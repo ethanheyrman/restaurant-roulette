@@ -9,7 +9,7 @@ from geopy.distance import geodesic
 from geopy.geocoders import Nominatim
 from rest_framework import viewsets
 from rest_framework.renderers import JSONRenderer
-from api_restaurant_roulette.settings import MAX_RESTAURANTS, MAX_DISTANCE, MAX_PRICE, MIN_RATING
+from api_restaurant_roulette.settings import MAX_RESTAURANTS, MAX_PRICE, MIN_RATING
 from .serializers import RestaurantSerializer
 from .models import Restaurant
 
@@ -176,12 +176,13 @@ def incrementally_query(query_params=None, avg_user_location=None):
             if num_applied_filters is len(query_params):  # all filters were applied
                 print(f"greater than {MAX_RESTAURANTS} and last filter applied")
                 unordered_filtered_restaurants = filtered_restaurants[:MAX_RESTAURANTS]
+                distances = []
                 for restaurant in unordered_filtered_restaurants:
                     try:
                         location = geolocator.geocode(restaurant.address)
-                        print(geodesic(location.point, avg_user_location))
+                        distances.append(geodesic(location.point, avg_user_location))
                     except:
-                        pass
+                        distances.append(None)
 
                 return filtered_restaurants[:MAX_RESTAURANTS], percent_filters_applied
             else:  # continue applying filters
