@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+import sys
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -54,7 +55,8 @@ MIDDLEWARE = [
 ]
 
 CORS_ORIGIN_WHITELIST = [
-    "http://localhost:3000"
+    "http://localhost:3000",
+    "http://localhost:42001"
 ]
 
 ROOT_URLCONF = 'api_restaurant_roulette.urls'
@@ -128,3 +130,6 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 MAX_RESTAURANTS = os.environ.get("MAX_RESTAURANTS", 5)
+MAX_DISTANCE = os.environ.get("MAX_DISTANCE", sys.maxsize)
+MAX_PRICE = os.environ.get("MAX_PRICE", 3)
+MIN_RATING = os.environ.get("MIN_RATING", 1)

@@ -34,3 +34,14 @@ $ npm start
 The app will open on http://localhost:3000 to be viewed in in the browser.
 
 The page will automatically reload if you make changes to the code.
+
+#### To run unit tests
+```
+$ python3 manage.py test
+```
+
+#### To compute the code coverage of the tests
+```
+$ coverage run --source='./api_restaurant_roulette' manage.py test api_restaurant_roulette
+$ coverage report
+```
