@@ -4,7 +4,7 @@ import {Link} from "react-router-dom";
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
 import { GoogleComponent } from 'react-google-location'; 
-// import Facebook from './Components/Facebook.js';
+//import Facebook from './Components/Facebook.js';
 
 const emailRegex = RegExp(
   /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/

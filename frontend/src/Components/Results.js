@@ -17,7 +17,16 @@ class Results extends React.Component {
 
      async componentDidMount() {
          console.log(this.props.location.state)
-         fetch('http://127.0.0.1:8000/restaurant/filtered/')
+         fetch('http://127.0.0.1:8000/restaurant/filtered/', {
+             method: 'POST',
+             body: {
+                'longitude': this.props.location.state.longitude,
+                'latitude': this.props.location.state.latitude,
+                'cuisine': this.props.location.state.cuisine,
+                'rating': this.props.location.state.rating,
+                'price': this.props.location.state.price
+             }
+         })
          .then (res => res.json())
          .then (json => {
              console.log(json)
@@ -30,7 +39,16 @@ class Results extends React.Component {
      }
 
      getRestaurant() {
-         fetch('http://127.0.0.1:8000/restaurant/filtered/')
+         fetch('http://127.0.0.1:8000/restaurant/filtered/', {
+            method: 'POST',
+            body: {
+                'longitude': this.props.location.state.longitude,
+                'latitude': this.props.location.state.latitude,
+                'cuisine': this.props.location.state.cuisine,
+                'rating': this.props.location.state.rating,
+                'price': this.props.location.state.price
+             }
+        })
          .then (res => res.json())
          .then (json => {
              console.log(json)
