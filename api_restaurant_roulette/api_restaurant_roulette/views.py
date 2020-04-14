@@ -1,3 +1,4 @@
+import sys
 from itertools import chain
 import json
 import random
@@ -6,7 +7,7 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import viewsets
 from rest_framework.renderers import JSONRenderer
-from api_restaurant_roulette.settings import MAX_RESTAURANTS
+from api_restaurant_roulette.settings import MAX_RESTAURANTS, MAX_DISTANCE, MAX_PRICE, MIN_RATING
 from .serializers import RestaurantSerializer
 from .models import Restaurant
 
@@ -25,16 +26,27 @@ def filter_restaurants(request):
     :returns: List of length MAX_RESTAURANTS, containing restaurant objects.
     """
 
-    query_params = {}
-    if request.GET.get('price'):
-        query_params['price'] = request.GET.getlist('price')
-    if request.GET.get('category') is not None:
-        query_params['category'] = request.GET.getlist('category')
-    if request.GET.get('rating') is not None:
-        query_params['rating'] = request.GET.getlist('rating')
-    if request.GET.get('distance') is not None:
-        query_params['distance'] = request.GET.getlist('distance')
+    request_body = request.body.decode('utf-8') if request.body is not None else None
 
+    all_user_filters = json.loads(request_body)
+
+    query_params = {}
+
+    category_filters = []
+    distance_filters = []
+    price_filters = []
+    rating_filters = []
+
+    for user in all_user_filters:
+        category_filters.append(user['category'])
+        distance_filters.append(user['distance'])
+        price_filters.append(user['price'])
+        rating_filters.append(user['rating'])
+    query_params['categories'] = category_filters
+    query_params['distances'] = distance_filters
+    query_params['prices'] = price_filters
+    query_params['ratings'] = rating_filters
+    # return HttpResponse(incrementally_query(query_params=query_params))
     response = {}
     if query_params:
         (response["restaurant_queryset"],
@@ -45,7 +57,7 @@ def filter_restaurants(request):
         restaurants = []
         for i in range(0, MAX_RESTAURANTS):
             restaurants.append(json.loads(random_restaurant(request=request).content))
-        response["restaurant_queryset"] = restaurants
+        response["restaurant_queryset"] = restaurants[0]
         response["percentage_of_filters_applied"] = 0
         # return HttpResponse(status=400)
 
@@ -73,15 +85,47 @@ def incrementally_query(query_params=None):
     filters = []
 
     # map query parameters to Django filters
-    for price in query_params.get("price", []):
-        filters.append(Q(price__exact=str(price)))
-    for category in query_params.get("category", []):
+    for category in query_params.get("categories", []):
+        if isinstance(category, list):
+            for index in category:
+                filters.append(Q(category__exact=str(index), _connector='OR'))  #TODO might need to create Q object first then AND it
+            continue
         filters.append(Q(category__exact=str(category)))
-    for rating in query_params.get("rating", []):
-        filters.append(Q(rating__exact=str(rating)))
-    for distance in query_params.get("distance", []):
-        filters.append(Q(distance__exact=str(distance)))
 
+    limiting_distance = MAX_DISTANCE  # effectively boundless max size to guarantee all indices are tested against
+    for distance in query_params.get("distances", []):
+        if isinstance(distance, list):
+            for index in distance:
+                if int(index) < limiting_distance:
+                    limiting_distance = int(index)
+            continue
+        if int(distance) < limiting_distance:
+            limiting_distance = int(distance)
+    filters.append(Q(distance__lte=str(limiting_distance)))
+
+    limiting_price = MAX_PRICE
+    for price in query_params.get("prices", []):
+        if isinstance(price, list):
+            for index in price:
+                if int(index) < limiting_price:
+                    limiting_price = int(index)
+            continue
+        if int(price) < limiting_price:
+            limiting_price = int(price)
+    filters.append(Q(price__lte=str(limiting_price)))
+
+    limiting_rating = MIN_RATING
+    for rating in query_params.get("ratings", []):
+        if isinstance(rating, list):
+            for index in rating:
+                if int(index) < limiting_rating:
+                    limiting_rating = int(index)
+            continue
+        if int(rating) < limiting_rating:
+            limiting_rating = int(rating)
+    filters.append(Q(rating__gte=str(limiting_rating)))
+
+    # return filters
     if not filtered_restaurants:  # initially retrieve all restaurants
         filtered_restaurants = Restaurant.objects.all()
         restaurant_queryset_stack.append(filtered_restaurants)
