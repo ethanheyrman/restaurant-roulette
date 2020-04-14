@@ -5,11 +5,15 @@ import random
 from django.db.models import Max, Q
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
+from geopy.distance import geodesic
+from geopy.geocoders import Nominatim
 from rest_framework import viewsets
 from rest_framework.renderers import JSONRenderer
 from api_restaurant_roulette.settings import MAX_RESTAURANTS, MAX_DISTANCE, MAX_PRICE, MIN_RATING
 from .serializers import RestaurantSerializer
 from .models import Restaurant
+
+geolocator = Nominatim(user_agent="api_restaurant_roulette.wsgi.application")
 
 
 class RestaurantView(viewsets.ModelViewSet):
@@ -25,33 +29,39 @@ def filter_restaurants(request):
     :param request: The GET request issued by the client.
     :returns: List of length MAX_RESTAURANTS, containing restaurant objects.
     """
-
     request_body = request.body.decode('utf-8') if request.body is not None else None
-
     all_user_filters = json.loads(request_body)
 
     query_params = {}
 
     category_filters = []
-    distance_filters = []
+    location_filters = []
     price_filters = []
     rating_filters = []
 
+    sum_latitude = 0
+    sum_longitude = 0
+
     for user in all_user_filters:
         category_filters.append(user['category'])
-        distance_filters.append(user['distance'])
         price_filters.append(user['price'])
         rating_filters.append(user['rating'])
+
+        sum_latitude += float(user['latitude'])
+        sum_longitude += float(user['longitude'])
+
+    latitude = sum_latitude/len(all_user_filters)
+    longitude = sum_longitude/len(all_user_filters)
+
     query_params['categories'] = category_filters
-    # query_params['distances'] = distance_filters
     query_params['prices'] = price_filters
     query_params['ratings'] = rating_filters
-    # return HttpResponse(incrementally_query(query_params=query_params))
+
     response = {}
     if query_params:
         (response["restaurant_queryset"],
          response["percentage_of_filters_applied"]
-         ) = incrementally_query(query_params=query_params)
+         ) = incrementally_query(query_params=query_params, avg_user_location=(latitude, longitude))
 
     else:
         restaurants = []
@@ -70,7 +80,7 @@ def filter_restaurants(request):
         content_type="application/json")
 
 
-def incrementally_query(query_params=None):
+def incrementally_query(query_params=None, avg_user_location=None):
     """
     Helper function used to order passed-in query parameters and apply each iteratively to the
     entire collection of restaurants. Filters are applied until a MAX_RESTAURANTS value is reached
@@ -94,16 +104,6 @@ def incrementally_query(query_params=None):
             filters.append(category_union)
             continue
         filters.append(Q(category__exact=str(category)))
-    # limiting_distance = MAX_DISTANCE  # effectively boundless max size to guarantee all indices are tested against
-    # for distance in query_params.get("distances", []):
-    #     if isinstance(distance, list):
-    #         for index in distance:
-    #             if int(index) < limiting_distance:
-    #                 limiting_distance = int(index)
-    #         continue
-    #     if int(distance) < limiting_distance:
-    #         limiting_distance = int(distance)
-    # filters.append(Q(distance__lte=str(limiting_distance)))
 
     limiting_price = MAX_PRICE
     for price in query_params.get("prices", []):
@@ -146,6 +146,14 @@ def incrementally_query(query_params=None):
                         continue
                 filtered_restaurants = list(chain(filtered_restaurants, remaining_restaurants))
                 print(f"less than {MAX_RESTAURANTS} and last filter applied")
+                unordered_filtered_restaurants = filtered_restaurants[:MAX_RESTAURANTS]
+                for restaurant in unordered_filtered_restaurants:
+                    try:
+                        location = geolocator.geocode(restaurant.address)
+                        print(geodesic(location.point, avg_user_location))
+                    except:
+                        pass
+
                 return filtered_restaurants[:MAX_RESTAURANTS], percent_filters_applied
 
             else:  # filters remain but priority is returning MAX_RESTAURANTS
@@ -154,11 +162,27 @@ def incrementally_query(query_params=None):
                     filtered_restaurants = restaurant_queryset_stack.pop()
                     # num_applied_filters -= 1
                 print(f"less than {MAX_RESTAURANTS} and last filter not applied")
+                unordered_filtered_restaurants = filtered_restaurants[:MAX_RESTAURANTS]
+                for restaurant in unordered_filtered_restaurants:
+                    try:
+                        location = geolocator.geocode(restaurant.address)
+                        print(geodesic(location.point, avg_user_location))
+                    except:
+                        pass
+
                 return filtered_restaurants[:MAX_RESTAURANTS], percent_filters_applied
 
         elif len(filtered_restaurants) >= MAX_RESTAURANTS:
             if num_applied_filters is len(query_params):  # all filters were applied
                 print(f"greater than {MAX_RESTAURANTS} and last filter applied")
+                unordered_filtered_restaurants = filtered_restaurants[:MAX_RESTAURANTS]
+                for restaurant in unordered_filtered_restaurants:
+                    try:
+                        location = geolocator.geocode(restaurant.address)
+                        print(geodesic(location.point, avg_user_location))
+                    except:
+                        pass
+
                 return filtered_restaurants[:MAX_RESTAURANTS], percent_filters_applied
             else:  # continue applying filters
                 print(f"greater than {MAX_RESTAURANTS} and continuing to filter")

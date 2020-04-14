@@ -6,10 +6,11 @@ import json
 url = 'http://127.0.0.1:8000/restaurant/filtered/'
 data = [
         {
-            'category': ['French', 'American'],
+            'category': "",#['French', 'American'],
             'rating': '4',
             'price': '2',
-            'distance':"1"
+            'latitude':"43.070530",
+            'longitude':"-89.388198",
         }
     ]
         # {
