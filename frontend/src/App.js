@@ -20,8 +20,8 @@ function App() {
     <div class="App">
      <Router>
         <Switch>
-        <Route path="/results">
-            <Results />
+        <Route path="/results" render={(props) => <Results {...props}/>}>
+            
         </Route>
         <Route path="/form">
             <Form />
