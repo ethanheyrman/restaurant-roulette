@@ -43,7 +43,7 @@ def filter_restaurants(request):
         price_filters.append(user['price'])
         rating_filters.append(user['rating'])
     query_params['categories'] = category_filters
-    query_params['distances'] = distance_filters
+    # query_params['distances'] = distance_filters
     query_params['prices'] = price_filters
     query_params['ratings'] = rating_filters
     # return HttpResponse(incrementally_query(query_params=query_params))
@@ -87,21 +87,23 @@ def incrementally_query(query_params=None):
     # map query parameters to Django filters
     for category in query_params.get("categories", []):
         if isinstance(category, list):
-            for index in category:
-                filters.append(Q(category__exact=str(index), _connector='OR'))  #TODO might need to create Q object first then AND it
+            category_union = Q(category__exact=category[0], _connector='OR')
+
+            for index in category[1:]:
+                category_union.add(Q(category__exact=str(index), _connector='OR'), conn_type='OR', squash=True)
+            filters.append(category_union)
             continue
         filters.append(Q(category__exact=str(category)))
-
-    limiting_distance = MAX_DISTANCE  # effectively boundless max size to guarantee all indices are tested against
-    for distance in query_params.get("distances", []):
-        if isinstance(distance, list):
-            for index in distance:
-                if int(index) < limiting_distance:
-                    limiting_distance = int(index)
-            continue
-        if int(distance) < limiting_distance:
-            limiting_distance = int(distance)
-    filters.append(Q(distance__lte=str(limiting_distance)))
+    # limiting_distance = MAX_DISTANCE  # effectively boundless max size to guarantee all indices are tested against
+    # for distance in query_params.get("distances", []):
+    #     if isinstance(distance, list):
+    #         for index in distance:
+    #             if int(index) < limiting_distance:
+    #                 limiting_distance = int(index)
+    #         continue
+    #     if int(distance) < limiting_distance:
+    #         limiting_distance = int(distance)
+    # filters.append(Q(distance__lte=str(limiting_distance)))
 
     limiting_price = MAX_PRICE
     for price in query_params.get("prices", []):
@@ -125,7 +127,6 @@ def incrementally_query(query_params=None):
             limiting_rating = int(rating)
     filters.append(Q(rating__gte=str(limiting_rating)))
 
-    # return filters
     if not filtered_restaurants:  # initially retrieve all restaurants
         filtered_restaurants = Restaurant.objects.all()
         restaurant_queryset_stack.append(filtered_restaurants)
