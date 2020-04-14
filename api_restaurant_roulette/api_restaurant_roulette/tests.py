@@ -5,6 +5,40 @@ from .RestaurantParser import fill_db
 import json
 
 # Create your tests here.
+class FilteredRestaurantTests(TestCase):
+    _url = "/restaurant/filtered/"
+
+    def setUp(self):
+        fill_db(self.client)
+
+    def test_no_query(self):
+        response = self.client.post(self._url)
+        self.assertEqual(response.status_code, 200, "Filtered Restaurant post request does not return 200")
+
+    def test_empty_query(self):
+        response = self.client.post(self._url, data = [], content_type = 'application/json')
+        self.assertEqual(response.status_code, 200, "Filtered Restaurant post request does not return 200")
+
+    def test_basic_query(self):
+        data = [
+                {
+                    'category': ['French', 'American'],
+                    'rating': '4',
+                    'price': '2',
+                    'distance': ""
+                },
+                {
+                    'category': 'French',
+                    'rating': '4',
+                    'price': '3',
+                    'distance': '3'
+                }
+        ]
+
+        response = self.client.post(self._url, data = data, content_type = 'application/json')
+
+        self.assertEqual(response.status_code, 200, "Filtered Restaurant post request does not return 200")
+
 class RandomRestaurantTests(TestCase):
     _url = "/restaurant/rand/"
 
