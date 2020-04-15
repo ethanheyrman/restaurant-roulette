@@ -13,7 +13,7 @@ const formValid = ({ formErrors, ...rest }) => {
 
   // check 1 if form  is being submitted empty
   Object.values(formErrors).forEach(val => {
-    val.length > 0 && (valid = false);
+    if (val.length <= 0) valid = false;
   });
 
   // check 2 if the form was filled out
@@ -213,13 +213,13 @@ class Form extends Component {
                 { 
                     pathname: "/results",
                     state: {
-                      longitude: this.state.longitude,
-                      latitude: this.state.latitude,
-                      cuisine: this.state.cuisine,
-                      rating: this.state.rating,
-                      price: this.state.price
+                      longitude: this.state.longitude || "",
+                      latitude: this.state.latitude || "",
+                      cuisine: this.state.cuisine || "",
+                      rating: this.state.rating || "",
+                      price: this.state.price || ""
                     }
-                }}><button class="sub_mit" disabled={!this.state.latitude || !this.state.longitude}>
+                }}><button class="sub_mit">
                 Submit</button></Link> :
               <Link to={
                 { 
