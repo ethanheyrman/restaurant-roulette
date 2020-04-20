@@ -130,6 +130,5 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 MAX_RESTAURANTS = os.environ.get("MAX_RESTAURANTS", 5)
-MAX_DISTANCE = os.environ.get("MAX_DISTANCE", sys.maxsize)
-MAX_PRICE = os.environ.get("MAX_PRICE", 3)
+MAX_PRICE = os.environ.get("MAX_PRICE", 4)
 MIN_RATING = os.environ.get("MIN_RATING", 1)
