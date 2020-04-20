@@ -25,8 +25,8 @@ class Results extends React.Component {
                         'longitude': this.props.location.state.longitude,
                         'latitude': this.props.location.state.latitude,
                         'category': this.props.location.state.cuisine,
-                        'rating': this.props.location.state.rating.length,
-                        'price': this.props.location.state.price.length
+                        'rating': this.props.location.state.rating,
+                        'price': this.props.location.state.price
                     }
                 ]
             )
@@ -51,8 +51,8 @@ class Results extends React.Component {
                         'longitude': this.props.location.state.longitude,
                         'latitude': this.props.location.state.latitude,
                         'category': this.props.location.state.cuisine,
-                        'rating': this.props.location.state.rating.length,
-                        'price': this.props.location.state.price.length
+                        'rating': this.props.location.state.rating,
+                        'price': this.props.location.state.price
                     }
                 ]
             )

@@ -43,12 +43,14 @@ def filter_restaurants(request):
     sum_longitude = 0
 
     for user in all_user_filters:
-        category_filters.append(user['category'])
-        price_filters.append(user['price'])
-        rating_filters.append(user['rating'])
-
-        sum_latitude += float(user['latitude'])
-        sum_longitude += float(user['longitude'])
+        print(user['category'][0]['title'])
+        if  category_filters.append(user['category'][0]['title']):
+            category_filters.append(user['category'][0]['title'])
+        price_filters.append(len(user['price']))
+        rating_filters.append(len(user['rating']))
+        if user['latitude'] and user['longitude']:
+            sum_latitude += float(user['latitude'])
+            sum_longitude += float(user['longitude'])
 
     latitude = sum_latitude/len(all_user_filters)
     longitude = sum_longitude/len(all_user_filters)

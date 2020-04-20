@@ -342,11 +342,11 @@ class Form extends Component {
                       firstName: this.state.firstName,
                       lastName: this.state.lastName,
                       email: this.state.email,
-                      longitude: this.state.longitude,
-                      latitude: this.state.latitude,
-                      cuisine: this.state.cuisine,
-                      rating: this.state.rating,
-                      price: this.state.price
+                      longitude: this.state.longitude || "",
+                      latitude: this.state.latitude || "",
+                      cuisine: this.state.cuisine || "",
+                      rating: this.state.rating || "",
+                      price: this.state.price || ""
                     }
                 }}><button class="sub_mit" disabled={!this.state.email || !this.state.firstName}>
                 Submit</button></Link> :
