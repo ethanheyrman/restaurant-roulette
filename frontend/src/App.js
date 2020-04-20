@@ -12,12 +12,11 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
 } from "react-router-dom";
 
 function App() {
   return (
-    <div class="App">
+    <div className="App">
      <Router>
         <Switch>
         <Route path="/results" render={(props) => <Results {...props}/>}>

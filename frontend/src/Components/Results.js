@@ -123,25 +123,25 @@ class Results extends React.Component {
             <div>
             {this.state.restaurants.map((item) => 
                 <div>
-                 <div class="FilteredRestaurant">
-                 <div class="FName">{item.name}</div>
-                 <div class="FInfo">
-                     <div class="FTitle">cuisine</div>
-                     <div class="FValue">{item.category}</div>
-                     <div class="FTitle">rating</div>
-                     <div class="FValue">{this.getRating(item.rating)}</div>
-                     <div class="FTitle">price</div>
-                     <div class="FValue">{this.getPrice(item.price)}</div>
+                 <div className="FilteredRestaurant">
+                 <div className="FName">{item.name}</div>
+                 <div className="FInfo">
+                     <div className="FTitle">cuisine</div>
+                     <div className="FValue">{item.category}</div>
+                     <div className="FTitle">rating</div>
+                     <div className="FValue">{this.getRating(item.rating)}</div>
+                     <div className="FTitle">price</div>
+                     <div className="FValue">{this.getPrice(item.price)}</div>
                  </div>
-                 <div class="FContact">
-                     <div class="FTitle">address</div>
-                     <div class="FValue">{item.address}</div>
-                     <div class="FTitle">phone number</div>
-                     <div class="FValue">{item.phone}</div>
-                     <div class="FTitle">website</div>
-                     <div class="FValue"><a id="Furl" href={item.website}>{item.website}</a></div>
+                 <div className="FContact">
+                     <div className="FTitle">address</div>
+                     <div className="FValue">{item.address}</div>
+                     <div className="FTitle">phone number</div>
+                     <div className="FValue">{item.phone}</div>
+                     <div className="FTitle">website</div>
+                     <div className="FValue"><a id="Furl" href={item.website}>{item.website}</a></div>
                  </div>
-                 <div class="FHours">
+                 <div className="FHours">
                      <h4>time</h4>
                      <div>
                          <p>{item.sunday_open} - {item.sunday_close}</p>
@@ -153,7 +153,7 @@ class Results extends React.Component {
                          <p>{item.saturday_open} - {item.saturday_close}</p>
                      </div>
                  </div>
-                 <div class="FDays">
+                 <div className="FDays">
                      <h4>day</h4>
                      <p>sunday:</p>
                      <p>monday:</p>
@@ -168,8 +168,8 @@ class Results extends React.Component {
             </div>
         )}
              
-             <div class="Navigation">
-                <Link class="link" to="/"><button class="homebutton">Home</button></Link>
+             <div className="Navigation">
+                <Link className="link" to="/"><button className="homebutton">Home</button></Link>
             </div>
             </div>
         )

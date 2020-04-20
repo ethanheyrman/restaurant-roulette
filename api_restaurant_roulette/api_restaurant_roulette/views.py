@@ -147,6 +147,7 @@ def incrementally_query(query_params=None, avg_user_location=None):
                     except ValueError:
                         continue
                 filtered_restaurants = list(chain(filtered_restaurants, remaining_restaurants))
+                print("debugging")
                 print(f"less than {MAX_RESTAURANTS} and last filter applied")
                 unordered_filtered_restaurants = filtered_restaurants[:MAX_RESTAURANTS]
                 for restaurant in unordered_filtered_restaurants:
