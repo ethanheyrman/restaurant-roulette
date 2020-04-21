@@ -46,6 +46,23 @@ class Form extends Component {
     };
   }
 
+  async componentDidMount() {
+    console.log(this.props.location.state)
+
+    if (this.props.location.state !== undefined) {
+            this.setState({
+
+            longitude: this.props.location.state.longitude || "",
+            latitude: this.props.location.state.latitude|| "",
+            cuisine: this.props.location.state.cuisine || "",
+            rating: this.props.location.state.rating || "",
+            price: this.props.location.state.price || ""
+
+        }, () => console.log(this.state) )
+        
+    }
+    console.log(this.state)
+}
 
   handleSubmit = e => {
     e.preventDefault();
@@ -94,34 +111,74 @@ class Form extends Component {
   };
 
   onCuisineChange = (event, values) => {
-    this.setState({
-      cuisine: values
-    }, () => {
-      // This will output an array of objects
-      // given by Autocompelte options property.
-      console.log(this.state);
-    });
+    console.log(this.state)
+    console.log(this.state.cuisine == null)
+    if (this.state.cuisine == null) {
+      this.setState({
+        cuisine: values
+      }, () => {
+        // This will output an array of objects
+        // given by Autocompelte options property.
+        console.log(this.state);
+      });
+    }
+    else {
+      this.setState({
+        cuisine: this.state.cuisine.concat(values)
+      }, () => {
+        // This will output an array of objects
+        // given by Autocompelte options property.
+        console.log(this.state);
+      });
+    }
   }
 
   onPriceChange = (event, values) => {
-    this.setState({
-      price: values
-    }, () => {
-      // This will output an array of objects
-      // given by Autocompelte options property.
-      console.log(this.state);
-    });
+
+    if (this.state.price == null) {
+      this.setState({
+        price: values
+      }, () => {
+        // This will output an array of objects
+        // given by Autocompelte options property.
+        console.log(this.state);
+      });
+    }
+    else {
+      this.setState({
+        price: this.state.price.concat(values)
+      }, () => {
+        // This will output an array of objects
+        // given by Autocompelte options property.
+        console.log(this.state);
+      });
+    }
+    
   }
 
   onRatingChange = (event, values) => {
-    this.setState({
-      rating: values
-    }, () => {
-      // This will output an array of objects
-      // given by Autocompelte options property.
-      console.log(this.state);
-    });
+    if (this.state.rating == null) {
+      this.setState({
+        rating: values
+      }, () => {
+        // This will output an array of objects
+        // given by Autocompelte options property.
+        console.log(this.state);
+      });
+    }
+    else {
+      this.setState({
+        rating: this.state.rating.concat(values)
+      }, () => {
+        // This will output an array of objects
+        // given by Autocompelte options property.
+        console.log(this.state);
+      });
+    }
+
+    
   }
+
 
   render() {
     const { formErrors } = this.state;
@@ -230,7 +287,17 @@ class Form extends Component {
            }
            {
               !this.props.formValid
-              ? <Link class="link" to="/filtered"><button class="sub_mit" disabled={!this.state.latitude || !this.state.longitude}>
+              ? <Link class="link" to={
+                { 
+                    pathname: "/filtered",
+                    state: {
+                      longitude: this.state.longitude || "",
+                      latitude: this.state.latitude || "",
+                      cuisine: this.state.cuisine || "",
+                      rating: this.state.rating || "",
+                      price: this.state.price || ""
+                    }
+                }}><button class="sub_mit" disabled={!this.state.latitude || !this.state.longitude}>
                 Add user</button></Link> :
               <Link class="link" to="/filtered"><button class="sub_mit">Add user</button></Link>
            }

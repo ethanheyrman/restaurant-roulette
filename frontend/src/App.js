@@ -19,21 +19,22 @@ function App() {
     <div className="App">
      <Router>
         <Switch>
+        <Route path="/filtered" render={(props) => <FilterPage {...props}/>}>
+        </Route>
+
         <Route path="/results" render={(props) => <Results {...props}/>}>
-            
         </Route>
-        <Route path="/form">
-            <Form />
+
+        <Route path="/form" render={(props) => <Form {...props}/>}>
         </Route>
-        <Route path="/form2">
-            <Form2 />
+
+        <Route path="/form2"render={(props) => <Form2 {...props}/>}>
         </Route>
+
         <Route path="/fb">
             <Facebook />
         </Route>
-        <Route path="/filtered">
-            <Filter />
-        </Route>
+        
         <Route path="/random">
             <Random />
         </Route>
@@ -54,8 +55,5 @@ function Random() {
   return <RandomPage></RandomPage>;
 }
 
-function Filter() {
-  return <FilterPage></FilterPage>
-}
 
 export default App;

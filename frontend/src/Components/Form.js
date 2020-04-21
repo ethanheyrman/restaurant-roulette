@@ -56,6 +56,24 @@ class Form extends Component {
     };
   }
 
+  async componentDidMount() {
+    console.log(this.props)
+    if (this.props.location.state !== undefined) {
+            this.setState({
+            firstName: this.props.location.state.firstName,
+            lastName: this.props.location.state.lastName || "",
+            email: this.props.location.state.email || "",
+            longitude: this.props.location.state.longitude || "",
+            latitude: this.props.location.state.latitude|| "",
+            cuisine: this.props.location.state.cuisine || "",
+            rating: this.props.location.state.rating || "",
+            price: this.props.location.state.price || ""
+
+        }, () => console.log(this.state) )
+        
+    }
+    
+}
 
   handleSubmit = e => {
     e.preventDefault();
@@ -121,33 +139,70 @@ class Form extends Component {
   };
 
   onCuisineChange = (event, values) => {
-    this.setState({
-      cuisine: values
-    }, () => {
-      // This will output an array of objects
-      // given by Autocompelte options property.
-      console.log(this.state);
-    });
+    if (this.state.cuisine === '') {
+      this.setState({
+        cuisine: values
+      }, () => {
+        // This will output an array of objects
+        // given by Autocompelte options property.
+        console.log(this.state);
+      });
+    }
+    else {
+      this.setState({
+        cuisine: this.state.cuisine.concat(values)
+      }, () => {
+        // This will output an array of objects
+        // given by Autocompelte options property.
+        console.log(this.state);
+      });
+    }
   }
 
   onPriceChange = (event, values) => {
-    this.setState({
-      price: values
-    }, () => {
-      // This will output an array of objects
-      // given by Autocompelte options property.
-      console.log(this.state);
-    });
+
+    if (this.state.price === '') {
+      this.setState({
+        price: values
+      }, () => {
+        // This will output an array of objects
+        // given by Autocompelte options property.
+        console.log(this.state);
+      });
+    }
+    else {
+      this.setState({
+        price: this.state.price.concat(values)
+      }, () => {
+        // This will output an array of objects
+        // given by Autocompelte options property.
+        console.log(this.state);
+      });
+    }
+    
   }
 
   onRatingChange = (event, values) => {
-    this.setState({
-      rating: values
-    }, () => {
-      // This will output an array of objects
-      // given by Autocompelte options property.
-      console.log(this.state);
-    });
+    if (this.state.rating === '') {
+      this.setState({
+        rating: values
+      }, () => {
+        // This will output an array of objects
+        // given by Autocompelte options property.
+        console.log(this.state);
+      });
+    }
+    else {
+      this.setState({
+        rating: this.state.rating.concat(values)
+      }, () => {
+        // This will output an array of objects
+        // given by Autocompelte options property.
+        console.log(this.state);
+      });
+    }
+
+    
   }
 
   render() {
@@ -360,9 +415,35 @@ class Form extends Component {
            }
            {
               !this.props.formValid
-              ? <Link class="link" to="/filtered"><button class="sub_mit" disabled={!this.state.email || !this.state.firstName}>
+              ? <Link class="link" to={
+                { 
+                    pathname: "/filtered",
+                    state: {
+                      firstName: this.state.firstName,
+                      lastName: this.state.lastName,
+                      email: this.state.email,
+                      longitude: this.state.longitude || "",
+                      latitude: this.state.latitude || "",
+                      cuisine: this.state.cuisine || "",
+                      rating: this.state.rating || "",
+                      price: this.state.price || ""
+                    }
+                }}><button class="sub_mit" disabled={!this.state.email || !this.state.firstName}>
                 Add user</button></Link> :
-              <Link class="link" to="/filtered"><button class="sub_mit">Add user</button></Link>
+              <Link class="link" to={
+                { 
+                    pathname: "/filtered",
+                    state: {
+                      firstName: this.state.firstName,
+                      lastName: this.state.lastName,
+                      email: this.state.email,
+                      longitude: this.state.longitude || "",
+                      latitude: this.state.latitude || "",
+                      cuisine: this.state.cuisine || "",
+                      rating: this.state.rating || "",
+                      price: this.state.price || ""
+                    }
+                }}><button class="sub_mit">Add user</button></Link>
            }
             </div>
               {/* <small>Already Have an Account</small> */}
