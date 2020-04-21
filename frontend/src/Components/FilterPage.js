@@ -18,8 +18,8 @@ class FilterPage extends React.Component {
           price: null,
           rating: null,
           distance: null,
-          latitude: '',
-          longitude: '',
+          latitude: [],
+          longitude: [],
         };
         this.componentDidMount = this.componentDidMount.bind(this)
       }
@@ -31,8 +31,8 @@ class FilterPage extends React.Component {
                 firstName: this.props.location.state.firstName,
                 lastName: this.props.location.state.lastName || "",
                 email: this.props.location.state.email || "",
-                longitude: this.props.location.state.longitude || "",
-                latitude: this.props.location.state.latitude|| "",
+                longitude: this.props.location.state.longitude || [],
+                latitude: this.props.location.state.latitude|| [],
                 cuisine: this.props.location.state.cuisine || "",
                 rating: this.props.location.state.rating || "",
                 price: this.props.location.state.price || ""
@@ -54,8 +54,8 @@ class FilterPage extends React.Component {
                       firstName: this.state.firstName,
                       lastName: this.state.lastName,
                       email: this.state.email,
-                      longitude: this.state.longitude || "",
-                      latitude: this.state.latitude || "",
+                      longitude: this.state.longitude || [],
+                      latitude: this.state.latitude || [],
                       cuisine: this.state.cuisine || "",
                       rating: this.state.rating || "",
                       price: this.state.price || ""

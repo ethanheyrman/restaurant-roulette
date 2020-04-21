@@ -31,8 +31,7 @@ function App() {
         <Route path="/form2"render={(props) => <Form2 {...props}/>}>
         </Route>
 
-        <Route path="/fb">
-            <Facebook />
+        <Route path="/fb"render={(props) => <Facebook {...props}/>}>
         </Route>
         
         <Route path="/random">

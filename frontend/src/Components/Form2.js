@@ -34,8 +34,8 @@ class Form extends Component {
       price: null,
       rating: null,
       distance: null,
-      latitude: '',
-      longitude: '',
+      latitude: [],
+      longitude: [],
       value: "default",
       formErrors: {
         cuisine: "",
@@ -52,8 +52,8 @@ class Form extends Component {
     if (this.props.location.state !== undefined) {
             this.setState({
 
-            longitude: this.props.location.state.longitude || "",
-            latitude: this.props.location.state.latitude|| "",
+            longitude: this.props.location.state.longitude || [],
+            latitude: this.props.location.state.latitude|| [],
             cuisine: this.props.location.state.cuisine || "",
             rating: this.props.location.state.rating || "",
             price: this.props.location.state.price || ""
@@ -179,6 +179,51 @@ class Form extends Component {
     
   }
 
+  onCoordinateChange = (event) => {
+    console.log(event.coordinates)
+    if (event.coordinates.lat !== undefined) {
+      if (this.state.latitude === []) {
+        this.setState({
+          latitude: event.coordinates.lat
+        }, () => {
+          // This will output an array of objects
+          // given by Autocompelte options property.
+          console.log(this.state);
+        });
+      }
+      else {
+        this.setState({
+          latitude: this.state.latitude.concat(event.coordinates.lat)
+        }, () => {
+          // This will output an array of objects
+          // given by Autocompelte options property.
+          console.log(this.state);
+        });
+      }
+    }
+
+    if (event.coordinates.lng !== undefined) {  
+      if (this.state.longitude === []) {
+        this.setState({
+          longitude: event.coordinates.lng
+        }, () => {
+          // This will output an array of objects
+          // given by Autocompelte options property.
+          console.log(this.state);
+        });
+      }
+      else {
+        this.setState({
+          longitude: this.state.longitude.concat(event.coordinates.lng)
+        }, () => {
+          // This will output an array of objects
+          // given by Autocompelte options property.
+          console.log(this.state);
+        });
+      }
+    }
+  }
+
 
   render() {
     const { formErrors } = this.state;
@@ -197,7 +242,7 @@ class Form extends Component {
                 coordinates={true}
                 locationBoxStyle={'boxstyle'}
                 locationListStyle={'liststyle'}
-                onChange={(e) => { this.setState({ latitude: e.coordinates.lat, longitude: e.coordinates.lng })}} />
+                onChange={this.onCoordinateChange} />
               {formErrors.distance.length > 0 && (
                 <span className="errorMessage">{formErrors.distance}</span>
               )}
@@ -270,8 +315,8 @@ class Form extends Component {
                 { 
                     pathname: "/results",
                     state: {
-                      longitude: this.state.longitude || "",
-                      latitude: this.state.latitude || "",
+                      longitude: this.state.longitude || [],
+                      latitude: this.state.latitude || [],
                       cuisine: this.state.cuisine || "",
                       rating: this.state.rating || "",
                       price: this.state.price || ""
@@ -291,8 +336,8 @@ class Form extends Component {
                 { 
                     pathname: "/filtered",
                     state: {
-                      longitude: this.state.longitude || "",
-                      latitude: this.state.latitude || "",
+                      longitude: this.state.longitude || [],
+                      latitude: this.state.latitude || [],
                       cuisine: this.state.cuisine || "",
                       rating: this.state.rating || "",
                       price: this.state.price || ""
