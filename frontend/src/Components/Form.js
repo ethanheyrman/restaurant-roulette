@@ -3,12 +3,55 @@ import "./Form.css";
 import {Link} from "react-router-dom";
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
-import { GoogleComponent } from 'react-google-location'; 
+import { GoogleComponent } from 'react-google-location';
+import Typography from '@material-ui/core/Typography';
+import Slider from '@material-ui/core/Slider'; 
 //import Facebook from './Components/Facebook.js';
 
 const emailRegex = RegExp(
   /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
 );
+const prices = [
+  {
+    value: 1,
+    label: '$',
+  },
+  {
+    value: 2,
+    label: '$$',
+  },
+  {
+    value: 3,
+    label: '$$$',
+  },
+  {
+    value: 4,
+    label: '$$$$',
+  },
+]
+
+const ratings = [
+  {
+    value: 1,
+    label:'1⭐',
+  },
+  { 
+    value: 2,
+    label:'2⭐',
+  },
+  { 
+    value: 3,
+    label:'3⭐'
+  },
+  { 
+    value: 4,
+    label:'4⭐',
+  },
+  { 
+    value: 5,
+    label:'5⭐'
+  }
+]
 
 const API_KEY = "AIzaSyAGrH5hYx20Y_k4drcU47uRPoBhz336QZM";
 
@@ -278,7 +321,7 @@ class Form extends Component {
                 <span className="errorMessage">{formErrors.price}</span>
               )}
             </div> */}
-            <div className="price">
+            {/*<div className="price">
             <Autocomplete
                 multiple
                 options={pricePref}
@@ -296,7 +339,21 @@ class Form extends Component {
                   />
                 )}
               />
-              </div>
+              </div>*/}
+            <div className="price">
+              <Typography id="price-values" gutterBottom>
+                Price
+              </Typography>
+              <Slider
+                defaultValue={1}
+                min={1}
+                step={1}
+                marks={prices}
+                max={4}
+                valueLabelDisplay="auto"
+                aria-labelledby="price-values"
+              />
+            </div>
             {/* <div className="rating">
               <label htmlFor="rating">Rating</label>
               <input
@@ -311,7 +368,7 @@ class Form extends Component {
                 <span className="errorMessage">{formErrors.rating}</span>
               )}
             </div> */}
-            <div className="rating">
+            {/*<div className="rating">
             <Autocomplete
             multiple
             options={ratingPref}
@@ -328,6 +385,20 @@ class Form extends Component {
                 />
             )}
             />
+            </div>*/}
+            <div className="rating">
+              <Typography id="rating-values" gutterBottom>
+                Rating
+              </Typography>
+              <Slider
+                defaultValue={5}
+                min={1}
+                step={1}
+                marks={ratings}
+                max={5}
+                valueLabelDisplay="auto"
+                aria-labelledby="rating-values"
+              />
             </div>
             <div className="sub_mit">
             <div class="Navigation">
@@ -393,18 +464,18 @@ const cuisinePref = [
 ];
 
 // Price preference
-const pricePref = [
-  { title: '$'},
-  { title: '$$'},
-  { title: '$$$'},
-  { title: '$$$$'},
-];
+// const pricePref = [
+//   { title: '$'},
+//   { title: '$$'},
+//   { title: '$$$'},
+//   { title: '$$$$'},
+// ];
 
 // Rating preference
-const ratingPref = [
-  { title: '⭐' },
-  { title: '⭐⭐'},
-  { title: '⭐⭐⭐'},
-  { title: '⭐⭐⭐⭐'},
-  { title: '⭐⭐⭐⭐⭐'},
-];
+// const ratingPref = [
+//   { title: '⭐' },
+//   { title: '⭐⭐'},
+//   { title: '⭐⭐⭐'},
+//   { title: '⭐⭐⭐⭐'},
+//   { title: '⭐⭐⭐⭐⭐'},
+// ];
