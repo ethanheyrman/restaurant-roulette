@@ -13,9 +13,9 @@ class HomePage extends React.Component {
     render() {
         return (
             <div>
-                <div class="Navigation">
-                    <Link class="link" to="/random"><button class="randombutton">Random</button></Link>
-                    <Link class="link" to="/filtered"><button class="filterbutton">Filters</button></Link>
+                <div className="Navigation">
+                    <Link className="link" to="/random"><button className="randombutton">Random</button></Link>
+                    <Link className="link" to="/filtered"><button className="filterbutton">Filters</button></Link>
                 </div>
             </div>
         )

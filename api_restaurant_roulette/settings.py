@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+import sys
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -54,7 +55,8 @@ MIDDLEWARE = [
 ]
 
 CORS_ORIGIN_WHITELIST = [
-    "http://localhost:3000"
+    "http://localhost:3000",
+    "http://localhost:42001"
 ]
 
 ROOT_URLCONF = 'api_restaurant_roulette.urls'
@@ -128,6 +130,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 # App settings determined at runtime
-MAX_RESTAURANTS = os.environ.get("MAX_RESTAURANTS", 5)
 YELP_API_KEY = os.environ.get("YELP_API_KEY", "")
 YELP_CLIENT_ID = os.environ.get("YELP_CLIENT_ID", "")
+MAX_RESTAURANTS = os.environ.get("MAX_RESTAURANTS", 5)
+MAX_PRICE = os.environ.get("MAX_PRICE", 4)
+MIN_RATING = os.environ.get("MIN_RATING", 1)

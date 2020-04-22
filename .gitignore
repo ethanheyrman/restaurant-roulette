@@ -9,6 +9,9 @@ environment_variables.txt
 .DS_Store
 node_modules/
 
+# Unit Testing
+.coverage
+
 #database
 db.sqlite3
 

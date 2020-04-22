@@ -4,7 +4,7 @@ import {Link} from "react-router-dom";
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
 import { GoogleComponent } from 'react-google-location'; 
-// import Facebook from './Components/Facebook.js';
+//import Facebook from './Components/Facebook.js';
 
 const emailRegex = RegExp(
   /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
@@ -120,6 +120,36 @@ class Form extends Component {
     this.setState({ formErrors, [name]: value }, () => console.log(this.state));
   };
 
+  onCuisineChange = (event, values) => {
+    this.setState({
+      cuisine: values
+    }, () => {
+      // This will output an array of objects
+      // given by Autocompelte options property.
+      console.log(this.state);
+    });
+  }
+
+  onPriceChange = (event, values) => {
+    this.setState({
+      price: values
+    }, () => {
+      // This will output an array of objects
+      // given by Autocompelte options property.
+      console.log(this.state);
+    });
+  }
+
+  onRatingChange = (event, values) => {
+    this.setState({
+      rating: values
+    }, () => {
+      // This will output an array of objects
+      // given by Autocompelte options property.
+      console.log(this.state);
+    });
+  }
+
   render() {
     const { formErrors } = this.state;
 
@@ -221,7 +251,7 @@ class Form extends Component {
                 options={cuisinePref}
                 getOptionLabel={option => option.title}
                 // defaultValue={[cuisinePref]}
-                onChange={this.onTagsChange}
+                onChange={this.onCuisineChange}
                 renderInput={params => (
                   <TextField
                     {...params}
@@ -254,7 +284,7 @@ class Form extends Component {
                 options={pricePref}
                 getOptionLabel={option => option.title}
                 // defaultValue={[pricePref[0]]}
-                onChange={this.onTagsChange}
+                onChange={this.onPriceChange}
                 renderInput={params => (
                   <TextField
                     {...params}
@@ -286,7 +316,7 @@ class Form extends Component {
             multiple
             options={ratingPref}
             getOptionLabel={option => option.title}
-            onChange={this.onTagsChange}
+            onChange={this.onRatingChange}
             renderInput={params => (
                 <TextField
                 {...params}
@@ -305,9 +335,28 @@ class Form extends Component {
 
             {
               !this.props.formValid
-              ? <Link class="link" to="/results"><button class="sub_mit" disabled={!this.state.email || !this.state.firstName}>
+              ? <Link class="link" to={
+                { 
+                    pathname: "/results",
+                    state: {
+                      firstName: this.state.firstName,
+                      lastName: this.state.lastName,
+                      email: this.state.email,
+                      longitude: this.state.longitude || "",
+                      latitude: this.state.latitude || "",
+                      cuisine: this.state.cuisine || "",
+                      rating: this.state.rating || "",
+                      price: this.state.price || ""
+                    }
+                }}><button class="sub_mit" disabled={!this.state.email || !this.state.firstName}>
                 Submit</button></Link> :
-              <Link class="link" to="/results"><button class="sub_mit">Submit</button></Link>
+              <Link to={
+                { 
+                    pathname: "/results",
+                    firstName: this.state.firstName
+                }
+            }>
+            <button class="sub_mit">Submit</button></Link>
            }
            {
               !this.props.formValid
