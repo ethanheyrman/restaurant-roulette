@@ -387,24 +387,68 @@ def write_restaurants_to_csv():
         print('.\n.\n.')
         sys.exit()
 
+# Brought back for the sake of testing.
+def fill_db(client = None):
+    my_path = os.path.abspath(os.path.dirname(__file__))
+    path = os.path.join(my_path, "RestaurantList.csv")
 
-args = parser.parse_args()
+    with open(path, 'r') as csv_file:
+        csv_reader = csv.reader(csv_file)
+        i = 0
+        for line in csv_reader:
+            if client == None:
+                print(line)
+            if i > 0:
+                dat = {'name': line[0],
+                        'sunday_open': line[1],
+                        'sunday_close': line[2],
+                        'monday_open': line[3],
+                        'monday_close': line[4],
+                        'tuesday_open': line[5],
+                        'tuesday_close': line[6],
+                        'wednesday_open': line[7],
+                        'wednesday_close': line[8],
+                        'thursday_open': line[9],
+                        'thursday_close': line[10],
+                        'friday_open': line[11],
+                        'friday_close': line[12],
+                        'saturday_open': line[13],
+                        'saturday_close': line[14],
+                        'phone': line[15],
+                        'rating': line[16],
+                        'price': line[17],
+                        'category': line[18],
+                        'address': line[19],
+                        'website': line[20]}
+                if client == None:
+                    url = 'http://127.0.0.1:8000/restaurant/add/'
+                    r = requests.post(url, json = dat)
+                else:
+                    url = '/restaurant/add/'
+                    client.post(url, data = dat, content_type = 'application/json')
+            i = i + 1
+        csv_file.close()
+        """print(r.text)"""
 
-method = int(args.method)
+if __name__ == "__main__":
+    args = parser.parse_args()
 
-url_get = 'http://127.0.0.1:8000/restaurant/all/'
-all_restaurants = requests.get(url=url_get)
-try:
-    all_restaurants_JSON = all_restaurants.json()
-except ValueError:
-    all_restaurants_JSON = {}
+    method = int(args.method)
 
-if method is 1:
-    fetch_restaurants_from_yelp()
-elif method is 2:
-    read_restaurants_from_csv()
-elif method is 3:
-    write_restaurants_to_csv()
-else:  # valid import method not specified.
-    error_msg = "Invalid method of database entry."
-    raise Exception(error_msg)
+    url_get = 'http://127.0.0.1:8000/restaurant/all/'
+    all_restaurants = requests.get(url=url_get)
+    try:
+        all_restaurants_JSON = all_restaurants.json()
+    except ValueError:
+        all_restaurants_JSON = {}
+
+    if method is 1:
+        fetch_restaurants_from_yelp()
+    elif method is 2:
+        read_restaurants_from_csv()
+    elif method is 3:
+        write_restaurants_to_csv()
+    else:  # valid import method not specified.
+        error_msg = "Invalid method of database entry."
+        raise Exception(error_msg)
+    
