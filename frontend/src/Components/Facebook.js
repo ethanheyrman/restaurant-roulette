@@ -50,16 +50,7 @@ export default class Facebook extends Component {
           <Link class="link" to={
                 { 
                     pathname: "/form2",
-                    state: {
-                      firstName: this.props.location.state.firstName|| "",
-                      lastName: this.props.location.state.lastName|| "",
-                      email: this.props.location.state.email|| "",
-                      longitude: this.props.location.state.longitude || [],
-                      latitude: this.props.location.state.latitude || [],
-                      cuisine: this.props.location.state.cuisine || "",
-                      rating: this.props.location.state.rating || "",
-                      price: this.props.location.state.price || ""
-                    }
+                    users: this.props.location.users || [],
                 }}><button class="button">Continue</button></Link>
           <Link class="link" to="/"><button class="button">Home</button></Link>
         </div>

@@ -30,12 +30,13 @@ class Form extends Component {
     super(props);
 
     this.state = {
-      cuisine: null,
+      category: null,
       price: null,
       rating: null,
       distance: null,
-      latitude: [],
-      longitude: [],
+      latitude: '',
+      longitude: '',
+      users: [],
       value: "default",
       formErrors: {
         cuisine: "",
@@ -47,21 +48,12 @@ class Form extends Component {
   }
 
   async componentDidMount() {
-    console.log(this.props.location.state)
-
-    if (this.props.location.state !== undefined) {
-            this.setState({
-
-            longitude: this.props.location.state.longitude || [],
-            latitude: this.props.location.state.latitude|| [],
-            cuisine: this.props.location.state.cuisine || "",
-            rating: this.props.location.state.rating || "",
-            price: this.props.location.state.price || ""
-
-        }, () => console.log(this.state) )
+    console.log(this.props)
+      this.setState({
+        users: this.props.location.users
+      }, () => console.log(this.state) )
         
-    }
-    console.log(this.state)
+    
 }
 
   handleSubmit = e => {
@@ -70,7 +62,7 @@ class Form extends Component {
     if (formValid(this.state)) {
       console.log(`
         --SUBMITTING--
-        Cuisine: ${this.state.cuisine}
+        Cuisine: ${this.state.category}
         Price: ${this.state.price}
         Rating: ${this.state.rating}
         Distance: ${this.state.distance}
@@ -111,31 +103,16 @@ class Form extends Component {
   };
 
   onCuisineChange = (event, values) => {
-    console.log(this.state)
-    console.log(this.state.cuisine == null)
-    if (this.state.cuisine == null) {
       this.setState({
-        cuisine: values
+        category: values
       }, () => {
         // This will output an array of objects
         // given by Autocompelte options property.
         console.log(this.state);
-      });
-    }
-    else {
-      this.setState({
-        cuisine: this.state.cuisine.concat(values)
-      }, () => {
-        // This will output an array of objects
-        // given by Autocompelte options property.
-        console.log(this.state);
-      });
-    }
-  }
+  })
+}
 
   onPriceChange = (event, values) => {
-
-    if (this.state.price == null) {
       this.setState({
         price: values
       }, () => {
@@ -144,20 +121,9 @@ class Form extends Component {
         console.log(this.state);
       });
     }
-    else {
-      this.setState({
-        price: this.state.price.concat(values)
-      }, () => {
-        // This will output an array of objects
-        // given by Autocompelte options property.
-        console.log(this.state);
-      });
-    }
-    
-  }
+
 
   onRatingChange = (event, values) => {
-    if (this.state.rating == null) {
       this.setState({
         rating: values
       }, () => {
@@ -165,65 +131,19 @@ class Form extends Component {
         // given by Autocompelte options property.
         console.log(this.state);
       });
-    }
-    else {
-      this.setState({
-        rating: this.state.rating.concat(values)
-      }, () => {
-        // This will output an array of objects
-        // given by Autocompelte options property.
-        console.log(this.state);
-      });
-    }
-
     
   }
 
   onCoordinateChange = (event) => {
-    console.log(event.coordinates)
-    if (event.coordinates.lat !== undefined) {
-      if (this.state.latitude === []) {
-        this.setState({
-          latitude: event.coordinates.lat
-        }, () => {
-          // This will output an array of objects
-          // given by Autocompelte options property.
-          console.log(this.state);
-        });
-      }
-      else {
-        this.setState({
-          latitude: this.state.latitude.concat(event.coordinates.lat)
-        }, () => {
-          // This will output an array of objects
-          // given by Autocompelte options property.
-          console.log(this.state);
-        });
-      }
-    }
-
-    if (event.coordinates.lng !== undefined) {  
-      if (this.state.longitude === []) {
-        this.setState({
-          longitude: event.coordinates.lng
-        }, () => {
-          // This will output an array of objects
-          // given by Autocompelte options property.
-          console.log(this.state);
-        });
-      }
-      else {
-        this.setState({
-          longitude: this.state.longitude.concat(event.coordinates.lng)
-        }, () => {
-          // This will output an array of objects
-          // given by Autocompelte options property.
-          console.log(this.state);
-        });
-      }
-    }
-  }
-
+    this.setState({
+      latitude: event.coordinates.lat,
+      longitude: event.coordinates.lng
+    }, () => {
+      // This will output an array of objects
+      // given by Autocompelte options property.
+      console.log(this.state);
+    })
+}
 
   render() {
     const { formErrors } = this.state;
@@ -317,10 +237,11 @@ class Form extends Component {
                     state: {
                       longitude: this.state.longitude || [],
                       latitude: this.state.latitude || [],
-                      cuisine: this.state.cuisine || "",
+                      category: this.state.category || "",
                       rating: this.state.rating || "",
                       price: this.state.price || ""
-                    }
+                    },
+                    users: this.state.users || [],
                 }}><button class="sub_mit">
                 Submit</button></Link> :
               <Link to={
@@ -338,10 +259,11 @@ class Form extends Component {
                     state: {
                       longitude: this.state.longitude || [],
                       latitude: this.state.latitude || [],
-                      cuisine: this.state.cuisine || "",
+                      category: this.state.category || "",
                       rating: this.state.rating || "",
                       price: this.state.price || ""
-                    }
+                    },
+                    users: this.state.users || [],
                 }}><button class="sub_mit" disabled={!this.state.latitude || !this.state.longitude}>
                 Add user</button></Link> :
               <Link class="link" to="/filtered"><button class="sub_mit">Add user</button></Link>

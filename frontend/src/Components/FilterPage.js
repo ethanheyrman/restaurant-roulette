@@ -14,12 +14,13 @@ class FilterPage extends React.Component {
           firstName: '',
           lastName: null,
           email: null,
-          cuisine: null,
+          category: null,
           price: null,
           rating: null,
           distance: null,
-          latitude: [],
-          longitude: [],
+          latitude: '',
+          longitude: '',
+          users: [],
         };
         this.componentDidMount = this.componentDidMount.bind(this)
       }
@@ -27,19 +28,25 @@ class FilterPage extends React.Component {
     async componentDidMount() {
         console.log(this.props)
         if (this.props.location.state !== undefined) {
-                this.setState({
-                firstName: this.props.location.state.firstName,
-                lastName: this.props.location.state.lastName || "",
-                email: this.props.location.state.email || "",
-                longitude: this.props.location.state.longitude || [],
-                latitude: this.props.location.state.latitude|| [],
-                cuisine: this.props.location.state.cuisine || "",
+            this.setState({
+                longitude: this.props.location.state.longitude || "",
+                latitude: this.props.location.state.latitude|| "",
+                category: this.props.location.state.category || "",
                 rating: this.props.location.state.rating || "",
-                price: this.props.location.state.price || ""
-
-            }, () => console.log(this.state) )
+                price: this.props.location.state.price || "",
+                users: this.state.users.concat(this.props.location.state) || [],
+            }, () => {
+                this.setState ({
+                    users: this.state.users.concat(this.props.location.users)
+                }, () => {
+                    console.log(this.state) 
+                })
+                
+            })
+            
             
         }
+        
         
     }
     
@@ -54,12 +61,13 @@ class FilterPage extends React.Component {
                       firstName: this.state.firstName,
                       lastName: this.state.lastName,
                       email: this.state.email,
-                      longitude: this.state.longitude || [],
-                      latitude: this.state.latitude || [],
-                      cuisine: this.state.cuisine || "",
+                      longitude: this.state.longitude || "",
+                      latitude: this.state.latitude || "",
+                      category: this.state.category || "",
                       rating: this.state.rating || "",
                       price: this.state.price || ""
-                    }
+                    },
+                    users: this.state.users || [],
                 }}><button class="homebutton">Start</button></Link>
             </div>
             <div class="Navigation">
