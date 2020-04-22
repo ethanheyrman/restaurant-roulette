@@ -264,7 +264,7 @@ class Form extends Component {
               <Slider
                 defaultValue={5}
                 min={1}
-                step={1}
+                step={.5}
                 marks={ratings}
                 max={5}
                 valueLabelDisplay="auto"
