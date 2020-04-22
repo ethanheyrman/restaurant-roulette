@@ -229,3 +229,39 @@ def random_restaurant(request):
     else:
         return HttpResponse(status=405)
 
+
+###
+def all_restaurants(request):
+
+    all_restaurants_stack = []
+    if request.method == 'GET':
+        # Fail if there are no restaurants in the DB
+        num_entries = Restaurant.objects.all().count()
+        if num_entries == 0:
+            return HttpResponse(status=500)
+        all_restaurants = Restaurant.objects.all()
+
+        serializer = RestaurantSerializer(all_restaurants, many=True)
+        serialized_data = JSONRenderer().render(serializer.data)
+        all_restaurants = json.loads(serialized_data.decode('utf-8'))
+
+        return HttpResponse(json.dumps(
+            all_restaurants, sort_keys=True, indent=4),
+            content_type="application/json")
+    else:
+        return HttpResponse(status=405)
+
+@csrf_exempt
+def delete_restaurant(request):
+
+    if request.method == 'DELETE':
+        # Fail if there are no restaurants in the DB
+        data = json.loads(request.body.decode("utf-8"))
+        idNum = int(data['idNum'])
+        num_entries = Restaurant.objects.all().count()
+        if num_entries == 0:
+            return HttpResponse(status=500)
+        Restaurant.objects.filter(id=idNum).delete()
+        return HttpResponse(status=200)
+    else:
+        return HttpResponse(status=405)

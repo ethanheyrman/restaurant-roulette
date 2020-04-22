@@ -123,12 +123,15 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
+
 STATIC_URL = '/static/'
 
+# App settings determined at runtime
+YELP_API_KEY = os.environ.get("YELP_API_KEY", "")
+YELP_CLIENT_ID = os.environ.get("YELP_CLIENT_ID", "")
 MAX_RESTAURANTS = os.environ.get("MAX_RESTAURANTS", 5)
 MAX_PRICE = os.environ.get("MAX_PRICE", 4)
 MIN_RATING = os.environ.get("MIN_RATING", 1)
