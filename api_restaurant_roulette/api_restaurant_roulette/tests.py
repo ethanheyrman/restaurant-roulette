@@ -1,7 +1,9 @@
+import sys
+sys.path.append("../../")
 from django.test import TestCase
 from django.db.models import Max
 from .models import Restaurant
-from .RestaurantParser import fill_db
+from RestaurantParser import fill_db
 import json
 
 # Create your tests here.
