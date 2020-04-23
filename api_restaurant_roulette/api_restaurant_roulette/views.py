@@ -45,7 +45,7 @@ def filter_restaurants(request):
     sum_longitude = 0
 
     for user in all_user_filters:
-        if 'category' in user:
+        if 'category' in user and len(user['category']) > 0:
             category_filters.append(user['category'][0]['title'])
         if 'price' in user:
             price_filters.append(len(user['price']))
@@ -130,10 +130,10 @@ def incrementally_query(query_params=None, avg_user_location=None):
     for rating in query_params.get("ratings", []):
         if isinstance(rating, list):
             for index in rating:
-                if int(index) < limiting_rating:
+                if int(index) > limiting_rating:
                     limiting_rating = int(index)
             continue
-        if int(rating) < limiting_rating:
+        if int(rating) > limiting_rating:
             limiting_rating = int(rating)
     filters.append(Q(rating__gte=str(limiting_rating)))
 
@@ -199,6 +199,8 @@ def incrementally_query(query_params=None, avg_user_location=None):
             else:  # continue applying filters
                 print(f"greater than {MAX_RESTAURANTS} and continuing to filter")
                 restaurant_queryset_stack.append(filtered_restaurants)
+    
+    return filtered_restaurants[:MAX_RESTAURANTS], percent_filters_applied
 
 
 @csrf_exempt
