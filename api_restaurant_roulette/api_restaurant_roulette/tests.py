@@ -116,3 +116,13 @@ class RandomRestaurantTests(TestCase):
         for i in range(max_id):
             cur_index = i + 1
             self.assertEqual(cur_index, returned_indices[i], "Missing restaurant id: " + str(i))
+
+class EmptyDBTests(TestCase):
+    def test_empty_rand(self):
+        response = self.client.get("/restaurant/rand/")
+        self.assertEqual(response.status_code, 500, "/restaurant/rand/ should return code 500 with an empty DB")
+
+    def test_empty_delete(self):
+        data = {'idNum': 0}
+        response = self.client.delete("/restaurant/delete/", data = data, content_type = 'application/json')
+        self.assertEqual(response.status_code, 500, "/restaurant/delete/ should return code 500 with an empty DB")
