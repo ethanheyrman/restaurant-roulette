@@ -1,10 +1,44 @@
+import sys
+sys.path.append("../../")
 from django.test import TestCase
 from django.db.models import Max
 from .models import Restaurant
-from .RestaurantParser import fill_db
+from RestaurantParser import fill_db
 import json
 
 # Create your tests here.
+class FilteredRestaurantTests(TestCase):
+    _url = "/restaurant/filtered/"
+
+    def setUp(self):
+        fill_db(self.client)
+
+    def test_no_query(self):
+        response = self.client.post(self._url, data = [], content_type = 'application/json')
+        self.assertEqual(response.status_code, 200, "Filtered Restaurant post request does not return 200")
+
+    def test_basic_query(self):
+        data = [
+            {
+                'category': [{'title': 'French'}, {'title': 'American'}],
+                'rating': 'ssss',
+                'price': '$$$',
+                'latitude': "43.0695",
+                'longitude': "-89.4125"
+            },
+            {
+                'category': [{'title': 'French'}],
+                'rating': 'ssss',
+                'price': '$',
+                'latitude': "43.0695",
+                'longitude': "-89.4125"
+            }
+        ]
+
+        response = self.client.post(self._url, data = data, content_type = 'application/json')
+        self.assertEqual(response.status_code, 200, "Filtered Restaurant post request does not return 200")
+
+
 class RandomRestaurantTests(TestCase):
     _url = "/restaurant/rand/"
 

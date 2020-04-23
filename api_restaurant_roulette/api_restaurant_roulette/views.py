@@ -3,7 +3,7 @@ from itertools import chain
 import json
 import random
 from django.db.models import Max, Q
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpRequest
 from django.views.decorators.csrf import csrf_exempt
 from geopy.distance import geodesic
 from geopy.geocoders import Nominatim
@@ -29,6 +29,8 @@ def filter_restaurants(request):
     :param request: The GET request issued by the client.
     :returns: List of length MAX_RESTAURANTS, containing restaurant objects.
     """
+    default_latitude = 43.0695
+    default_longitude = -89.4125
     request_body = request.body.decode('utf-8') if request.body is not None else None
     all_user_filters = json.loads(request_body)
 
@@ -43,35 +45,41 @@ def filter_restaurants(request):
     sum_longitude = 0
 
     for user in all_user_filters:
-        print(user['category'][0]['title'])
-        if  category_filters.append(user['category'][0]['title']):
+        if 'category' in user:
             category_filters.append(user['category'][0]['title'])
-        price_filters.append(len(user['price']))
-        rating_filters.append(len(user['rating']))
-        if user['latitude'] and user['longitude']:
+        if 'price' in user:
+            price_filters.append(len(user['price']))
+        if 'rating' in user:
+            rating_filters.append(len(user['rating']))
+        if 'latitude' in user and 'longitude' in user:
             sum_latitude += float(user['latitude'])
             sum_longitude += float(user['longitude'])
 
-    latitude = sum_latitude/len(all_user_filters)
-    longitude = sum_longitude/len(all_user_filters)
+    if len(all_user_filters) > 0:
+        latitude = sum_latitude/len(all_user_filters)
+        longitude = sum_longitude/len(all_user_filters)
+    else:
+        latitude = default_latitude
+        longitude = default_longitude
 
     query_params['categories'] = category_filters
     query_params['prices'] = price_filters
     query_params['ratings'] = rating_filters
 
     response = {}
-    if query_params:
+    if any(len(param) > 0 for param in query_params.values()):
         (response["restaurant_queryset"],
          response["percentage_of_filters_applied"]
          ) = incrementally_query(query_params=query_params, avg_user_location=(latitude, longitude))
 
     else:
         restaurants = []
+        rand_request = HttpRequest()
+        rand_request.method = "GET"
         for i in range(0, MAX_RESTAURANTS):
-            restaurants.append(json.loads(random_restaurant(request=request).content))
-        response["restaurant_queryset"] = restaurants[0]
+            restaurants.append(json.loads(random_restaurant(request=rand_request).content))
+        response["restaurant_queryset"] = restaurants
         response["percentage_of_filters_applied"] = 0
-        # return HttpResponse(status=400)
 
     serializer = RestaurantSerializer(response["restaurant_queryset"], many=True)
     serialized_data = JSONRenderer().render(serializer.data)
