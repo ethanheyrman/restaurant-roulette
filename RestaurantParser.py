@@ -178,6 +178,7 @@ def fetch_restaurants_from_yelp():
             # Website
             try:
                 website_url = Yelp_Detail_Query_Response_JSON['url']
+                website_url = website_url.split("?")[0]
             except KeyError:
                 website_url = 'No website available'
 
