@@ -147,7 +147,7 @@ def incrementally_query(query_params=None, avg_user_location=None):
         num_applied_filters += 1
         percent_filters_applied = str(int(100 * (num_applied_filters) / len(filters)))
         if len(filtered_restaurants) < MAX_RESTAURANTS:
-            if num_applied_filters is len(query_params):  # all filters were applied
+            if num_applied_filters is len(filters):  # all filters were applied
                 remaining_restaurants = list(restaurant_queryset_stack.pop())[:MAX_RESTAURANTS]
                 for restaurant in filtered_restaurants:  # build an ordered pseudo-set of restaurants
                     try:
@@ -155,7 +155,6 @@ def incrementally_query(query_params=None, avg_user_location=None):
                     except ValueError:
                         continue
                 filtered_restaurants = list(chain(filtered_restaurants, remaining_restaurants))
-                print("debugging")
                 print(f"less than {MAX_RESTAURANTS} and last filter applied")
                 unordered_filtered_restaurants = filtered_restaurants[:MAX_RESTAURANTS]
                 for restaurant in unordered_filtered_restaurants:
@@ -184,7 +183,7 @@ def incrementally_query(query_params=None, avg_user_location=None):
                 return filtered_restaurants[:MAX_RESTAURANTS], percent_filters_applied
 
         elif len(filtered_restaurants) >= MAX_RESTAURANTS:
-            if num_applied_filters is len(query_params):  # all filters were applied
+            if num_applied_filters is len(filters):  # all filters were applied
                 print(f"greater than {MAX_RESTAURANTS} and last filter applied")
                 unordered_filtered_restaurants = filtered_restaurants[:MAX_RESTAURANTS]
                 distances = []
