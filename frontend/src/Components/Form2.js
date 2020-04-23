@@ -3,7 +3,9 @@ import "./Form.css";
 import {Link} from "react-router-dom";
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
-import { GoogleComponent } from 'react-google-location'; 
+import { GoogleComponent } from 'react-google-location';
+import Typography from '@material-ui/core/Typography';
+import Slider from '@material-ui/core/Slider'; 
 //import Facebook from './Components/Facebook.js';
 
 const API_KEY = "AIzaSyAGrH5hYx20Y_k4drcU47uRPoBhz336QZM";
@@ -23,6 +25,48 @@ const formValid = ({ formErrors, ...rest }) => {
 
   return valid;
 };
+
+const prices = [
+  {
+    value: 1,
+    label: '$',
+  },
+  {
+    value: 2,
+    label: '$$',
+  },
+  {
+    value: 3,
+    label: '$$$',
+  },
+  {
+    value: 4,
+    label: '$$$$',
+  },
+]
+
+const ratings = [
+  {
+    value: 1,
+    label:'1⭐',
+  },
+  { 
+    value: 2,
+    label:'2⭐',
+  },
+  { 
+    value: 3,
+    label:'3⭐'
+  },
+  { 
+    value: 4,
+    label:'4⭐',
+  },
+  { 
+    value: 5,
+    label:'5⭐'
+  }
+]
 
 
 class Form extends Component {
@@ -166,7 +210,7 @@ class Form extends Component {
             </div>
           
             <div className="price">
-            <Autocomplete
+            {/* <Autocomplete
                 multiple
                 options={pricePref}
                 getOptionLabel={option => option.title}
@@ -182,11 +226,23 @@ class Form extends Component {
                     fullWidth
                   />
                 )}
+              /> */}
+              <Typography id="price-values" gutterBottom>
+                Price
+              </Typography>
+              <Slider
+                defaultValue={1}
+                min={1}
+                step={1}
+                marks={prices}
+                max={4}
+                valueLabelDisplay="auto"
+                aria-labelledby="price-values"
               />
-              </div>
+            </div>
 
             <div className="rating">
-            <Autocomplete
+            {/* <Autocomplete
             multiple
             options={ratingPref}
             getOptionLabel={option => option.title}
@@ -201,7 +257,19 @@ class Form extends Component {
                 fullWidth
                 />
             )}
-            />
+            /> */}
+              <Typography id="rating-values" gutterBottom>
+                Rating
+              </Typography>
+              <Slider
+                defaultValue={5}
+                min={1}
+                step={.5}
+                marks={ratings}
+                max={5}
+                valueLabelDisplay="auto"
+                aria-labelledby="rating-values"
+              />
             </div>
             <div className="sub_mit">
             <div class="Navigation">
@@ -261,19 +329,19 @@ const cuisinePref = [
   { title: 'Thai' },
 ];
 
-// Price preference
-const pricePref = [
-  { title: '$'},
-  { title: '$$'},
-  { title: '$$$'},
-  { title: '$$$$'},
-];
+// // Price preference
+// const pricePref = [
+//   { title: '$'},
+//   { title: '$$'},
+//   { title: '$$$'},
+//   { title: '$$$$'},
+// ];
 
-// Rating preference
-const ratingPref = [
-  { title: '⭐' },
-  { title: '⭐⭐'},
-  { title: '⭐⭐⭐'},
-  { title: '⭐⭐⭐⭐'},
-  { title: '⭐⭐⭐⭐⭐'},
-];
+// // Rating preference
+// const ratingPref = [
+//   { title: '⭐' },
+//   { title: '⭐⭐'},
+//   { title: '⭐⭐⭐'},
+//   { title: '⭐⭐⭐⭐'},
+//   { title: '⭐⭐⭐⭐⭐'},
+// ];
