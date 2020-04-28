@@ -118,6 +118,94 @@ class Results extends React.Component {
          }
      }
 
+     sunOpenHours(item){
+        return item.sunday_open === '00:00:00' ? 'Closed' : item.sunday_open
+     }
+
+     sunCloseHours(item){
+        if (item.sunday_open === '00:00:00' && item.sunday_close === '00:00:00') {
+            return ''
+        } else {
+            return item.sunday_close
+        }     
+    }
+
+     monOpenHours(item){
+        return item.monday_open === '00:00:00' ? 'Closed' : item.monday_open
+     }
+
+     monCloseHours(item){
+        if (item.monday_open === '00:00:00' && item.monday_close === '00:00:00') {
+            return ''
+        } else {
+            return item.monday_close
+        }     
+    }
+
+     tuesOpenHours(item){
+        return item.tuesday_open === '00:00:00' ? 'Closed' : item.tuesday_open
+     }
+
+     tuesCloseHours(item){
+        if (item.tuesday_open === '00:00:00' && item.tuesday_close === '00:00:00') {
+            return ''
+        } else {
+            return item.tuesday_close
+        }     
+    }
+
+     wednesOpenHours(item){
+        return item.wednesday_open === '00:00:00' ? 'Closed' : item.wednesday_open
+     }
+
+     wednesCloseHours(item){
+        if (item.wednesday_open === '00:00:00' && item.wednesday_close === '00:00:00') {
+            return ''
+        } else {
+            return item.wednesday_close
+        }     
+    }
+
+     thursOpenHours(item){
+        return item.thursday_open === '00:00:00' ? 'Closed' : item.thursday_open
+     }
+
+     thursCloseHours(item){
+        if (item.thursday_open === '00:00:00' && item.thursday_close === '00:00:00') {
+            return ''
+        } else {
+            return item.thursday_close
+        }     
+    }
+
+     friOpenHours(item){
+        return item.friday_open === '00:00:00' ? 'Closed' : item.friday_open
+     }
+
+     friCloseHours(item){
+        if (item.friday_open === '00:00:00' && item.friday_close === '00:00:00') {
+            return ''
+        } else {
+            return item.friday_close
+        }
+    }
+
+     satOpenHours(item){
+        return item.saturday_open === '00:00:00' ? 'Closed' : item.saturday_open
+     }
+
+     satCloseHours(item){
+        if (item.saturday_open === '00:00:00' && item.saturday_close === '00:00:00') {
+            return ''
+        } else {
+            return item.saturday_close
+        }     
+    }
+
+     addDash(item){
+         return item === '00:00:00' ? '' : '-'
+     }
+
      render() {
          return (
             <div>
@@ -144,13 +232,13 @@ class Results extends React.Component {
                  <div className="FHours">
                      <h4>time</h4>
                      <div>
-                         <p>{item.sunday_open} - {item.sunday_close}</p>
-                         <p>{item.monday_open} - {item.monday_close}</p>
-                         <p>{item.tuesday_open} - {item.tuesday_close}</p>
-                         <p>{item.wednesday_open} - {item.wednesday_close}</p>
-                         <p>{item.thursday_open} - {item.thursday_close}</p>
-                         <p>{item.friday_open} - {item.friday_close}</p>
-                         <p>{item.saturday_open} - {item.saturday_close}</p>
+                         <p>{this.sunOpenHours(item)} {this.addDash(item.sunday_open)} {this.sunCloseHours(item)}</p>
+                         <p>{this.monOpenHours(item)} {this.addDash(item.monday_open)} {this.monCloseHours(item)}</p>
+                         <p>{this.tuesOpenHours(item)} {this.addDash(item.tuesday_open)} {this.tuesCloseHours(item)}</p>
+                         <p>{this.wednesOpenHours(item)} {this.addDash(item.wednesday_open)} {this.wednesCloseHours(item)}</p>
+                         <p>{this.thursOpenHours(item)} {this.addDash(item.thursday_open)} {this.thursCloseHours(item)}</p>
+                         <p>{this.friOpenHours(item)} {this.addDash(item.friday_open)} {this.friCloseHours(item)}</p>
+                         <p>{this.satOpenHours(item)} {this.addDash(item.saturday_open)} {this.satCloseHours(item)}</p>
                      </div>
                  </div>
                  <div className="FDays">
