@@ -86,22 +86,57 @@ class Results extends React.Component {
          })
      }
 
-     getRating(rating) {
-         switch (rating) {
-             case 1: 
-                 return "⭐"
-             case 2: 
-                 return "⭐⭐"
-             case 3:
-                 return "⭐⭐⭐"
-             case 4:
-                 return "⭐⭐⭐⭐"
-             case 5: 
-                 return "⭐⭐⭐⭐⭐"
-             default:
-                 return ""
-         }
-     }
+    //  getRating(rating) {
+    //     switch (rating) {
+    //         case 0:
+    //             return "No Rating Available"
+    //         case 1: 
+    //             return "⭐"
+    //         case 1.5:
+    //             return "1.5"
+    //         case 2: 
+    //             return "⭐⭐"
+    //         case 2.5:
+    //             return "2.5"
+    //         case 3:
+    //             return "⭐⭐⭐"
+    //         case 3.5:
+    //             return <img height="16" width="16" src="https://images.media-allrecipes.com/ar-images/icons/rating-stars/full-star-2015.svg" role="presentation" alt></img>
+    //         case 4:
+    //             return "⭐⭐⭐⭐"
+    //         case 4.5:
+    //             return "4.5"
+    //         case 5: 
+    //             return "⭐⭐⭐⭐⭐"
+    //         default:
+    //             return ""
+    //     }
+    // }
+
+    getRating(rating) {
+        switch (rating) {
+            case 1: 
+                return "⭐"
+            case 1.5:
+                return "⭐⭐"
+            case 2: 
+                return "⭐⭐"
+            case 2.5:
+                return "⭐⭐⭐"
+            case 3:
+                return "⭐⭐⭐"
+            case 3.5:
+                return "⭐⭐⭐⭐"
+            case 4:
+                return "⭐⭐⭐⭐"
+            case 4.5:
+                return "⭐⭐⭐⭐⭐"
+            case 5: 
+                return "⭐⭐⭐⭐⭐"
+            default:
+                return "No Rating Available"
+        }
+    }
 
      getPrice(price) {
          switch (price) {
@@ -114,7 +149,7 @@ class Results extends React.Component {
              case 4:
                  return "$ $ $ $"
              default:
-                 return ""
+                 return "No Price Available"
          }
      }
 
