@@ -98,28 +98,66 @@ class RandomPage extends React.Component {
     getRating(rating) {
         switch (rating) {
             case 1: 
-                return "⭐"
+                return <div>
+                <img src="https://images.media-allrecipes.com/ar-images/icons/rating-stars/full-star-2015.svg" alt=""></img>
+            </div>
             case 1.5:
-                return "⭐⭐"
+                return <div>
+                <img src="https://images.media-allrecipes.com/ar-images/icons/rating-stars/full-star-2015.svg" alt=""></img>
+                <img src="https://images.media-allrecipes.com/ar-images/icons/rating-stars/half-star-2015.svg" alt=""></img>
+            </div>
             case 2: 
-                return "⭐⭐"
+                return <div>
+                <img src="https://images.media-allrecipes.com/ar-images/icons/rating-stars/full-star-2015.svg" alt=""></img>
+                <img src="https://images.media-allrecipes.com/ar-images/icons/rating-stars/full-star-2015.svg" alt=""></img>
+            </div>
             case 2.5:
-                return "⭐⭐⭐"
+                return <div>
+                <img src="https://images.media-allrecipes.com/ar-images/icons/rating-stars/full-star-2015.svg" alt=""></img>
+                <img src="https://images.media-allrecipes.com/ar-images/icons/rating-stars/full-star-2015.svg" alt=""></img>
+                <img src="https://images.media-allrecipes.com/ar-images/icons/rating-stars/half-star-2015.svg" alt=""></img>
+            </div>
             case 3:
-                return "⭐⭐⭐"
+                return <div>
+                <img src="https://images.media-allrecipes.com/ar-images/icons/rating-stars/full-star-2015.svg" alt=""></img>
+                <img src="https://images.media-allrecipes.com/ar-images/icons/rating-stars/full-star-2015.svg" alt=""></img>
+                <img src="https://images.media-allrecipes.com/ar-images/icons/rating-stars/full-star-2015.svg" alt=""></img>
+            </div>
             case 3.5:
-                return "⭐⭐⭐⭐"
+                return <div>
+                <img src="https://images.media-allrecipes.com/ar-images/icons/rating-stars/full-star-2015.svg" alt=""></img>
+                <img src="https://images.media-allrecipes.com/ar-images/icons/rating-stars/full-star-2015.svg" alt=""></img>
+                <img src="https://images.media-allrecipes.com/ar-images/icons/rating-stars/full-star-2015.svg" alt=""></img>
+                <img src="https://images.media-allrecipes.com/ar-images/icons/rating-stars/half-star-2015.svg" alt=""></img>
+            </div>
             case 4:
-                return "⭐⭐⭐⭐"
+                return <div>
+                <img src="https://images.media-allrecipes.com/ar-images/icons/rating-stars/full-star-2015.svg" alt=""></img>
+                <img src="https://images.media-allrecipes.com/ar-images/icons/rating-stars/full-star-2015.svg" alt=""></img>
+                <img src="https://images.media-allrecipes.com/ar-images/icons/rating-stars/full-star-2015.svg" alt=""></img>
+                <img src="https://images.media-allrecipes.com/ar-images/icons/rating-stars/full-star-2015.svg" alt=""></img>
+            </div>
             case 4.5:
-                return "⭐⭐⭐⭐⭐"
+                return <div>
+                <img src="https://images.media-allrecipes.com/ar-images/icons/rating-stars/full-star-2015.svg" alt=""></img>
+                <img src="https://images.media-allrecipes.com/ar-images/icons/rating-stars/full-star-2015.svg" alt=""></img>
+                <img src="https://images.media-allrecipes.com/ar-images/icons/rating-stars/full-star-2015.svg" alt=""></img>
+                <img src="https://images.media-allrecipes.com/ar-images/icons/rating-stars/full-star-2015.svg" alt=""></img>
+                <img src="https://images.media-allrecipes.com/ar-images/icons/rating-stars/half-star-2015.svg" alt=""></img>
+            </div>
             case 5: 
-                return "⭐⭐⭐⭐⭐"
+                return <div>
+                    <img src="https://images.media-allrecipes.com/ar-images/icons/rating-stars/full-star-2015.svg" alt=""></img>
+                    <img src="https://images.media-allrecipes.com/ar-images/icons/rating-stars/full-star-2015.svg" alt=""></img>
+                    <img src="https://images.media-allrecipes.com/ar-images/icons/rating-stars/full-star-2015.svg" alt=""></img>
+                    <img src="https://images.media-allrecipes.com/ar-images/icons/rating-stars/full-star-2015.svg" alt=""></img>
+                    <img src="https://images.media-allrecipes.com/ar-images/icons/rating-stars/full-star-2015.svg" alt=""></img>
+                </div>
             default:
                 return "No Rating Available"
         }
     }
-
+    
     getPrice(price) {
         switch (price) {
             case 1: 
