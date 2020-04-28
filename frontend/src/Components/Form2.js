@@ -6,7 +6,6 @@ import TextField from '@material-ui/core/TextField';
 import { GoogleComponent } from 'react-google-location';
 import Typography from '@material-ui/core/Typography';
 import Slider from '@material-ui/core/Slider'; 
-//import Facebook from './Components/Facebook.js';
 
 const API_KEY = "AIzaSyAGrH5hYx20Y_k4drcU47uRPoBhz336QZM";
 
@@ -194,7 +193,6 @@ class Form extends Component {
                 multiple
                 options={cuisinePref}
                 getOptionLabel={option => option.title}
-                // defaultValue={[cuisinePref]}
                 onChange={this.onCuisineChange}
                 renderInput={params => (
                   <TextField
@@ -210,23 +208,6 @@ class Form extends Component {
             </div>
           
             <div className="price">
-            {/* <Autocomplete
-                multiple
-                options={pricePref}
-                getOptionLabel={option => option.title}
-                // defaultValue={[pricePref[0]]}
-                onChange={this.onPriceChange}
-                renderInput={params => (
-                  <TextField
-                    {...params}
-                    variant="standard"
-                    label="Price"
-                    placeholder="Price"
-                    margin="normal"
-                    fullWidth
-                  />
-                )}
-              /> */}
               <Typography id="price-values" gutterBottom>
                 Price
               </Typography>
@@ -242,22 +223,6 @@ class Form extends Component {
             </div>
 
             <div className="rating">
-            {/* <Autocomplete
-            multiple
-            options={ratingPref}
-            getOptionLabel={option => option.title}
-            onChange={this.onRatingChange}
-            renderInput={params => (
-                <TextField
-                {...params}
-                variant="standard"
-                label="Rating"
-                placeholder="Rating"
-                margin="normal"
-                fullWidth
-                />
-            )}
-            /> */}
               <Typography id="rating-values" gutterBottom>
                 Rating
               </Typography>
@@ -303,7 +268,6 @@ class Form extends Component {
               <Link class="link" to="/filtered"><button class="sub_mit">Add user</button></Link>
            }
             </div>
-              {/* <small>Already Have an Account</small> */}
             </div>
           </form>
         </div>
@@ -328,20 +292,3 @@ const cuisinePref = [
   { title: 'Mediterranean'},
   { title: 'Thai' },
 ];
-
-// // Price preference
-// const pricePref = [
-//   { title: '$'},
-//   { title: '$$'},
-//   { title: '$$$'},
-//   { title: '$$$$'},
-// ];
-
-// // Rating preference
-// const ratingPref = [
-//   { title: '⭐' },
-//   { title: '⭐⭐'},
-//   { title: '⭐⭐⭐'},
-//   { title: '⭐⭐⭐⭐'},
-//   { title: '⭐⭐⭐⭐⭐'},
-// ];

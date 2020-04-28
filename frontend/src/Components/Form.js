@@ -6,7 +6,6 @@ import TextField from '@material-ui/core/TextField';
 import { GoogleComponent } from 'react-google-location';
 import Typography from '@material-ui/core/Typography';
 import Slider from '@material-ui/core/Slider'; 
-//import Facebook from './Components/Facebook.js';
 
 const emailRegex = RegExp(
   /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
@@ -258,42 +257,11 @@ class Form extends Component {
                 <span className="errorMessage">{formErrors.distance}</span>
               )}
             </div>
-            {/*<div className="distance">
-              <label htmlFor="distance">Distance</label>
-              <input
-                className={formErrors.distance.length > 0 ? "error" : null}
-                placeholder="Distance"
-                type="distance"
-                name="distance"
-                noValidate
-                onChange={this.handleChange}
-              />
-              {formErrors.distance.length > 0 && (
-                <span className="errorMessage">{formErrors.distance}</span>
-              )}
-            </div>*/
-            }
-
-            {/* <div className="cuisine">
-              <label htmlFor="cuisine">Cuisine</label>
-              <input
-                className={formErrors.cuisine.length > 0 ? "error" : null}
-                placeholder="Cuisine"
-                type="cuisine"
-                name="cuisine"
-                noValidate
-                onChange={this.handleChange}
-              />
-              {formErrors.cuisine.length > 0 && (
-                <span className="errorMessage">{formErrors.cuisine}</span>
-              )}
-            </div> */}
             <div className="cuisine">
                <Autocomplete
                 multiple
                 options={cuisinePref}
                 getOptionLabel={option => option.title}
-                // defaultValue={[cuisinePref]}
                 onChange={this.onCuisineChange}
                 renderInput={params => (
                   <TextField
@@ -307,39 +275,6 @@ class Form extends Component {
                 )}
               />
             </div>
-            {/* <div className="price">
-              <label htmlFor="price">Price</label>
-              <input
-                className={formErrors.price.length > 0 ? "error" : null}
-                placeholder="Price"
-                type="price"
-                name="price"
-                noValidate
-                onChange={this.handleChange}
-              />
-              {formErrors.price.length > 0 && (
-                <span className="errorMessage">{formErrors.price}</span>
-              )}
-            </div> */}
-            {/*<div className="price">
-            <Autocomplete
-                multiple
-                options={pricePref}
-                getOptionLabel={option => option.title}
-                // defaultValue={[pricePref[0]]}
-                onChange={this.onPriceChange}
-                renderInput={params => (
-                  <TextField
-                    {...params}
-                    variant="standard"
-                    label="Price"
-                    placeholder="Price"
-                    margin="normal"
-                    fullWidth
-                  />
-                )}
-              />
-              </div>*/}
             <div className="price">
               <Typography id="price-values" gutterBottom>
                 Price
@@ -354,38 +289,6 @@ class Form extends Component {
                 aria-labelledby="price-values"
               />
             </div>
-            {/* <div className="rating">
-              <label htmlFor="rating">Rating</label>
-              <input
-                className={formErrors.rating.length > 0 ? "error" : null}
-                placeholder="Rating"
-                type="rating"
-                name="rating"
-                noValidate
-                onChange={this.handleChange}
-              />
-              {formErrors.rating.length > 0 && (
-                <span className="errorMessage">{formErrors.rating}</span>
-              )}
-            </div> */}
-            {/*<div className="rating">
-            <Autocomplete
-            multiple
-            options={ratingPref}
-            getOptionLabel={option => option.title}
-            onChange={this.onRatingChange}
-            renderInput={params => (
-                <TextField
-                {...params}
-                variant="standard"
-                label="Rating"
-                placeholder="Rating"
-                margin="normal"
-                fullWidth
-                />
-            )}
-            />
-            </div>*/}
             <div className="rating">
               <Typography id="rating-values" gutterBottom>
                 Rating
@@ -436,7 +339,6 @@ class Form extends Component {
               <Link class="link" to="/filtered"><button class="sub_mit">Add user</button></Link>
            }
             </div>
-              {/* <small>Already Have an Account</small> */}
               <Link class="link" to="/fb" ><small>Already Have an Account?</small></Link>
             </div>
           </form>
@@ -462,20 +364,3 @@ const cuisinePref = [
   { title: 'Mediterranean'},
   { title: 'Thai' },
 ];
-
-// Price preference
-// const pricePref = [
-//   { title: '$'},
-//   { title: '$$'},
-//   { title: '$$$'},
-//   { title: '$$$$'},
-// ];
-
-// Rating preference
-// const ratingPref = [
-//   { title: '⭐' },
-//   { title: '⭐⭐'},
-//   { title: '⭐⭐⭐'},
-//   { title: '⭐⭐⭐⭐'},
-//   { title: '⭐⭐⭐⭐⭐'},
-// ];
