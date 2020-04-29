@@ -107,6 +107,11 @@
     width: 100%;
   }
 
+  .MuiAutocomplete-option {
+    background-color: #fff;
+    
+  }
+
   .rating {
     width: 49%;
   }
