@@ -339,7 +339,7 @@ class Form extends Component {
               <Link class="link" to="/filtered"><button class="sub_mit">Add user</button></Link>
            }
             </div>
-            {/* <small>Already Have an Account</small> */}
+              {/* <small>Already Have an Account</small> */}
               <Link class="link" to={
                 { 
                     pathname: "/fb",
