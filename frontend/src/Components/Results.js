@@ -10,36 +10,38 @@ class Results extends React.Component {
     constructor(props) {
         super(props)
          this.state = {
-             restaurants:[]
+             restaurants:[],
+             users: []
          }
          this.getRestaurant = this.getRestaurant.bind(this)
      }
 
      async componentDidMount() {
-         console.log(this.props.location.state)
-         fetch('http://127.0.0.1:8000/restaurant/filtered/', {
-             method: 'POST',
-             body: JSON.stringify(
-                [
-                    {
-                        'longitude': this.props.location.state.longitude,
-                        'latitude': this.props.location.state.latitude,
-                        'category': this.props.location.state.cuisine,
-                        'rating': this.props.location.state.rating,
-                        'price': this.props.location.state.price
-                    }
-                ]
-            )
-         })
-         .then (res => res.json())
-         .then (json => {
-             console.log(json)
-             this.setState ({
-                 restaurants: json.restaurant_queryset
-             }) 
-             console.log(this.state)
-         })
+         console.log(this.props)
+         this.setState({
+            users: this.state.users.concat(this.props.location.state) || [],
+        }, () => {
 
+                console.log(this.state)
+            this.setState ({
+                users: this.state.users.concat(this.props.location.users)
+            }, () => {
+                console.log(this.state)
+                fetch('http://127.0.0.1:8000/restaurant/filtered/', {
+                    method: 'POST',
+                    body: JSON.stringify(this.state.users)
+                })
+                .then (res => res.json())
+                .then (json => {
+                    console.log(json)
+                    this.setState ({
+                        restaurants: json.restaurant_queryset
+                    }) 
+                    console.log(this.state)
+                })
+            })  
+        })
+            
      }
 
      getRestaurant() {

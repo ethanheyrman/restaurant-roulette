@@ -80,12 +80,13 @@ class Form extends Component {
       firstName: null,
       lastName: null,
       email: null,
-      cuisine: null,
+      category: null,
       price: null,
       rating: null,
       distance: null,
       latitude: '',
       longitude: '',
+      users: [],
       value: "default",
       formErrors: {
         firstName: "",
@@ -99,6 +100,16 @@ class Form extends Component {
     };
   }
 
+  async componentDidMount() {
+    console.log(this.props)
+    if (this.props.location.state !== undefined) {
+            this.setState({
+              users: this.props.location.users
+        }, () => console.log(this.state) )
+        
+    }
+    
+}
 
   handleSubmit = e => {
     e.preventDefault();
@@ -109,7 +120,7 @@ class Form extends Component {
         First Name: ${this.state.firstName}
         Last Name: ${this.state.lastName}
         Email: ${this.state.email}
-        Cuisine: ${this.state.cuisine}
+        Cuisine: ${this.state.category}
         Price: ${this.state.price}
         Rating: ${this.state.rating}
         Distance: ${this.state.distance}
@@ -164,34 +175,47 @@ class Form extends Component {
   };
 
   onCuisineChange = (event, values) => {
-    this.setState({
-      cuisine: values
-    }, () => {
-      // This will output an array of objects
-      // given by Autocompelte options property.
-      console.log(this.state);
-    });
+      this.setState({
+        category: values
+      }, () => {
+        // This will output an array of objects
+        // given by Autocompelte options property.
+        console.log(this.state);
+      });
   }
 
   onPriceChange = (event, values) => {
-    this.setState({
-      price: values
-    }, () => {
-      // This will output an array of objects
-      // given by Autocompelte options property.
-      console.log(this.state);
-    });
+      this.setState({
+        price: values
+      }, () => {
+        // This will output an array of objects
+        // given by Autocompelte options property.
+        console.log(this.state);
+      });
+    
   }
 
   onRatingChange = (event, values) => {
-    this.setState({
-      rating: values
-    }, () => {
-      // This will output an array of objects
-      // given by Autocompelte options property.
-      console.log(this.state);
-    });
+      this.setState({
+        rating: values
+      }, () => {
+        // This will output an array of objects
+        // given by Autocompelte options property.
+        console.log(this.state);
+      });
   }
+
+  onCoordinateChange = (event) => {
+        this.setState({
+          latitude: event.coordinates.lat,
+          longitude: event.coordinates.lng
+        }, () => {
+          // This will output an array of objects
+          // given by Autocompelte options property.
+          console.log(this.state);
+        })
+  }
+
 
   render() {
     const { formErrors } = this.state;
@@ -253,7 +277,7 @@ class Form extends Component {
                 coordinates={true}
                 locationBoxStyle={'boxstyle'}
                 locationListStyle={'liststyle'}
-                onChange={(e) => { this.setState({ latitude: e.coordinates.lat, longitude: e.coordinates.lng })}} />
+                onChange={this.onCoordinateChange} />
               {formErrors.distance.length > 0 && (
                 <span className="errorMessage">{formErrors.distance}</span>
               )}
@@ -410,15 +434,13 @@ class Form extends Component {
                 { 
                     pathname: "/results",
                     state: {
-                      firstName: this.state.firstName,
-                      lastName: this.state.lastName,
-                      email: this.state.email,
                       longitude: this.state.longitude || "",
                       latitude: this.state.latitude || "",
-                      cuisine: this.state.cuisine || "",
+                      category: this.state.category || "",
                       rating: this.state.rating || "",
-                      price: this.state.price || ""
-                    }
+                      price: this.state.price || "",
+                    },
+                    users: this.state.users || [],
                 }}><button class="sub_mit" disabled={!this.state.email || !this.state.firstName}>
                 Submit</button></Link> :
               <Link to={
@@ -431,13 +453,39 @@ class Form extends Component {
            }
            {
               !this.props.formValid
-              ? <Link class="link" to="/filtered"><button class="sub_mit" disabled={!this.state.email || !this.state.firstName}>
+              ? <Link class="link" to={
+                { 
+                    pathname: "/filtered",
+                    state: {
+                      longitude: this.state.longitude || [],
+                      latitude: this.state.latitude || [],
+                      category: this.state.category || "",
+                      rating: this.state.rating || "",
+                      price: this.state.price || ""
+                    },
+                    users: this.state.users
+                }}><button class="sub_mit" disabled={!this.state.email || !this.state.firstName}>
                 Add user</button></Link> :
-              <Link class="link" to="/filtered"><button class="sub_mit">Add user</button></Link>
+              <Link class="link" to={
+                { 
+                    pathname: "/filtered",
+                    state: {
+                      longitude: this.state.longitude || "",
+                      latitude: this.state.latitude || "",
+                      category: this.state.category || "",
+                      rating: this.state.rating || "",
+                      price: this.state.price || ""
+                    },
+                    users: this.state.users || [],
+                }}><button class="sub_mit">Add user</button></Link>
            }
             </div>
               {/* <small>Already Have an Account</small> */}
-              <Link class="link" to="/fb" ><small>Already Have an Account?</small></Link>
+              <Link class="link" to={
+                { 
+                    pathname: "/fb",
+                    users: this.state.users
+                }} ><small>Already Have an Account?</small></Link>
             </div>
           </form>
         </div>
