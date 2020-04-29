@@ -95,18 +95,21 @@ def incrementally_query(query_params=None, avg_user_location=None):
     filtered_restaurants = None
     restaurant_queryset_stack = []
     filters = []
-
+    category_union = None
     # map query parameters to Django filters
     for category in query_params.get("categories", []):
         if isinstance(category, list):
-            category_union = Q(category__exact=category[0], _connector='OR')
-
+            category_union = Q(category__contains=category[0], _connector='OR')
             for index in category[1:]:
-                category_union.add(Q(category__exact=str(index), _connector='OR'), conn_type='OR', squash=True)
+                category_union.add(Q(category__contains=str(index), _connector='OR'), conn_type='OR')
             filters.append(category_union)
             continue
-        filters.append(Q(category__exact=str(category)))
-
+        if category_union is not None:
+            category_union.add(Q(category__contains=category, _connector='OR'), conn_type='OR')
+        else:
+            category_union = Q(category__contains=category)
+    filters.append(category_union)
+    print(filters)
     limiting_price = MAX_PRICE
     for price in query_params.get("prices", []):
         if isinstance(price, list):
@@ -147,7 +150,6 @@ def incrementally_query(query_params=None, avg_user_location=None):
                     except ValueError:
                         continue
                 filtered_restaurants = list(chain(filtered_restaurants, remaining_restaurants))
-                print("debugging")
                 print(f"less than {MAX_RESTAURANTS} and last filter applied")
                 unordered_filtered_restaurants = filtered_restaurants[:MAX_RESTAURANTS]
                 for restaurant in unordered_filtered_restaurants:
