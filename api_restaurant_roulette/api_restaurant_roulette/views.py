@@ -116,8 +116,9 @@ def incrementally_query(query_params=None, avg_user_location=None):
             category_union.add(Q(category__contains=category, _connector='OR'), conn_type='OR')
         else:
             category_union = Q(category__contains=category)
-    filters.append(category_union)
-    print(filters)
+    if category_union != None:
+        filters.append(category_union)
+
     limiting_price = MAX_PRICE
     for price in query_params.get("prices", []):
         if isinstance(price, list):
