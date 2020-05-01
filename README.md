@@ -17,9 +17,15 @@ $ python3 manage.py migrate
 $ python3 manage.py runserver
 ```
 #### To manually fill the database for testing:
-Start the Django server, then in a different terminal run
+Start the Django server.
+Then if you want to fill the database with a small dataset for testing in a different terminal run:
 ```
-$ python3 ./api_restaurant_roulette/api_restaurant_roulette/RestaurantParser.py
+$ python3 RestaurantParser.py --method 2 --filenameR RestaurantList.csv
+```
+If you have a Yelp API key and a Yelp client ID, export them to your environment variables as
+YELP_API_KEY and YELP_CLIENT_ID, then run:
+```
+$ python3 RestaurantParser.py --method 1
 ```
 ### Frontend Setup
 #### To setup the Node modules

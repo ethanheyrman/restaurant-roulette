@@ -3,12 +3,54 @@ import "./Form.css";
 import {Link} from "react-router-dom";
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
-import { GoogleComponent } from 'react-google-location'; 
-//import Facebook from './Components/Facebook.js';
+import { GoogleComponent } from 'react-google-location';
+import Typography from '@material-ui/core/Typography';
+import Slider from '@material-ui/core/Slider'; 
 
 const emailRegex = RegExp(
   /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
 );
+const prices = [
+  {
+    value: 1,
+    label: '$',
+  },
+  {
+    value: 2,
+    label: '$$',
+  },
+  {
+    value: 3,
+    label: '$$$',
+  },
+  {
+    value: 4,
+    label: '$$$$',
+  },
+]
+
+const ratings = [
+  {
+    value: 1,
+    label:'1⭐',
+  },
+  { 
+    value: 2,
+    label:'2⭐',
+  },
+  { 
+    value: 3,
+    label:'3⭐'
+  },
+  { 
+    value: 4,
+    label:'4⭐',
+  },
+  { 
+    value: 5,
+    label:'5⭐'
+  }
+]
 
 const API_KEY = "AIzaSyAGrH5hYx20Y_k4drcU47uRPoBhz336QZM";
 
@@ -37,12 +79,13 @@ class Form extends Component {
       firstName: null,
       lastName: null,
       email: null,
-      cuisine: null,
+      category: null,
       price: null,
       rating: null,
       distance: null,
       latitude: '',
       longitude: '',
+      users: [],
       value: "default",
       formErrors: {
         firstName: "",
@@ -56,6 +99,16 @@ class Form extends Component {
     };
   }
 
+  async componentDidMount() {
+    console.log(this.props)
+    if (this.props.location.state !== undefined) {
+            this.setState({
+              users: this.props.location.users
+        }, () => console.log(this.state) )
+        
+    }
+    
+}
 
   handleSubmit = e => {
     e.preventDefault();
@@ -66,7 +119,7 @@ class Form extends Component {
         First Name: ${this.state.firstName}
         Last Name: ${this.state.lastName}
         Email: ${this.state.email}
-        Cuisine: ${this.state.cuisine}
+        Cuisine: ${this.state.category}
         Price: ${this.state.price}
         Rating: ${this.state.rating}
         Distance: ${this.state.distance}
@@ -121,34 +174,47 @@ class Form extends Component {
   };
 
   onCuisineChange = (event, values) => {
-    this.setState({
-      cuisine: values
-    }, () => {
-      // This will output an array of objects
-      // given by Autocompelte options property.
-      console.log(this.state);
-    });
+      this.setState({
+        category: values
+      }, () => {
+        // This will output an array of objects
+        // given by Autocompelte options property.
+        console.log(this.state);
+      });
   }
 
   onPriceChange = (event, values) => {
-    this.setState({
-      price: values
-    }, () => {
-      // This will output an array of objects
-      // given by Autocompelte options property.
-      console.log(this.state);
-    });
+      this.setState({
+        price: values
+      }, () => {
+        // This will output an array of objects
+        // given by Autocompelte options property.
+        console.log(this.state);
+      });
+    
   }
 
   onRatingChange = (event, values) => {
-    this.setState({
-      rating: values
-    }, () => {
-      // This will output an array of objects
-      // given by Autocompelte options property.
-      console.log(this.state);
-    });
+      this.setState({
+        rating: values
+      }, () => {
+        // This will output an array of objects
+        // given by Autocompelte options property.
+        console.log(this.state);
+      });
   }
+
+  onCoordinateChange = (event) => {
+        this.setState({
+          latitude: event.coordinates.lat,
+          longitude: event.coordinates.lng
+        }, () => {
+          // This will output an array of objects
+          // given by Autocompelte options property.
+          console.log(this.state);
+        })
+  }
+
 
   render() {
     const { formErrors } = this.state;
@@ -210,47 +276,16 @@ class Form extends Component {
                 coordinates={true}
                 locationBoxStyle={'boxstyle'}
                 locationListStyle={'liststyle'}
-                onChange={(e) => { this.setState({ latitude: e.coordinates.lat, longitude: e.coordinates.lng })}} />
+                onChange={this.onCoordinateChange} />
               {formErrors.distance.length > 0 && (
                 <span className="errorMessage">{formErrors.distance}</span>
               )}
             </div>
-            {/*<div className="distance">
-              <label htmlFor="distance">Distance</label>
-              <input
-                className={formErrors.distance.length > 0 ? "error" : null}
-                placeholder="Distance"
-                type="distance"
-                name="distance"
-                noValidate
-                onChange={this.handleChange}
-              />
-              {formErrors.distance.length > 0 && (
-                <span className="errorMessage">{formErrors.distance}</span>
-              )}
-            </div>*/
-            }
-
-            {/* <div className="cuisine">
-              <label htmlFor="cuisine">Cuisine</label>
-              <input
-                className={formErrors.cuisine.length > 0 ? "error" : null}
-                placeholder="Cuisine"
-                type="cuisine"
-                name="cuisine"
-                noValidate
-                onChange={this.handleChange}
-              />
-              {formErrors.cuisine.length > 0 && (
-                <span className="errorMessage">{formErrors.cuisine}</span>
-              )}
-            </div> */}
             <div className="cuisine">
                <Autocomplete
                 multiple
                 options={cuisinePref}
                 getOptionLabel={option => option.title}
-                // defaultValue={[cuisinePref]}
                 onChange={this.onCuisineChange}
                 renderInput={params => (
                   <TextField
@@ -264,70 +299,33 @@ class Form extends Component {
                 )}
               />
             </div>
-            {/* <div className="price">
-              <label htmlFor="price">Price</label>
-              <input
-                className={formErrors.price.length > 0 ? "error" : null}
-                placeholder="Price"
-                type="price"
-                name="price"
-                noValidate
-                onChange={this.handleChange}
-              />
-              {formErrors.price.length > 0 && (
-                <span className="errorMessage">{formErrors.price}</span>
-              )}
-            </div> */}
             <div className="price">
-            <Autocomplete
-                multiple
-                options={pricePref}
-                getOptionLabel={option => option.title}
-                // defaultValue={[pricePref[0]]}
-                onChange={this.onPriceChange}
-                renderInput={params => (
-                  <TextField
-                    {...params}
-                    variant="standard"
-                    label="Price"
-                    placeholder="Price"
-                    margin="normal"
-                    fullWidth
-                  />
-                )}
+              <Typography id="price-values" gutterBottom>
+                Price
+              </Typography>
+              <Slider
+                defaultValue={1}
+                min={1}
+                step={1}
+                marks={prices}
+                max={4}
+                valueLabelDisplay="auto"
+                aria-labelledby="price-values"
               />
-              </div>
-            {/* <div className="rating">
-              <label htmlFor="rating">Rating</label>
-              <input
-                className={formErrors.rating.length > 0 ? "error" : null}
-                placeholder="Rating"
-                type="rating"
-                name="rating"
-                noValidate
-                onChange={this.handleChange}
-              />
-              {formErrors.rating.length > 0 && (
-                <span className="errorMessage">{formErrors.rating}</span>
-              )}
-            </div> */}
+            </div>
             <div className="rating">
-            <Autocomplete
-            multiple
-            options={ratingPref}
-            getOptionLabel={option => option.title}
-            onChange={this.onRatingChange}
-            renderInput={params => (
-                <TextField
-                {...params}
-                variant="standard"
-                label="Rating"
-                placeholder="Rating"
-                margin="normal"
-                fullWidth
-                />
-            )}
-            />
+              <Typography id="rating-values" gutterBottom>
+                Rating
+              </Typography>
+              <Slider
+                defaultValue={5}
+                min={1}
+                step={.5}
+                marks={ratings}
+                max={5}
+                valueLabelDisplay="auto"
+                aria-labelledby="rating-values"
+              />
             </div>
             <div className="sub_mit">
             <div class="Navigation">
@@ -339,15 +337,13 @@ class Form extends Component {
                 { 
                     pathname: "/results",
                     state: {
-                      firstName: this.state.firstName,
-                      lastName: this.state.lastName,
-                      email: this.state.email,
-                      longitude: this.state.longitude,
-                      latitude: this.state.latitude,
-                      cuisine: this.state.cuisine,
-                      rating: this.state.rating,
-                      price: this.state.price
-                    }
+                      longitude: this.state.longitude || "",
+                      latitude: this.state.latitude || "",
+                      category: this.state.category || "",
+                      rating: this.state.rating || "",
+                      price: this.state.price || "",
+                    },
+                    users: this.state.users || [],
                 }}><button class="sub_mit" disabled={!this.state.email || !this.state.firstName}>
                 Submit</button></Link> :
               <Link to={
@@ -360,13 +356,39 @@ class Form extends Component {
            }
            {
               !this.props.formValid
-              ? <Link class="link" to="/filtered"><button class="sub_mit" disabled={!this.state.email || !this.state.firstName}>
+              ? <Link class="link" to={
+                { 
+                    pathname: "/filtered",
+                    state: {
+                      longitude: this.state.longitude || [],
+                      latitude: this.state.latitude || [],
+                      category: this.state.category || "",
+                      rating: this.state.rating || "",
+                      price: this.state.price || ""
+                    },
+                    users: this.state.users
+                }}><button class="sub_mit" disabled={!this.state.email || !this.state.firstName}>
                 Add user</button></Link> :
-              <Link class="link" to="/filtered"><button class="sub_mit">Add user</button></Link>
+              <Link class="link" to={
+                { 
+                    pathname: "/filtered",
+                    state: {
+                      longitude: this.state.longitude || "",
+                      latitude: this.state.latitude || "",
+                      category: this.state.category || "",
+                      rating: this.state.rating || "",
+                      price: this.state.price || ""
+                    },
+                    users: this.state.users || [],
+                }}><button class="sub_mit">Add user</button></Link>
            }
             </div>
               {/* <small>Already Have an Account</small> */}
-              <Link class="link" to="/fb" ><small>Already Have an Account?</small></Link>
+              <Link class="link" to={
+                { 
+                    pathname: "/fb",
+                    users: this.state.users
+                }} ><small>Already Have an Account?</small></Link>
             </div>
           </form>
         </div>
@@ -390,21 +412,4 @@ const cuisinePref = [
   { title: 'Asian fusion'},
   { title: 'Mediterranean'},
   { title: 'Thai' },
-];
-
-// Price preference
-const pricePref = [
-  { title: '$'},
-  { title: '$$'},
-  { title: '$$$'},
-  { title: '$$$$'},
-];
-
-// Rating preference
-const ratingPref = [
-  { title: '⭐' },
-  { title: '⭐⭐'},
-  { title: '⭐⭐⭐'},
-  { title: '⭐⭐⭐⭐'},
-  { title: '⭐⭐⭐⭐⭐'},
 ];

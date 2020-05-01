@@ -3,7 +3,7 @@ from itertools import chain
 import json
 import random
 from django.db.models import Max, Q
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpRequest
 from django.views.decorators.csrf import csrf_exempt
 from geopy.distance import geodesic
 from geopy.geocoders import Nominatim
@@ -29,6 +29,8 @@ def filter_restaurants(request):
     :param request: The GET request issued by the client.
     :returns: List of length MAX_RESTAURANTS, containing restaurant objects.
     """
+    default_latitude = 43.0695
+    default_longitude = -89.4125
     request_body = request.body.decode('utf-8') if request.body is not None else None
     all_user_filters = json.loads(request_body)
 
@@ -43,33 +45,41 @@ def filter_restaurants(request):
     sum_longitude = 0
 
     for user in all_user_filters:
-        category_filters.append(user['category'])
-        price_filters.append(user['price'])
-        rating_filters.append(user['rating'])
+        if 'category' in user and len(user['category']) > 0:
+            category_filters.append(user['category'][0]['title'])
+        if 'price' in user:
+            price_filters.append(len(user['price']))
+        if 'rating' in user:
+            rating_filters.append(len(user['rating']))
+        if 'latitude' in user and 'longitude' in user:
+            sum_latitude += float(user['latitude'])
+            sum_longitude += float(user['longitude'])
 
-        sum_latitude += float(user['latitude'])
-        sum_longitude += float(user['longitude'])
-
-    latitude = sum_latitude/len(all_user_filters)
-    longitude = sum_longitude/len(all_user_filters)
+    if len(all_user_filters) > 0:
+        latitude = sum_latitude/len(all_user_filters)
+        longitude = sum_longitude/len(all_user_filters)
+    else:
+        latitude = default_latitude
+        longitude = default_longitude
 
     query_params['categories'] = category_filters
     query_params['prices'] = price_filters
     query_params['ratings'] = rating_filters
 
     response = {}
-    if query_params:
+    if any(len(param) > 0 for param in query_params.values()):
         (response["restaurant_queryset"],
          response["percentage_of_filters_applied"]
          ) = incrementally_query(query_params=query_params, avg_user_location=(latitude, longitude))
 
     else:
         restaurants = []
+        rand_request = HttpRequest()
+        rand_request.method = "GET"
         for i in range(0, MAX_RESTAURANTS):
-            restaurants.append(json.loads(random_restaurant(request=request).content))
-        response["restaurant_queryset"] = restaurants[0]
+            restaurants.append(json.loads(random_restaurant(request=rand_request).content))
+        response["restaurant_queryset"] = restaurants
         response["percentage_of_filters_applied"] = 0
-        # return HttpResponse(status=400)
 
     serializer = RestaurantSerializer(response["restaurant_queryset"], many=True)
     serialized_data = JSONRenderer().render(serializer.data)
@@ -93,17 +103,21 @@ def incrementally_query(query_params=None, avg_user_location=None):
     filtered_restaurants = None
     restaurant_queryset_stack = []
     filters = []
-
+    category_union = None
     # map query parameters to Django filters
     for category in query_params.get("categories", []):
         if isinstance(category, list):
-            category_union = Q(category__exact=category[0], _connector='OR')
-
+            category_union = Q(category__contains=category[0], _connector='OR')
             for index in category[1:]:
-                category_union.add(Q(category__exact=str(index), _connector='OR'), conn_type='OR', squash=True)
+                category_union.add(Q(category__contains=str(index), _connector='OR'), conn_type='OR')
             filters.append(category_union)
             continue
-        filters.append(Q(category__exact=str(category)))
+        if category_union is not None:
+            category_union.add(Q(category__contains=category, _connector='OR'), conn_type='OR')
+        else:
+            category_union = Q(category__contains=category)
+    if category_union != None:
+        filters.append(category_union)
 
     limiting_price = MAX_PRICE
     for price in query_params.get("prices", []):
@@ -120,10 +134,10 @@ def incrementally_query(query_params=None, avg_user_location=None):
     for rating in query_params.get("ratings", []):
         if isinstance(rating, list):
             for index in rating:
-                if int(index) < limiting_rating:
+                if int(index) > limiting_rating:
                     limiting_rating = int(index)
             continue
-        if int(rating) < limiting_rating:
+        if int(rating) > limiting_rating:
             limiting_rating = int(rating)
     filters.append(Q(rating__gte=str(limiting_rating)))
 
@@ -137,7 +151,7 @@ def incrementally_query(query_params=None, avg_user_location=None):
         num_applied_filters += 1
         percent_filters_applied = str(int(100 * (num_applied_filters) / len(filters)))
         if len(filtered_restaurants) < MAX_RESTAURANTS:
-            if num_applied_filters is len(query_params):  # all filters were applied
+            if num_applied_filters is len(filters):  # all filters were applied
                 remaining_restaurants = list(restaurant_queryset_stack.pop())[:MAX_RESTAURANTS]
                 for restaurant in filtered_restaurants:  # build an ordered pseudo-set of restaurants
                     try:
@@ -173,7 +187,7 @@ def incrementally_query(query_params=None, avg_user_location=None):
                 return filtered_restaurants[:MAX_RESTAURANTS], percent_filters_applied
 
         elif len(filtered_restaurants) >= MAX_RESTAURANTS:
-            if num_applied_filters is len(query_params):  # all filters were applied
+            if num_applied_filters is len(filters):  # all filters were applied
                 print(f"greater than {MAX_RESTAURANTS} and last filter applied")
                 unordered_filtered_restaurants = filtered_restaurants[:MAX_RESTAURANTS]
                 distances = []
@@ -188,6 +202,8 @@ def incrementally_query(query_params=None, avg_user_location=None):
             else:  # continue applying filters
                 print(f"greater than {MAX_RESTAURANTS} and continuing to filter")
                 restaurant_queryset_stack.append(filtered_restaurants)
+    
+    return filtered_restaurants[:MAX_RESTAURANTS], percent_filters_applied
 
 
 @csrf_exempt
@@ -226,3 +242,39 @@ def random_restaurant(request):
     else:
         return HttpResponse(status=405)
 
+
+###
+def all_restaurants(request):
+
+    all_restaurants_stack = []
+    if request.method == 'GET':
+        # Fail if there are no restaurants in the DB
+        num_entries = Restaurant.objects.all().count()
+        if num_entries == 0:
+            return HttpResponse(status=500)
+        all_restaurants = Restaurant.objects.all()
+
+        serializer = RestaurantSerializer(all_restaurants, many=True)
+        serialized_data = JSONRenderer().render(serializer.data)
+        all_restaurants = json.loads(serialized_data.decode('utf-8'))
+
+        return HttpResponse(json.dumps(
+            all_restaurants, sort_keys=True, indent=4),
+            content_type="application/json")
+    else:
+        return HttpResponse(status=405)
+
+@csrf_exempt
+def delete_restaurant(request):
+
+    if request.method == 'DELETE':
+        # Fail if there are no restaurants in the DB
+        data = json.loads(request.body.decode("utf-8"))
+        idNum = int(data['idNum'])
+        num_entries = Restaurant.objects.all().count()
+        if num_entries == 0:
+            return HttpResponse(status=500)
+        Restaurant.objects.filter(id=idNum).delete()
+        return HttpResponse(status=200)
+    else:
+        return HttpResponse(status=405)

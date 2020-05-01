@@ -1,22 +1,20 @@
-
-
 import React, { Component } from "react";
 import "./Form.css";
 import {Link} from "react-router-dom";
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
-// import Facebook from './Components/Facebook.js';
+import { GoogleComponent } from 'react-google-location';
+import Typography from '@material-ui/core/Typography';
+import Slider from '@material-ui/core/Slider'; 
 
-const emailRegex = RegExp(
-  /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
-);
+const API_KEY = "AIzaSyAGrH5hYx20Y_k4drcU47uRPoBhz336QZM";
 
 const formValid = ({ formErrors, ...rest }) => {
   let valid = true;
 
   // check 1 if form  is being submitted empty
   Object.values(formErrors).forEach(val => {
-    val.length > 0 && (valid = false);
+    if (val.length <= 0) valid = false;
   });
 
   // check 2 if the form was filled out
@@ -27,16 +25,61 @@ const formValid = ({ formErrors, ...rest }) => {
   return valid;
 };
 
+const prices = [
+  {
+    value: 1,
+    label: '$',
+  },
+  {
+    value: 2,
+    label: '$$',
+  },
+  {
+    value: 3,
+    label: '$$$',
+  },
+  {
+    value: 4,
+    label: '$$$$',
+  },
+]
+
+const ratings = [
+  {
+    value: 1,
+    label:'1⭐',
+  },
+  { 
+    value: 2,
+    label:'2⭐',
+  },
+  { 
+    value: 3,
+    label:'3⭐'
+  },
+  { 
+    value: 4,
+    label:'4⭐',
+  },
+  { 
+    value: 5,
+    label:'5⭐'
+  }
+]
+
 
 class Form extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      cuisine: null,
+      category: null,
       price: null,
       rating: null,
       distance: null,
+      latitude: '',
+      longitude: '',
+      users: [],
       value: "default",
       formErrors: {
         cuisine: "",
@@ -47,6 +90,14 @@ class Form extends Component {
     };
   }
 
+  async componentDidMount() {
+    console.log(this.props)
+      this.setState({
+        users: this.props.location.users
+      }, () => console.log(this.state) )
+        
+    
+}
 
   handleSubmit = e => {
     e.preventDefault();
@@ -54,7 +105,7 @@ class Form extends Component {
     if (formValid(this.state)) {
       console.log(`
         --SUBMITTING--
-        Cuisine: ${this.state.cuisine}
+        Cuisine: ${this.state.category}
         Price: ${this.state.price}
         Rating: ${this.state.rating}
         Distance: ${this.state.distance}
@@ -68,6 +119,7 @@ class Form extends Component {
     e.preventDefault();
     const { name, value } = e.target;
     let formErrors = { ...this.state.formErrors };
+
     
     switch (name) {
       case "cuisine":
@@ -93,6 +145,49 @@ class Form extends Component {
     this.setState({ formErrors, [name]: value }, () => console.log(this.state));
   };
 
+  onCuisineChange = (event, values) => {
+      this.setState({
+        category: values
+      }, () => {
+        // This will output an array of objects
+        // given by Autocompelte options property.
+        console.log(this.state);
+  })
+}
+
+  onPriceChange = (event, values) => {
+      this.setState({
+        price: values
+      }, () => {
+        // This will output an array of objects
+        // given by Autocompelte options property.
+        console.log(this.state);
+      });
+    }
+
+
+  onRatingChange = (event, values) => {
+      this.setState({
+        rating: values
+      }, () => {
+        // This will output an array of objects
+        // given by Autocompelte options property.
+        console.log(this.state);
+      });
+    
+  }
+
+  onCoordinateChange = (event) => {
+    this.setState({
+      latitude: event.coordinates.lat,
+      longitude: event.coordinates.lng
+    }, () => {
+      // This will output an array of objects
+      // given by Autocompelte options property.
+      console.log(this.state);
+    })
+}
+
   render() {
     const { formErrors } = this.state;
 
@@ -101,16 +196,16 @@ class Form extends Component {
         <div className="form-wrapper">
           <h1>Ready? Set. Go!</h1>
           <form onSubmit={this.handleSubmit} noValidate>
-            <div className="distance">
-              <label htmlFor="distance">Distance</label>
-              <input
-                className={formErrors.distance.length > 0 ? "error" : null}
-                placeholder="Distance"
-                type="distance"
-                name="distance"
-                noValidate
-                onChange={this.handleChange}
-              />
+            <div className="location">
+              <label htmlFor="location">Location</label>
+              <GoogleComponent
+                apiKey={API_KEY}
+                language={'en'}
+                country={'country:us'}
+                coordinates={true}
+                locationBoxStyle={'boxstyle'}
+                locationListStyle={'liststyle'}
+                onChange={this.onCoordinateChange} />
               {formErrors.distance.length > 0 && (
                 <span className="errorMessage">{formErrors.distance}</span>
               )}
@@ -120,7 +215,7 @@ class Form extends Component {
                 multiple
                 options={cuisinePref}
                 getOptionLabel={option => option.title}
-                onChange={this.onTagsChange}
+                onChange={this.onCuisineChange}
                 renderInput={params => (
                   <TextField
                     {...params}
@@ -133,49 +228,79 @@ class Form extends Component {
                 )}
               />
             </div>
+          
             <div className="price">
-            <Autocomplete
-                multiple
-                options={pricePref}
-                getOptionLabel={option => option.title}
-                onChange={this.onTagsChange}
-                renderInput={params => (
-                  <TextField
-                    {...params}
-                    variant="standard"
-                    label="Price"
-                    placeholder="Price"
-                    margin="normal"
-                    fullWidth
-                  />
-                )}
+              <Typography id="price-values" gutterBottom>
+                Price
+              </Typography>
+              <Slider
+                defaultValue={1}
+                min={1}
+                step={1}
+                marks={prices}
+                max={4}
+                valueLabelDisplay="auto"
+                aria-labelledby="price-values"
               />
-              </div>
+            </div>
+
             <div className="rating">
-            <Autocomplete
-            multiple
-            options={ratingPref}
-            getOptionLabel={option => option.title}
-            onChange={this.onTagsChange}
-            renderInput={params => (
-                <TextField
-                {...params}
-                variant="standard"
-                label="Rating"
-                placeholder="Rating"
-                margin="normal"
-                fullWidth
-                />
-            )}
-            />
+              <Typography id="rating-values" gutterBottom>
+                Rating
+              </Typography>
+              <Slider
+                defaultValue={5}
+                min={1}
+                step={.5}
+                marks={ratings}
+                max={5}
+                valueLabelDisplay="auto"
+                aria-labelledby="rating-values"
+              />
             </div>
             <div className="sub_mit">
             <div class="Navigation">
                 <Link class="link" to="/"><button class="sub_mit">Home</button></Link>
 
-              <Link class="link" to="/results"><button class="sub_mit">Submit</button></Link>
-           
+            {
+              !this.props.formValid
+              ? <Link class="link" to={
+                { 
+                    pathname: "/results",
+                    state: {
+                      longitude: this.state.longitude || [],
+                      latitude: this.state.latitude || [],
+                      category: this.state.category || "",
+                      rating: this.state.rating || "",
+                      price: this.state.price || ""
+                    },
+                    users: this.state.users || [],
+                }}><button class="sub_mit">
+                Submit</button></Link> :
+              <Link to={
+                { 
+                    pathname: "/results"
+                }
+            }>
+            <button class="sub_mit">Submit</button></Link>
+           }
+           {
+              !this.props.formValid
+              ? <Link class="link" to={
+                { 
+                    pathname: "/filtered",
+                    state: {
+                      longitude: this.state.longitude || [],
+                      latitude: this.state.latitude || [],
+                      category: this.state.category || "",
+                      rating: this.state.rating || "",
+                      price: this.state.price || ""
+                    },
+                    users: this.state.users || [],
+                }}><button class="sub_mit" disabled={!this.state.latitude || !this.state.longitude}>
+                Add user</button></Link> :
               <Link class="link" to="/filtered"><button class="sub_mit">Add user</button></Link>
+           }
             </div>
             </div>
           </form>
@@ -200,21 +325,4 @@ const cuisinePref = [
   { title: 'Asian fusion'},
   { title: 'Mediterranean'},
   { title: 'Thai' },
-];
-
-// Price preference
-const pricePref = [
-  { title: '$'},
-  { title: '$$'},
-  { title: '$$$'},
-  { title: '$$$$'},
-];
-
-// Rating preference
-const ratingPref = [
-  { title: '⭐' },
-  { title: '⭐⭐'},
-  { title: '⭐⭐⭐'},
-  { title: '⭐⭐⭐⭐'},
-  { title: '⭐⭐⭐⭐⭐'},
 ];
